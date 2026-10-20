@@ -25,8 +25,14 @@ runs:
       shell: bash
       run: |
         sudo xcodebuild -runFirstLaunch
-        sudo xcodebuild -downloadPlatform visionOS
-        sudo xcodebuild -runFirstLaunch
+        # Download as the runner user: under sudo, CoreSimulator is unreachable
+        # and the download exits 70 ("Unable to connect to simulator").
+        if xcrun simctl list runtimes | grep -q 'visionOS'; then
+          echo "visionOS simulator runtime already installed"
+        else
+          xcodebuild -downloadPlatform visionOS
+        fi
+        xcrun simctl list runtimes | grep -i 'visionOS'
         xcodebuild -version
         xcrun --sdk xros --show-sdk-version
         xcrun --sdk xrsimulator --show-sdk-version
