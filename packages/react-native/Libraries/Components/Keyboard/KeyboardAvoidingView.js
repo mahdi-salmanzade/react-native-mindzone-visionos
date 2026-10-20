@@ -253,7 +253,7 @@ class KeyboardAvoidingView extends React.Component<
     if (Platform.isVision === true) {
       // The system keyboard does not change the app window's layout on visionOS.
       return (
-        <View ref={this.viewRef} style={style} {...props}>
+        <View ref={this.viewRef} style={style} onLayout={onLayout} {...props}>
           {children}
         </View>
       );

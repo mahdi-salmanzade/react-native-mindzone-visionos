@@ -5,7 +5,7 @@
 import SwiftUI
 
 /**
- This SwiftUI struct returns the main React Native scene. It should be used only once because it installs window notification handlers.
+ This SwiftUI struct returns the main React Native scene. Declare it once for the app's main window.
 
  Example:
  ```swift
@@ -96,51 +96,73 @@ extension RCTMainWindow {
 }
 
 /**
- Handles data sharing between React Native and SwiftUI views.
+ Handles data sharing between React Native and SwiftUI views. Each React scene
+ may install this modifier; one mounted host handles notifications at a time.
+ Closing that host transfers routing to another mounted scene.
  */
 public struct WindowHandlingModifier: ViewModifier {
   typealias UserInfoType = Dictionary<String, AnyHashable>
 
+  @State private var handlerID: UUID?
+
   @Environment(\.reactContext) private var reactContext
   @Environment(\.openWindow) private var openWindow
   @Environment(\.dismissWindow) private var dismissWindow
-  @Environment(\.supportsMultipleWindows) private var supportsMultipleWindows
 
   public init() {}
 
   public func body(content: Content) -> some View {
-    // Attach listeners only if app supports multiple windows
-    if supportsMultipleWindows {
-      content
-        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("RCTOpenWindow"))) { data in
-          guard let id = data.userInfo?["id"] as? String else { return }
-          reactContext.scenes.updateValue(RCTSceneData(id: id, props: data.userInfo?["userInfo"] as? UserInfoType), forKey: id)
-          openWindow(id: id)
+    // WindowManager checks multi-window support before posting. Immersive
+    // scene data must be handled even in apps without multiple windows.
+    content
+      .onAppear {
+        if handlerID == nil {
+          handlerID = RCTWindowRouter.shared.register(handle)
         }
-        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("RCTUpdateWindow"))) { data in
-          guard
-            let id = data.userInfo?["id"] as? String,
-            let userInfo = data.userInfo?["userInfo"] as? UserInfoType else { return }
-          reactContext.scenes[id]?.props = userInfo
+      }
+      .onDisappear {
+        if let handlerID {
+          RCTWindowRouter.shared.unregister(handlerID)
         }
-        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("RCTDismissWindow"))) { data in
-          guard let id = data.userInfo?["id"] as? String else { return }
-          dismissWindow(id: id)
-          reactContext.scenes.removeValue(forKey: id)
+        handlerID = nil
+      }
+  }
+
+  private func handle(_ data: Notification) {
+    guard let id = data.userInfo?["id"] as? String else { return }
+    switch data.name.rawValue {
+      case "RCTOpenWindow":
+        guard RCTWindowRouter.claim(data) else { return }
+        let props = data.userInfo?["userInfo"] as? UserInfoType ?? [:]
+        if let sceneData = reactContext.scenes[id] {
+          sceneData.props = (sceneData.props ?? [:]).merging(props) { _, incoming in incoming }
+        } else {
+          reactContext.scenes[id] = RCTSceneData(id: id, props: props)
         }
-        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("RCTOpenImmersiveSpace"))) { data in
-          guard let id = data.userInfo?["id"] as? String else { return }
-          reactContext.scenes.updateValue(
-            RCTSceneData(id: id, props: data.userInfo?["userInfo"] as? UserInfoType),
-            forKey: id
-          )
-        }
-        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("RCTDismissImmersiveSpace"))) { data in
-          guard let id = data.userInfo?["id"] as? String else { return }
-          reactContext.scenes.removeValue(forKey: id)
-        }
-    } else {
-      content
+        // The value identifies a single instance, even while it is opening.
+        // An id-only WindowGroup action creates another window on every call.
+        openWindow(id: id, value: id)
+      case "RCTUpdateWindow":
+        guard
+          let userInfo = data.userInfo?["userInfo"] as? UserInfoType,
+          let sceneData = reactContext.scenes[id],
+          RCTWindowRouter.claim(data) else { return }
+        // Merge every delta before SwiftUI can coalesce renders. Null object
+        // values are omitted by the JS wrapper / default TurboModule conversion.
+        sceneData.props = (sceneData.props ?? [:]).merging(userInfo) { _, incoming in incoming }
+      case "RCTDismissWindow":
+        guard RCTWindowRouter.claim(data) else { return }
+        dismissWindow(id: id)
+        reactContext.scenes.removeValue(forKey: id)
+      case "RCTOpenImmersiveSpace":
+        reactContext.scenes.updateValue(
+          RCTSceneData(id: id, props: data.userInfo?["userInfo"] as? UserInfoType),
+          forKey: id
+        )
+      case "RCTDismissImmersiveSpace":
+        reactContext.scenes.removeValue(forKey: id)
+      default:
+        break
     }
   }
 }

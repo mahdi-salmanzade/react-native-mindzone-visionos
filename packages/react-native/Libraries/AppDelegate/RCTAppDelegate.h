@@ -68,6 +68,15 @@ __attribute__((deprecated(
 #if TARGET_OS_VISION
 /// Store the last focused window to handle multiple SwiftUI windows.
 @property (nonatomic, weak, nullable) UIWindow *lastFocusedWindow;
+
+/// Captures the first application-role scene's launch URL, including no URL.
+/// Overrides must call super or forward the session and options to
+/// +[RCTLinkingManager sceneSession:willConnectWithOptions:], even without a URL.
+/// Return a fresh configuration; never copy the session's existing configuration
+/// or return SwiftUI's own delegateClass, which would cause recursive forwarding.
+- (UISceneConfiguration *)application:(UIApplication *)application
+    configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
+                                   options:(UISceneConnectionOptions *)options;
 #endif
 
 @property (nonatomic, strong, nullable) NSString *moduleName;

@@ -15,6 +15,7 @@ def run_codegen!(
   fabric_enabled: false,
   hermes_enabled: true,
   codegen_output_dir: 'build/generated/ios',
+  dependency_platform: :ios,
   config_key: 'codegenConfig',
   package_json_file: '~/app/package.json',
   folly_version: Helpers::Constants.folly_config()[:version],
@@ -33,6 +34,7 @@ def run_codegen!(
     :hermes_enabled => hermes_enabled,
     :config_file_dir => config_file_dir,
     :codegen_output_dir => codegen_output_dir,
+    :dependency_platform => dependency_platform,
     :config_key => config_key,
     :folly_version => folly_version
   )

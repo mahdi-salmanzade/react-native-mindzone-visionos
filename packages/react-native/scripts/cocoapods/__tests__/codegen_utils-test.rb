@@ -6,6 +6,7 @@
 require "test/unit"
 require "json"
 require_relative "../codegen_utils.rb"
+require_relative "../codegen.rb"
 require_relative "../helpers.rb"
 require_relative "./test_utils/FileMock.rb"
 require_relative "./test_utils/DirMock.rb"
@@ -93,6 +94,62 @@ class CodegenUtilsTests < Test::Unit::TestCase
             'Error: app_path is required for use_react_native_codegen_discovery.',
             'If you are calling use_react_native_codegen_discovery! in your Podfile, please remove the call and pass `app_path` and/or `config_file_dir` to `use_react_native!`.'
         ], Pod::UI.collected_warns)
+    end
+
+    def testUseReactCodegenDiscovery_preserves_upstream_ios_command
+        CodegenUtils.new().use_react_native_codegen_discovery!(false, '~/app')
+
+        assert_equal([{
+            'command' => 'node',
+            'arguments' => [
+                '~/app/ios/../node_modules/react-native/scripts/generate-codegen-artifacts.js',
+                '-p', '~/app', '-o', Pod::Config.instance.installation_root, '-t', 'ios'
+            ]
+        }], Pod::Executable.executed_commands)
+    end
+
+    def testRunCodegen_visionos_filters_dependencies_separately_from_ios_backend
+        run_codegen!('~/app', '', dependency_platform: :visionos)
+
+        assert_equal([{
+            'command' => 'node',
+            'arguments' => [
+                '~/app/ios/../node_modules/react-native/scripts/generate-codegen-artifacts.js',
+                '-p', '~/app', '-o', Pod::Config.instance.installation_root, '-t', 'ios',
+                '--dependencyPlatform', 'visionos'
+            ]
+        }], Pod::Executable.executed_commands)
+    end
+
+    def testRunCodegen_other_apple_platforms_preserve_upstream_ios_command
+        [:ios, :osx, :tvos, nil].each do |platform|
+            CodegenUtils.set_react_codegen_discovery_done(false)
+            Pod::Executable.reset()
+            run_codegen!('~/app', '', dependency_platform: platform)
+            assert_equal(['-t', 'ios'], Pod::Executable.executed_commands.first['arguments'].last(2))
+        end
+    end
+
+    def testRunCodegen_mixed_apple_targets_validate_before_reusing_codegen
+        [[:ios, :visionos], [:visionos, :ios]].each do |platforms|
+            CodegenUtils.set_react_codegen_discovery_done(false)
+            Pod::Executable.reset()
+            platforms.each { |platform| run_codegen!('~/app', '', dependency_platform: platform) }
+            assert_equal(2, Pod::Executable.executed_commands.length)
+            assert_equal([
+                '~/app/ios/../node_modules/react-native/scripts/codegen/validate-apple-codegen.js',
+                '~/app', Pod::Config.instance.installation_root
+            ], Pod::Executable.executed_commands.last['arguments'])
+        end
+    end
+
+    def testRunCodegen_repeated_same_platform_reuses_codegen_without_new_commands
+        [:ios, :visionos].each do |platform|
+            CodegenUtils.set_react_codegen_discovery_done(false)
+            Pod::Executable.reset()
+            2.times { run_codegen!('~/app', '', dependency_platform: platform) }
+            assert_equal(1, Pod::Executable.executed_commands.length)
+        end
     end
 
     # =========================== #

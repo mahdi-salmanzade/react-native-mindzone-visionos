@@ -4,8 +4,9 @@
 
 #import <Foundation/Foundation.h>
 #import <React/RCTBridgeModule.h>
+#import <React/RCTInvalidating.h>
 
-@interface RCTXRModule : NSObject <RCTBridgeModule>
+@interface RCTXRModule : NSObject <RCTBridgeModule, RCTInvalidating>
 
 @end
 

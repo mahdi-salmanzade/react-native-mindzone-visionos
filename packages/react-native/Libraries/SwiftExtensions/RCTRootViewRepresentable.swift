@@ -11,11 +11,16 @@ import RCTSwiftExtensionsObjC
 /**
  SwiftUI view enclosing `RCTReactViewController`. Its main purpose is to display React Native views inside of SwiftUI lifecycle.
 
+ When hosting this view directly in a custom WindowGroup or ImmersiveSpace,
+ apply WindowHandlingModifier so that scene can route WindowManager operations
+ after other windows close. RCTMainWindow and RCTWindow do this automatically.
+
  Use it create new windows in your app:
  Example:
  ```swift
   WindowGroup {
     RCTRootViewRepresentable(moduleName: "YourAppName")
+      .modifier(WindowHandlingModifier())
   }
  ```
  */

@@ -145,12 +145,31 @@ RCT_EXPORT_MODULE()
 }
 
 #if TARGET_OS_VISION
++ (void)sceneSession:(UISceneSession *)session willConnectWithOptions:(UISceneConnectionOptions *)connectionOptions
+{
+  // Capture the first window's launch delivery, including the absence of a URL.
+  // Runtime links and later scene connections must never change this value.
+  if (![session.role isEqualToString:UIWindowSceneSessionRoleApplication]) {
+    return;
+  }
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    initialURL = connectionOptions.URLContexts.allObjects.firstObject.URL;
+    if (initialURL == nil) {
+      for (NSUserActivity *activity in connectionOptions.userActivities) {
+        if ([activity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb] && activity.webpageURL != nil) {
+          initialURL = activity.webpageURL;
+          break;
+        }
+      }
+    }
+  });
+}
+
 + (void)onOpenURL:(NSURL *)url
 {
-  if (initialURL == nil) {
-    initialURL = url;
-  }
-  // Observers may already be listening when the first URL opens a running app.
+  // SwiftUI delivers both cold and warm links here. Always notify listeners;
+  // only the scene's connection options establish the process's initial URL.
   [self postNotificationWithURL:url];
 }
 #endif

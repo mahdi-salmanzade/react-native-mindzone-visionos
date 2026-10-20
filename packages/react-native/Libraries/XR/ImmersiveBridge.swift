@@ -13,33 +13,58 @@ public typealias CompletionHandlerType = (_ result: ImmersiveSpaceResult) -> Voi
 
 #if os(visionOS)
 @MainActor
-private final class ImmersiveBridgeLifecycle {
+private final class ImmersiveBridgeLifecycle: NSObject {
   private enum State {
     case idle, opening, opened, dismissing, closed
   }
 
   private let spaceId: String
   private let completionHandler: CompletionHandlerType
+  private let dismissalHandler: () -> Void
   private var state = State.idle
   private var dismissalRequested = false
+  private var dismissalReported = false
   private var dismissalHandlers: [() -> Void] = []
   private var dismissAction: DismissImmersiveSpaceAction?
+  private weak var immersiveScene: UIScene?
+  private var sceneDisconnected = false
 
-  init(spaceId: String, completionHandler: @escaping CompletionHandlerType) {
+  init(
+    spaceId: String,
+    completionHandler: @escaping CompletionHandlerType,
+    dismissalHandler: @escaping () -> Void
+  ) {
     self.spaceId = spaceId
     self.completionHandler = completionHandler
+    self.dismissalHandler = dismissalHandler
+    super.init()
+  }
+
+  deinit {
+    NotificationCenter.default.removeObserver(self)
   }
 
   func appear(open: OpenImmersiveSpaceAction, dismiss: DismissImmersiveSpaceAction) {
     guard state == .idle else { return }
     state = .opening
     dismissAction = dismiss
+    NotificationCenter.default.addObserver(
+      self, selector: #selector(sceneWillConnect(_:)), name: UIScene.willConnectNotification, object: nil
+    )
+    NotificationCenter.default.addObserver(
+      self, selector: #selector(sceneDidDisconnect(_:)), name: UIScene.didDisconnectNotification, object: nil
+    )
     Task {
       let result = await open(id: spaceId)
       switch result {
       case .opened:
-        state = .opened
-        completionHandler(.opened)
+        if immersiveScene == nil && !sceneDisconnected {
+          immersiveScene = UIApplication.shared.connectedScenes.first {
+            $0.session.role == .immersiveSpaceApplication
+          }
+        }
+        state = sceneDisconnected ? .closed : .opened
+        completionHandler(sceneDisconnected ? .error : .opened)
       case .userCancelled:
         state = .closed
         completionHandler(.userCancelled)
@@ -50,9 +75,27 @@ private final class ImmersiveBridgeLifecycle {
         state = .closed
         completionHandler(.error)
       }
-      if dismissalRequested {
+      if dismissalRequested || sceneDisconnected {
         dismissIfNeeded()
       }
+    }
+  }
+
+  @objc private func sceneWillConnect(_ notification: Notification) {
+    guard state == .opening,
+      let scene = notification.object as? UIScene,
+      scene.session.role == .immersiveSpaceApplication else { return }
+    immersiveScene = scene
+  }
+
+  @objc private func sceneDidDisconnect(_ notification: Notification) {
+    guard let scene = notification.object as? UIScene,
+      scene === immersiveScene else { return }
+    sceneDisconnected = true
+    if state == .opened {
+      // Also runs when the user leaves with the Digital Crown, without endSession().
+      state = .closed
+      finishDismissal()
     }
   }
 
@@ -85,6 +128,11 @@ private final class ImmersiveBridgeLifecycle {
   private func finishDismissal() {
     let handlers = dismissalHandlers
     dismissalHandlers.removeAll()
+    if !dismissalReported {
+      dismissalReported = true
+      NotificationCenter.default.removeObserver(self)
+      dismissalHandler()
+    }
     for handler in handlers {
       handler()
     }
@@ -97,6 +145,8 @@ private final class ImmersiveBridgeLifecycle {
  * Calls `openImmersiveSpace` when the view appears in the UIKit hierarchy and
  * `dismissImmersiveSpace` when removed. Explicit dismissal waits for any pending
  * open request, so a subsequent session cannot race the previous dismissal.
+ * Both removal and the immersive scene disconnecting report dismissal exactly
+ * once, including a user leaving the space with the Digital Crown.
  */
 private struct ImmersiveBridgeView: View {
   @Environment(\.openImmersiveSpace) private var openImmersiveSpace
@@ -123,12 +173,24 @@ private struct ImmersiveBridgeView: View {
     completionHandler: @escaping CompletionHandlerType
   ) -> UIViewController {
 #if os(visionOS)
-    let lifecycle = ImmersiveBridgeLifecycle(spaceId: spaceId, completionHandler: completionHandler)
-    return UIHostingController(rootView: ImmersiveBridgeView(lifecycle: lifecycle))
+    return makeImmersiveBridgeView(spaceId: spaceId, completionHandler: completionHandler, dismissalHandler: {})
 #else
     return UIViewController()
 #endif
   }
+
+#if os(visionOS)
+  @objc public static func makeImmersiveBridgeView(
+    spaceId: String,
+    completionHandler: @escaping CompletionHandlerType,
+    dismissalHandler: @escaping () -> Void
+  ) -> UIViewController {
+    let lifecycle = ImmersiveBridgeLifecycle(
+      spaceId: spaceId, completionHandler: completionHandler, dismissalHandler: dismissalHandler
+    )
+    return UIHostingController(rootView: ImmersiveBridgeView(lifecycle: lifecycle))
+  }
+#endif
 
   @objc public static func dismissImmersiveBridgeView(
     _ viewController: UIViewController,

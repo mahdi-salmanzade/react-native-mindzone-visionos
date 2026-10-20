@@ -5,6 +5,13 @@
 
 class AutolinkingUtils
 
+    def self.dependency_config(package, current_target_definition)
+        # visionOS has its own CLI exclusions and pod configuration. Preserve
+        # the upstream iOS configuration for all other CocoaPods targets.
+        platform = current_target_definition.platform&.name == :visionos ? "visionos" : "ios"
+        return package["platforms"][platform]
+    end
+
     def self.nested_path_exists?(object, *path)
         path.reduce(object) do |obj, method|
             return false unless obj.respond_to?(method)

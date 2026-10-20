@@ -33,8 +33,7 @@ RCT_EXPORT_METHOD(openWindow : (NSString *)windowId userInfo : (NSDictionary *)
     if (userInfo != nil) {
       [userInfoDict setValue:userInfo forKey:@"userInfo"];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:RCTOpenWindow object:self userInfo:userInfoDict];
-    resolve(nil);
+    [self dispatchWindowNotification:RCTOpenWindow userInfo:userInfoDict resolve:resolve reject:reject];
   });
 }
 
@@ -46,10 +45,7 @@ RCT_EXPORT_METHOD(closeWindow : (NSString *)windowId resolve : (RCTPromiseResolv
       reject(@"ERROR", @"Multiple scenes not supported", nil);
       return;
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:RCTDismissWindow
-                                                        object:self
-                                                      userInfo:@{@"id" : windowId}];
-    resolve(nil);
+    [self dispatchWindowNotification:RCTDismissWindow userInfo:@{@"id" : windowId} resolve:resolve reject:reject];
   });
 }
 
@@ -66,9 +62,24 @@ RCT_EXPORT_METHOD(updateWindow : (NSString *)windowId userInfo : (NSDictionary *
     if (userInfo != nil) {
       [userInfoDict setValue:userInfo forKey:@"userInfo"];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:RCTUpdateWindow object:self userInfo:userInfoDict];
-    resolve(nil);
+    [self dispatchWindowNotification:RCTUpdateWindow userInfo:userInfoDict resolve:resolve reject:reject];
   });
+}
+
+- (void)dispatchWindowNotification:(NSString *)name
+                          userInfo:(NSDictionary *)userInfo
+                           resolve:(RCTPromiseResolveBlock)resolve
+                            reject:(RCTPromiseRejectBlock)reject
+{
+  // NotificationCenter delivers synchronously on the main queue. The elected
+  // SwiftUI host claims this shared request before invoking its window action.
+  NSMutableDictionary *request = [@{@"handled" : @NO} mutableCopy];
+  [[NSNotificationCenter defaultCenter] postNotificationName:name object:request userInfo:userInfo];
+  if ([request[@"handled"] boolValue]) {
+    resolve(nil);
+  } else {
+    reject(@"ERROR", @"No React scene could handle the window operation", nil);
+  }
 }
 
 - (facebook::react::ModuleConstants<JS::NativeWindowManager::Constants::Builder>)constantsToExport

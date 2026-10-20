@@ -21,7 +21,7 @@ Implemented the owned visionOS APIs and JS/type surface against React Native 0.8
 | A-09 | done | `Libraries/SwiftExtensions/RCTMainWindow.swift` | Both initializers, custom content, URL callback, window and immersive scene notifications; startup/plist documentation. |
 | A-10 | done | `Libraries/SwiftExtensions/RCTWindow.swift` | Four initializers, matching WindowGroup ID, scene props, no secondary dev-menu ornament, missing-data fatal diagnostic. |
 | A-11 | done | `Libraries/SwiftExtensions/RCTRootViewRepresentable.swift` | UIKit controller wrapper, prop updates and DEBUG ornament; SwiftPM import request applied. |
-| A-12 | done | `Libraries/SwiftExtensions/RCTReactViewController.{h,m}` | Current Fabric hosting view/factory; null-preserving prop merge; focus/attachment/resize/disconnection notifications coordinated with T2-native. |
+| A-12 | done | `Libraries/SwiftExtensions/RCTReactViewController.{h,m}` | Current Fabric hosting view/factory; dictionary prop merge (see T8 null correction below); focus/attachment/resize/disconnection notifications coordinated with T2-native. |
 | A-13 | done | `Libraries/SwiftExtensions/React-RCTSwiftExtensions.podspec` | Explicit AppDelegate dependency, source globs, Swift 5, package metadata, RN_BUILDING marker. |
 | A-14 | done | `Libraries/WindowManager/{NativeWindowManager,WindowManager}.js`, tests | Lazy-safe optional native module; getWindow ID/open/update/close and support constant; omitted/null payloads normalize to `{}`. |
 | A-15 | done | `Libraries/WindowManager/RCTWindowManager.{h,mm}` | Generated protocol/TurboModule implementation, typed constants, main-queue notifications; return after unsupported-scenes rejection. |
@@ -57,7 +57,7 @@ No disagreement with the already-upstream/obsolete classifications. PLAN's updat
 
 | ID | Status | Files | Finding/change |
 | --- | --- | --- | --- |
-| NEW-1 | done | `Libraries/SwiftExtensions/RCTReactViewController.m` | `setValuesForKeysWithDictionary:` removes NSNull values; Foundation probe confirmed it. `addEntriesFromDictionary:` preserves explicit null and existing keys. |
+| NEW-1 | done | `Libraries/SwiftExtensions/RCTReactViewController.m` | `setValuesForKeysWithDictionary:` removes NSNull values; Foundation probe confirmed it. `addEntriesFromDictionary:` preserves existing keys and native NSNull values. **T8 correction:** this does not establish a JS null contract: the default TurboModule conversion drops null-valued object keys before this merge; `update({nullable: null})` leaves the old prop unchanged. |
 | NEW-2 | done | same | Focus tap recognizer uses `cancelsTouchesInView = NO` so it does not cancel RN touch delivery. |
 | NEW-3 | withdrawn by orchestrator | View props/config, view config test, legacy types, generated types | Removed by T2-fixup. Neither reference fork exposes `visionos_hoverEffect`; upstream `cursor: 'pointer'` already drives visionOS hover. |
 | NEW-4 | done | `Libraries/SwiftExtensions/RCTReactViewController.m` | T2-native request: notify dimensions on initial attachment/focus and after resize completion; clear matching weak focused-window hint on scene disconnection, not temporary view disappearance. |
@@ -270,7 +270,7 @@ xcrun --sdk xrsimulator swiftc -typecheck -swift-version 5 -D DEBUG -D SWIFT_PAC
 
 ## Objective-C visionOS checks
 
-Passed (exit 0), repeated after the null-preserving property-merge change. Warnings: upstream `RCTUIConfiguratorProtocol` references deprecated `RCTRootView`, and the intentional `RCTAppDelegate` compatibility path is deprecated.
+Passed (exit 0), repeated after the dictionary property-merge change. Warnings: upstream `RCTUIConfiguratorProtocol` references deprecated `RCTRootView`, and the intentional `RCTAppDelegate` compatibility path is deprecated.
 
 ```sh
 xcrun --sdk xrsimulator clang -fsyntax-only -fobjc-arc -fblocks -target arm64-apple-xros1.0-simulator -I /private/tmp/t2-apis-swift-check/headers -I packages/react-native/ReactCommon/yoga packages/react-native/Libraries/SwiftExtensions/RCTReactViewController.m
@@ -365,7 +365,7 @@ RUBY
 
 ## Foundation property-merge behavior probe
 
-Compilation and execution passed (exit 0). Output demonstrated that reference KVC merge removed the `nullable` key, while dictionary merge retained `nullable = <null>` and `unchanged = 1`. This directly motivated using `addEntriesFromDictionary:` in the host's property update.
+Compilation and execution passed (exit 0). Output demonstrated that reference KVC merge removed the `nullable` key, while dictionary merge retained `nullable = <null>` and `unchanged = 1`. This motivated using `addEntriesFromDictionary:` in the host's property update. **T8 correction:** this Foundation-only probe bypassed the JSI-to-Objective-C conversion and did not prove JS null reached native. With the unchanged upstream `enableModuleArgumentNSNullConversionIOS` default, null object values are dropped before the merge. WindowManager null props do not clear or override old values; omitted/null whole payloads remain empty updates.
 
 ```sh
 cat > /private/tmp/t2-apis-swift-check/props.m <<'OBJC'

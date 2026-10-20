@@ -290,6 +290,7 @@ def use_react_native! (
     :fabric_enabled => fabric_enabled,
     :hermes_enabled => hermes_enabled,
     :codegen_output_dir => $CODEGEN_OUTPUT_DIR,
+    :dependency_platform => current_target_definition.platform&.name,
     :package_json_file => File.join(__dir__, "..", "package.json"),
     :folly_version => folly_config[:version]
   )

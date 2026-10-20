@@ -135,6 +135,27 @@ SwiftUI windows. The native `SwiftExtensions` library supplies the SwiftUI root
 and window integration. Configure the corresponding SwiftUI scenes in the app;
 JavaScript exports alone do not create them.
 
+`WindowManager.getWindow(id)` addresses one registered `RCTWindow`. One
+`open(props)` call opens one window. Reopening the same ID, including while its
+first open is pending, reuses that window and shallowly merges the supplied props.
+`update(props)` shallowly merges incoming props into that window's React root;
+unspecified props keep their previous values. Null and undefined prop values
+are ignored: `update({nullable: null})` leaves an existing `nullable` value
+unchanged. `update(null)` and `update()` are empty updates. The same ignored-value
+rule applies to initial props passed to `open`.
+
+The default TurboModule conversion also omits null-valued keys inside nested
+objects, while preserving null array elements. Updates replace each supplied
+nested object as a whole; they do not recursively merge it. This fork leaves
+`enableModuleArgumentNSNullConversionIOS` at its upstream default and provides no
+null-based prop-clearing operation.
+
+`RCTMainWindow` and `RCTWindow` both host request routing, so window operations
+continue from a surviving React scene after the main window closes. A custom
+React scene must apply `.modifier(WindowHandlingModifier())` to host routing.
+A custom window group addressed by WindowManager must use String-valued identity:
+`WindowGroup(id: id, for: String.self) { _ in /* content */ } defaultValue: { id }`.
+
 React Native's [component and API documentation](https://reactnative.dev/docs/getting-started)
 applies to shared functionality. This fork does not claim automatic Expo or Viro
 integration.

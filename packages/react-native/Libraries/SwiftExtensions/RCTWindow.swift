@@ -3,10 +3,14 @@
 #if os(visionOS)
 
 import SwiftUI
-import React
 
 /**
  `RCTWindow` is a SwiftUI struct that returns additional scenes.
+
+ When visionOS restores a window after relaunch, its in-memory scene data may
+ be absent. The window still renders its registered module, and recreates the
+ shared scene data with nil props. Props from the previous process are not
+ persisted; subsequent WindowManager updates merge into this new scene data.
 
  Example usage:
  ```
@@ -24,16 +28,28 @@ public struct RCTWindow: Scene {
   }
 
   public var body: some Scene {
-    WindowGroup(id: id) {
-      Group {
-        contentView
-      }
+    WindowGroup(id: id, for: String.self) { _ in
+      RCTWindowContent(id: id, sceneData: sceneData, contentView: contentView)
+    } defaultValue: {
+      id
+    }
+  }
+}
+
+private struct RCTWindowContent: View {
+  @Environment(\.reactContext) private var reactContext
+  let id: String
+  let sceneData: RCTSceneData?
+  let contentView: AnyView?
+
+  var body: some View {
+    contentView
+      .modifier(WindowHandlingModifier())
       .onAppear {
-        if sceneData == nil {
-          RCTFatal(RCTErrorWithMessage("Passed scene data is nil, make sure to pass sceneContext to RCTWindow() in App.swift"))
+        if reactContext.scenes[id] == nil {
+          reactContext.scenes[id] = sceneData ?? RCTSceneData(id: id, props: nil)
         }
       }
-    }
   }
 }
 

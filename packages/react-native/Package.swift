@@ -783,7 +783,7 @@ let visionOSTargets: [BaseTarget] = [
     name: "RCTSwiftExtensions",
     path: "Libraries/SwiftExtensions",
     dependencies: [.reactCore, "RCTSwiftExtensionsObjC", "React-RCTXR", "React-RCTWindowManager"],
-    sources: ["RCTMainWindow.swift", "RCTReactContext.swift", "RCTRootViewRepresentable.swift", "RCTWindow.swift"],
+    sources: ["RCTMainWindow.swift", "RCTReactContext.swift", "RCTRootViewRepresentable.swift", "RCTWindow.swift", "RCTWindowRouter.swift"],
     publicHeadersPath: nil
   ),
 ]
@@ -813,6 +813,11 @@ let package = Package(
 )
 
 // MARK: Support & Utility Classes
+
+// The visionOS app delegate forwards scene connection options to RCTLinkingManager.
+package.targets.first { $0.name == .reactAppDelegate }?.dependencies.append(
+  .target(name: .reactRCTLinking, condition: .when(platforms: [.visionOS]))
+)
 
 class BaseTarget {
   let name: String

@@ -56,6 +56,7 @@ const path = require('node:path');
  * @parameter baseOutputPath: the base output path for the CodeGen.
  * @parameter targetPlatform: the target platform. Supported values: 'android', 'ios', 'all'.
  * @parameter source: the source that is invoking codegen. Supported values: 'app', 'library'.
+ * @parameter dependencyPlatform: optional visionOS dependency selection with the iOS generation backend.
  * @throws If it can't find a config file for react-native.
  * @throws If it can't find a CodeGen configuration in the file.
  * @throws If it can't find a cli for the CodeGen.
@@ -67,6 +68,7 @@ function execute(
   source /*: string */,
   runReactNativeCodegen /*: boolean */ = true,
   forceOutputPath /*: boolean */ = false,
+  dependencyPlatform /*: ?string */ = null,
 ) {
   try {
     codegenLog(`Analyzing ${path.join(projectRoot, 'package.json')}`);
@@ -120,7 +122,9 @@ function execute(
 
       const disabledLibraries = findDisabledLibrariesByPlatform(
         reactNativeConfig,
-        platform,
+        platform === 'ios' && dependencyPlatform === 'visionos'
+          ? 'visionos'
+          : platform,
       );
       const libraries = codegenEnabledLibraries.filter(
         ({name, config}) =>

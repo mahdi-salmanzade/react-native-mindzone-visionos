@@ -50,7 +50,15 @@
 + (void)scene:(nonnull UIScene *)scene openURLContexts:(nonnull NSSet<UIOpenURLContext *> *)URLContexts;
 
 #if TARGET_OS_VISION
-/// Forward URLs from the SwiftUI onOpenURL callback.
+/// Captures the first application-role scene's launch URL (or nil) for the process lifetime.
+/// RCTAppDelegate forwards application:configurationForConnectingSceneSession:options: here.
+/// App subclasses overriding that callback must call super or forward its session and
+/// options here, including connections without a URL. Other scene roles are ignored.
+/// Return a fresh scene configuration, never one naming SwiftUI's own delegateClass.
++ (void)sceneSession:(nonnull UISceneSession *)session
+    willConnectWithOptions:(nonnull UISceneConnectionOptions *)connectionOptions;
+
+/// Forward URLs from SwiftUI onOpenURL to JS events. This never changes getInitialURL.
 + (void)onOpenURL:(nonnull NSURL *)url NS_SWIFT_NAME(onOpenURL(url:));
 #endif
 

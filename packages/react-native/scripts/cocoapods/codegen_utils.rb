@@ -14,9 +14,11 @@ class CodegenUtils
     end
 
     @@REACT_CODEGEN_DISCOVERY_DONE = false
+    @@REACT_CODEGEN_DEPENDENCY_PLATFORM = nil
 
     def self.set_react_codegen_discovery_done(value)
         @@REACT_CODEGEN_DISCOVERY_DONE = value
+        @@REACT_CODEGEN_DEPENDENCY_PLATFORM = nil unless value
     end
 
     def self.react_codegen_discovery_done
@@ -31,6 +33,7 @@ class CodegenUtils
       hermes_enabled: true,
       config_file_dir: '',
       codegen_output_dir: 'build/generated/ios',
+      dependency_platform: :ios,
       config_key: 'codegenConfig',
       folly_version: Helpers::Constants.folly_config[:version],
       codegen_utils: CodegenUtils.new(),
@@ -40,6 +43,16 @@ class CodegenUtils
       return if codegen_disabled
 
       if CodegenUtils.react_codegen_discovery_done()
+        # Both targets share one ReactCodegen pod. Reusing different dependency
+        # sets would silently generate the wrong providers for one platform.
+        platform = dependency_platform == :visionos ? :visionos : :ios
+        if @@REACT_CODEGEN_DEPENDENCY_PLATFORM && @@REACT_CODEGEN_DEPENDENCY_PLATFORM != platform
+          relative_installation_root = Pod::Config.instance.installation_root.relative_path_from(Pathname.pwd)
+          Pod::UI.puts Pod::Executable.execute_command('node', [
+            "#{relative_installation_root}/#{react_native_path}/scripts/codegen/validate-apple-codegen.js",
+            app_path, Pod::Config.instance.installation_root
+          ])
+        end
         logger.puts("Skipping use_react_native_codegen_discovery.")
         return
       end
@@ -59,10 +72,11 @@ class CodegenUtils
           "-p", "#{app_path}",
           "-o", Pod::Config.instance.installation_root,
           "-t", "ios",
-        ])
+        ] + (dependency_platform == :visionos ? ["--dependencyPlatform", "visionos"] : []))
       Pod::UI.puts out;
 
       CodegenUtils.set_react_codegen_discovery_done(true)
+      @@REACT_CODEGEN_DEPENDENCY_PLATFORM = dependency_platform == :visionos ? :visionos : :ios
     end
 
     @@CLEANUP_DONE = false

@@ -9,9 +9,17 @@ import NativeWindowManager from './NativeWindowManager';
 
 export interface WindowStatic {
   id: string;
-  /** Opens the RCTWindow registered with this ID, passing initial props. */
+  /**
+   * Opens the RCTWindow registered with this ID, passing initial props.
+   * Reopening the same ID reuses its window and shallowly merges supplied props.
+   * Null and undefined prop values are ignored.
+   */
   open(props?: UnsafeObject | null): Promise<void>;
-  /** Merges props into the registered window's React root. */
+  /**
+   * Shallowly merges props into the registered window's React root.
+   * Null and undefined prop values do not clear or override existing props.
+   * An omitted or null payload is an empty update.
+   */
   update(props?: UnsafeObject | null): Promise<void>;
   /** Closes the window and removes its scene data. */
   close(): Promise<void>;
@@ -38,6 +46,14 @@ const WindowManager: WindowManagerStatic = {
   },
 };
 
+function normalizeProps(props?: UnsafeObject | null): UnsafeObject {
+  // The default TurboModule conversion omits null/undefined object values.
+  // Make this root-prop contract explicit before crossing the native boundary.
+  return Object.fromEntries(
+    Object.entries(props ?? {}).filter(([, value]) => value != null),
+  );
+}
+
 class WindowHandle implements WindowStatic {
   id: string;
 
@@ -47,7 +63,7 @@ class WindowHandle implements WindowStatic {
 
   open(props?: UnsafeObject | null): Promise<void> {
     if (NativeWindowManager != null && NativeWindowManager.openWindow != null) {
-      return NativeWindowManager.openWindow(this.id, props ?? {});
+      return NativeWindowManager.openWindow(this.id, normalizeProps(props));
     }
     return Promise.reject(new Error('NativeWindowManager is not available'));
   }
@@ -57,7 +73,7 @@ class WindowHandle implements WindowStatic {
       NativeWindowManager != null &&
       NativeWindowManager.updateWindow != null
     ) {
-      return NativeWindowManager.updateWindow(this.id, props ?? {});
+      return NativeWindowManager.updateWindow(this.id, normalizeProps(props));
     }
     return Promise.reject(new Error('NativeWindowManager is not available'));
   }

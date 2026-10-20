@@ -52,7 +52,7 @@ def list_native_modules!(config_command)
   found_pods = []
 
   packages.each do |package_name, package|
-    next unless package_config = package["platforms"]["ios"]
+    next unless package_config = AutolinkingUtils.dependency_config(package, current_target_definition)
 
     name = package["name"]
     podspec_path = package_config["podspecPath"]

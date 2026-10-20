@@ -52,6 +52,33 @@ it('defaults missing support constants to false', () => {
   );
 });
 
+it('omits null and undefined props before calling native without changing the input', async () => {
+  const openWindow = jest.fn().mockResolvedValue(undefined);
+  const updateWindow = jest.fn().mockResolvedValue(undefined);
+  jest.doMock('../NativeWindowManager', () => ({openWindow, updateWindow}));
+  const window = require('../WindowManager').default.getWindow('Second');
+  const props = Object.freeze({
+    nullable: null,
+    missing: undefined,
+    count: 0,
+    enabled: false,
+    title: '',
+  });
+
+  await window.open(props);
+  await window.update(props);
+  await window.update({nullable: null});
+
+  const expected = {count: 0, enabled: false, title: ''};
+  expect(openWindow).toHaveBeenCalledWith('Second', expected);
+  expect(updateWindow.mock.calls).toEqual([
+    ['Second', expected],
+    ['Second', {}],
+  ]);
+  expect(props.nullable).toBeNull();
+  expect(Object.hasOwn(props, 'missing')).toBe(true);
+});
+
 it('preserves native failures', async () => {
   const error = new Error('Multiple scenes are disabled');
   jest.doMock('../NativeWindowManager', () => ({

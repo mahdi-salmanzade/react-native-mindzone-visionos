@@ -26,6 +26,11 @@ const argv = yargs
     alias: 'outputPath',
     description: 'Path where generated artifacts will be output to.',
   })
+  .option('dependencyPlatform', {
+    description:
+      'Use visionOS dependency exclusions with the iOS generation backend.',
+    choices: ['visionos'],
+  })
   .option('s', {
     alias: 'source',
     description: 'Whether the script is invoked from an `app` or a `library`',
@@ -53,4 +58,6 @@ executor.execute(
   true, // runReactNativeCodegen
   // $FlowFixMe[prop-missing]
   argv.forceOutputPath,
+  // $FlowFixMe[prop-missing]
+  argv.dependencyPlatform,
 );

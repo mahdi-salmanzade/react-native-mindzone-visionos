@@ -15,6 +15,8 @@ const {REACT_NATIVE} = require('../generate-artifacts-executor/constants');
 const {
   findCodegenEnabledLibraries,
 } = require('../generate-artifacts-executor/utils');
+const {validateAppleCodegen} = require('../validate-apple-codegen');
+const {spawnSync} = require('node:child_process');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
@@ -104,6 +106,150 @@ function packageConfig(name, specs) {
     },
   };
 }
+
+it.each([undefined, 'visionos'])(
+  'uses %s dependency exclusions with the iOS CLI backend',
+  dependencyPlatform => {
+    write('package.json', {name: 'app'});
+    for (const name of ['IOSOnly', 'VisionOnly']) {
+      write(`${name}/package.json`, packageConfig(name, [name]));
+      write(`${name}/Native${name}.js`, moduleSpec(name));
+    }
+    const output = path.join(root, 'out');
+    write('out/build/generated/autolinking/autolinking.json', {
+      dependencies: {
+        IOSOnly: {
+          root: path.join(root, 'IOSOnly'),
+          platforms: {ios: {}, visionos: null},
+        },
+        VisionOnly: {
+          root: path.join(root, 'VisionOnly'),
+          platforms: {ios: null, visionos: {}},
+        },
+      },
+    });
+    const result = spawnSync(
+      process.execPath,
+      [
+        path.join(__dirname, '../../generate-codegen-artifacts.js'),
+        '-p',
+        root,
+        '-o',
+        output,
+        '-t',
+        'ios',
+        '-s',
+        'library',
+        ...(dependencyPlatform == null
+          ? []
+          : ['--dependencyPlatform', dependencyPlatform]),
+      ],
+      {encoding: 'utf8'},
+    );
+    expect(result.stderr).toBe('');
+    expect(result.status).toBe(0);
+    const files = fs.readdirSync(
+      path.join(output, 'build/generated/ios/ReactCodegen'),
+      {recursive: true},
+    );
+    expect(files.includes('VisionOnly/VisionOnly.h')).toBe(
+      dependencyPlatform === 'visionos',
+    );
+    expect(files.includes('IOSOnly/IOSOnly.h')).toBe(
+      dependencyPlatform == null,
+    );
+  },
+);
+
+it.each(['iphonesimulator', 'xrsimulator', 'xros'])(
+  'preserves dependency filtering during the %s Xcode script phase',
+  platformName => {
+    write('package.json', {name: 'app'});
+    const dependencies = {};
+    for (const name of ['IOSOnly', 'VisionOnly']) {
+      write(`${name}/package.json`, {
+        name,
+        codegenConfig: {
+          name,
+          type: 'modules',
+          jsSrcsDir: '.',
+          ios: {modulesProvider: {[name]: name}},
+        },
+      });
+      write(`${name}/Native${name}.js`, moduleSpec(name));
+      dependencies[name] = {
+        root: path.join(root, name),
+        platforms: {
+          ios: name === 'IOSOnly' ? {} : null,
+          visionos: name === 'VisionOnly' ? {} : null,
+        },
+      };
+    }
+    write('out/build/generated/autolinking/autolinking.json', {dependencies});
+    const result = spawnSync(
+      '/bin/bash',
+      [path.join(__dirname, '../../react_native_pods_utils/script_phases.sh')],
+      {
+        encoding: 'utf8',
+        env: {
+          ...process.env,
+          NODE_BINARY: process.execPath,
+          RCT_SCRIPT_TYPE: 'withCodegenDiscovery',
+          RCT_SCRIPT_RN_DIR: path.join(__dirname, '../../..'),
+          RCT_SCRIPT_APP_PATH: root,
+          RCT_SCRIPT_OUTPUT_DIR: path.join(root, 'out'),
+          DERIVED_FILE_DIR: path.join(root, 'derived'),
+          SCRIPT_OUTPUT_FILE_0: path.join(root, 'codegen.log'),
+          PLATFORM_NAME: platformName,
+        },
+      },
+    );
+    expect(result.stderr).toBe('');
+    expect(result.status).toBe(0);
+    const providers = fs.readFileSync(
+      path.join(
+        root,
+        'out/build/generated/ios/ReactCodegen/RCTModuleProviders.mm',
+      ),
+      'utf8',
+    );
+    const expected =
+      platformName === 'iphonesimulator' ? 'IOSOnly' : 'VisionOnly';
+    const excluded =
+      platformName === 'iphonesimulator' ? 'VisionOnly' : 'IOSOnly';
+    expect(providers).toContain(`@"${expected}"`);
+    expect(providers).not.toContain(`@"${excluded}"`);
+  },
+);
+
+it.each([false, true])(
+  'validates shared mixed-target codegen (different exclusions: %s)',
+  differentExclusions => {
+    write('package.json', {name: 'app'});
+    write('dependency/package.json', {
+      name: 'dependency',
+      codegenConfig: {name: 'Fixture', type: 'modules', jsSrcsDir: '.'},
+    });
+    write('build/generated/autolinking/autolinking.json', {
+      dependencies: {
+        dependency: {
+          root: path.join(root, 'dependency'),
+          platforms: {
+            ios: {},
+            visionos: differentExclusions ? null : {},
+          },
+        },
+      },
+    });
+    if (differentExclusions) {
+      expect(() => validateAppleCodegen(root, root)).toThrow(
+        'Use separate Podfiles/installations for iOS and visionOS',
+      );
+    } else {
+      expect(() => validateAppleCodegen(root, root)).not.toThrow();
+    }
+  },
+);
 
 it.each(['autolinking', 'fallback'])(
   'keeps the fork and unrelated libraries during %s discovery',

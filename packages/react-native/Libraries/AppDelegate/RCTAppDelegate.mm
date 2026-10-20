@@ -17,6 +17,10 @@
 #import "RCTAppSetupUtils.h"
 #import "RCTDependencyProvider.h"
 
+#if TARGET_OS_VISION
+#import <React/RCTLinkingManager.h>
+#endif
+
 #if RN_DISABLE_OSS_PLUGIN_HEADER
 #import <RCTTurboModulePlugin/RCTTurboModulePlugin.h>
 #else
@@ -70,5 +74,17 @@ using namespace facebook::react;
 {
   return self.reactNativeFactory.rootViewFactory;
 }
+
+#if TARGET_OS_VISION
+- (UISceneConfiguration *)application:(UIApplication *)application
+    configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
+                                   options:(UISceneConnectionOptions *)options
+{
+  [RCTLinkingManager sceneSession:connectingSceneSession willConnectWithOptions:options];
+  // SwiftUI may already own the session's delegate. Copying its configuration
+  // would make SwiftUI forward scene callbacks back to itself.
+  return [[UISceneConfiguration alloc] initWithName:nil sessionRole:connectingSceneSession.role];
+}
+#endif
 
 @end

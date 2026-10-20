@@ -97,7 +97,10 @@ generateCodegenArtifactsFromSchema () {
 generateArtifacts () {
     describe "Generating codegen artifacts"
     pushd "$RCT_SCRIPT_RN_DIR" >/dev/null || exit 1
-        "$NODE_BINARY" "scripts/generate-codegen-artifacts.js" --path "$RCT_SCRIPT_APP_PATH" --outputPath "$RCT_SCRIPT_OUTPUT_DIR" --targetPlatform "ios"
+        case "$PLATFORM_NAME" in
+            xros|xrsimulator) set -- --dependencyPlatform visionos ;;
+        esac
+        "$NODE_BINARY" "scripts/generate-codegen-artifacts.js" --path "$RCT_SCRIPT_APP_PATH" --outputPath "$RCT_SCRIPT_OUTPUT_DIR" --targetPlatform "ios" "$@"
     popd >/dev/null || exit 1
 }
 
