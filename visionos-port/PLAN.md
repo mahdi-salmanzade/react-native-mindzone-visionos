@@ -68,10 +68,20 @@ Ownership is exclusive within a phase. Paths are relative to the repo root, and 
 
 | ID | State |
 | --- | --- |
-| T1-inventory | done: 121 items; reviewed by the orchestrator. Ownership gaps it flagged are now assigned above |
-| T2-build | pending |
-| T2-native | pending |
-| T2-apis | pending |
-| T3-apps | pending |
-| T4-verify | pending |
-| T5-review | pending |
+| T1-inventory | done: 121 items |
+| T2-build / T2-native / T2-apis | done, plus T2-fixup (withdrew the invented hover prop, fixed formatting churn) |
+| T3-apps | done: RNTester-visionOS target, `react-native-mindzone-visionos-template` |
+| T4-verify | done. Workspace builds pass for RNTester visionOS and iOS and for the template on visionOS; the orchestrator ran them outside the sandbox. RNTester runs in the Apple Vision Pro simulator |
+| T5-review | done: 8 visionOS-only findings, no off-visionOS findings |
+| T6–T8 fixes | done: all 8 fixed, plus two regressions caught by simulator probes (scene recursion crash, duplicate windows) |
+| T9-rereview | done: no verified defects |
+
+Still not verified at runtime:
+- window restoration after relaunch;
+- closing the main window by hand;
+- leaving the immersive space with the Digital Crown;
+- cold and warm deep links (blocked by visionOS's system prompt on this machine);
+- interactive pointer, hover and keyboard input;
+- Release, device, framework-mode CocoaPods and SwiftPM consumer builds.
+
+Not done (needs the owner): a real repository remote (`package.json` metadata is a placeholder), and npm publication.
