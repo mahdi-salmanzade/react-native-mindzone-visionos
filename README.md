@@ -10,9 +10,8 @@ from 0.79.6 and [ReactVision's port](https://github.com/ReactVision/react-native
 from 0.86.4. React Native is developed by Meta and its contributors. The MIT
 [LICENSE](./LICENSE), including Meta's copyright notice, is retained.
 
-The repository, homepage, and issue URLs currently use
-`https://github.com/mindzone/react-native-mindzone-visionos` as an **owner-confirmation
-placeholder**. They do not establish that a public repository or npm release exists.
+Source: <https://github.com/mahdi-salmanzade/react-native-mindzone-visionos> (a fork of [react/react-native](https://github.com/react/react-native)).
+The packages are not yet published to npm.
 
 ## Requirements
 

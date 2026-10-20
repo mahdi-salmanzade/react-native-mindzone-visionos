@@ -16,7 +16,12 @@ Goal: upstream React Native 0.88.0 plus everything `@callstack/react-native-visi
 
 ## Reference material (read-only, outside the repo)
 
-`$REF` = `/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/vos-src`
+`$SCRATCH` was the orchestrator's session scratch directory on the build machine. It is not part of this repo, and paths under it are kept only as a record.
+To recreate `$REF`:
+- the `gh/*` trees: `gh api repos/<owner>/<repo>/tarball/<ref>` for `callstack/react-native-visionos@0.79-stable`, `ReactVision/react-native-visionos@0.86-stable`, and `facebook/react-native` at `v0.79.6`, `v0.86.2` and `v0.88.0`;
+- the `npm/*` packages: `npm pack` of the listed packages.
+
+`$REF` = `$SCRATCH/vos-src`
 
 | Path | What |
 | --- | --- |
@@ -33,7 +38,7 @@ Goal: upstream React Native 0.88.0 plus everything `@callstack/react-native-visi
 
 Tooling:
 
-- **Yarn 1.22.22** is at `/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/tools/node_modules/.bin/yarn`; it is already on `PATH` for agent runs.
+- **Yarn 1.22.22** is at `$SCRATCH/tools/node_modules/.bin/yarn`; it is already on `PATH` for agent runs.
 - **Node** is v26.
 - **Xcode** is 27.1, with the `xros27.0` and `xrsimulator27.0` SDKs installed.
 - **The visionOS 27.0 simulator runtime** (24M362) is installed, with the device type "Apple Vision Pro".

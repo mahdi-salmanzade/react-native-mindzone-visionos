@@ -32,5 +32,5 @@ Several of these come from the reference forks' original designs. Fixing them is
 - Native compile. Inside the sandbox, use the direct **project** builds that worked in T4, not `-workspace`, with `OTHER_SWIFT_FLAGS='$(inherited) -disable-sandbox'` on the command line only. Build:
   - the RNTester Pods project and app for `xrsimulator`;
   - the RNTester Pods project and app for `iphonesimulator`.
-- Use `-derivedDataPath` and `OBJROOT` under `/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/T6-*`. If a podspec changes, re-run `RCT_USE_PREBUILT_RNCORE=0 pod install` in `packages/rn-tester`.
+- Use `-derivedDataPath` and `OBJROOT` under `$SCRATCH/derived/T6-*`. If a podspec changes, re-run `RCT_USE_PREBUILT_RNCORE=0 pod install` in `packages/rn-tester`.
 - Runtime checks need the simulator, which your sandbox cannot reach. List the exact scenarios the orchestrator should run in a "Runtime checks for orchestrator" section: what to call from JS, and what to observe.

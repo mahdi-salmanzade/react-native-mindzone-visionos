@@ -11,8 +11,8 @@ Read all six existing reports and all four request files before implementation. 
 Paths used below:
 
 ```sh
-R=/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos
-S=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad
+R=$REPO
+S=$SCRATCH
 V="$S/T4-verify"
 ```
 
@@ -55,28 +55,28 @@ All other requests (codegen isolation/output, source API pods/header exports, Sw
 All commands ran from repository root. Exact final commands and results:
 
 ```sh
-PATH=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/T4-verify/node22/bin:$PATH BABEL_DISABLE_CACHE=1 DOTSLASH_CACHE=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/T4-verify/js/dotslash-cache yarn test --runInBand --watchman=false --forceExit --testNamePattern='^(?!shouldAutoDeintegrate (?:false for a CocoaPods project whose Podfile has third-party pods|false when the pbxproj has uncommitted edits|true despite an unrelated dirty file)).*$' --json --outputFile=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/T4-verify/js/jest-node22.json
+PATH=$SCRATCH/T4-verify/node22/bin:$PATH BABEL_DISABLE_CACHE=1 DOTSLASH_CACHE=$SCRATCH/T4-verify/js/dotslash-cache yarn test --runInBand --watchman=false --forceExit --testNamePattern='^(?!shouldAutoDeintegrate (?:false for a CocoaPods project whose Podfile has third-party pods|false when the pbxproj has uncommitted edits|true despite an unrelated dirty file)).*$' --json --outputFile=$SCRATCH/T4-verify/js/jest-node22.json
 ```
 
-Exit **0**: 238 suites pass, 1 suite skipped; 6069 tests pass, 8 skipped; all 1679 snapshots pass. 148.404 seconds. Log: `/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/T4-verify/js/jest-node22.log`.
+Exit **0**: 238 suites pass, 1 suite skipped; 6069 tests pass, 8 skipped; all 1679 snapshots pass. 148.404 seconds. Log: `$SCRATCH/T4-verify/js/jest-node22.log`.
 
 ```sh
-PATH=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/T4-verify/node22/bin:$PATH BABEL_DISABLE_CACHE=1 yarn flow-check --max-workers 2 --temp-dir /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/T4-verify/js/flow-node22
+PATH=$SCRATCH/T4-verify/node22/bin:$PATH BABEL_DISABLE_CACHE=1 yarn flow-check --max-workers 2 --temp-dir $SCRATCH/T4-verify/js/flow-node22
 ```
 
-Exit **0**: Found 0 errors; 16.42s Log: `/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/T4-verify/js/flow-node22.log`.
+Exit **0**: Found 0 errors; 16.42s Log: `$SCRATCH/T4-verify/js/flow-node22.log`.
 
 ```sh
-PATH=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/T4-verify/node22/bin:$PATH BABEL_DISABLE_CACHE=1 yarn lint
+PATH=$SCRATCH/T4-verify/node22/bin:$PATH BABEL_DISABLE_CACHE=1 yarn lint
 ```
 
-Exit **0**: No errors/warnings; 12.39s Log: `/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/T4-verify/js/lint-node22.log`.
+Exit **0**: No errors/warnings; 12.39s Log: `$SCRATCH/T4-verify/js/lint-node22.log`.
 
 ```sh
-PATH=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/T4-verify/node22/bin:$PATH BABEL_DISABLE_CACHE=1 yarn test-generated-typescript
+PATH=$SCRATCH/T4-verify/node22/bin:$PATH BABEL_DISABLE_CACHE=1 yarn test-generated-typescript
 ```
 
-Exit **0**: 3.19s Log: `/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/T4-verify/js/typescript-node22.log`.
+Exit **0**: 3.19s Log: `$SCRATCH/T4-verify/js/typescript-node22.log`.
 
 
 The negative `testNamePattern` excludes exactly three `setup-apple-spm-test.js` cases that invoke `gitInitAndCommit`. Five additional skips already exist upstream. No tests were deleted, weakened or edited. `--forceExit` handles existing lingering test-process handles after the complete result is written; it does not suppress assertion failures. The first full Node 26 run finished assertions but was interrupted after retaining handles (exit 130), so it is not represented as a clean process exit.
@@ -153,11 +153,11 @@ The exact requested template workspace build exits **66** before compilation wit
 Cwd for both exact supplemental commands: `$V/TemplateVerify/visionos`.
 
 ```sh
-xcodebuild -project Pods/Pods.xcodeproj -scheme Pods-TemplateVerify -sdk xrsimulator -configuration Debug -destination 'generic/platform=visionOS Simulator' -derivedDataPath /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/template-visionos-pods -jobs 2 'OTHER_SWIFT_FLAGS=$(inherited) -disable-sandbox' OBJROOT=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/template-visionos-pods/Build/Intermediates.noindex build > ../../template-pods-xcodebuild.log 2>&1
+xcodebuild -project Pods/Pods.xcodeproj -scheme Pods-TemplateVerify -sdk xrsimulator -configuration Debug -destination 'generic/platform=visionOS Simulator' -derivedDataPath $SCRATCH/derived/template-visionos-pods -jobs 2 'OTHER_SWIFT_FLAGS=$(inherited) -disable-sandbox' OBJROOT=$SCRATCH/derived/template-visionos-pods/Build/Intermediates.noindex build > ../../template-pods-xcodebuild.log 2>&1
 ```
 
 ```sh
-xcodebuild -project TemplateVerify.xcodeproj -scheme TemplateVerify -sdk xrsimulator -configuration Debug -destination 'generic/platform=visionOS Simulator' -derivedDataPath /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/template-visionos-app -jobs 2 'OTHER_SWIFT_FLAGS=$(inherited) -disable-sandbox' OBJROOT=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/template-visionos-app/Build/Intermediates.noindex BUILD_DIR=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/T4-verify/TemplateVerify/visionos/build CODE_SIGNING_ALLOWED=NO build > ../../template-app-project-xcodebuild.log 2>&1
+xcodebuild -project TemplateVerify.xcodeproj -scheme TemplateVerify -sdk xrsimulator -configuration Debug -destination 'generic/platform=visionOS Simulator' -derivedDataPath $SCRATCH/derived/template-visionos-app -jobs 2 'OTHER_SWIFT_FLAGS=$(inherited) -disable-sandbox' OBJROOT=$SCRATCH/derived/template-visionos-app/Build/Intermediates.noindex BUILD_DIR=$SCRATCH/T4-verify/TemplateVerify/visionos/build CODE_SIGNING_ALLOWED=NO build > ../../template-app-project-xcodebuild.log 2>&1
 ```
 
 Artifact: `$V/TemplateVerify/visionos/build/Debug-xrsimulator/TemplateVerify.app`, bundle ID `org.reactjs.native.example.TemplateVerify`, arm64+x86_64, xrsimulator27.0, declared minimum 1.0. Logs: `T4-verify/template-pods-xcodebuild.log` and `template-app-project-xcodebuild.log`. The app is an unsigned Debug simulator build intended to load Metro; it has not been launched.
@@ -228,7 +228,7 @@ Each entry below is generated from the actual completed command recorder JSON. F
 
 ### simctl-runtimes-final
 
-Cwd: `/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos`. Exit **1**. Log: `T4-verify/native/simctl-runtimes-final.log`.
+Cwd: `$REPO`. Exit **1**. Log: `T4-verify/native/simctl-runtimes-final.log`.
 
 ```sh
 xcrun simctl list runtimes
@@ -236,7 +236,7 @@ xcrun simctl list runtimes
 
 ### rntester-pod-install-1
 
-Cwd: `/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos/packages/rn-tester`. Exit **1**. Log: `T4-verify/native/rntester-pod-install-1.log`.
+Cwd: `$REPO/packages/rn-tester`. Exit **1**. Log: `T4-verify/native/rntester-pod-install-1.log`.
 
 ```sh
 RCT_USE_PREBUILT_RNCORE=0 BABEL_DISABLE_CACHE=1 pod install
@@ -244,7 +244,7 @@ RCT_USE_PREBUILT_RNCORE=0 BABEL_DISABLE_CACHE=1 pod install
 
 ### rntester-pod-update
 
-Cwd: `/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos/packages/rn-tester`. Exit **0**. Log: `T4-verify/native/rntester-pod-update.log`.
+Cwd: `$REPO/packages/rn-tester`. Exit **0**. Log: `T4-verify/native/rntester-pod-update.log`.
 
 ```sh
 RCT_USE_PREBUILT_RNCORE=0 BABEL_DISABLE_CACHE=1 pod update ReactNativeDependencies --no-repo-update
@@ -252,7 +252,7 @@ RCT_USE_PREBUILT_RNCORE=0 BABEL_DISABLE_CACHE=1 pod update ReactNativeDependenci
 
 ### rntester-pod-install-final
 
-Cwd: `/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos/packages/rn-tester`. Exit **0**. Log: `T4-verify/native/rntester-pod-install-final.log`.
+Cwd: `$REPO/packages/rn-tester`. Exit **0**. Log: `T4-verify/native/rntester-pod-install-final.log`.
 
 ```sh
 RCT_USE_PREBUILT_RNCORE=0 BABEL_DISABLE_CACHE=1 pod install
@@ -260,82 +260,82 @@ RCT_USE_PREBUILT_RNCORE=0 BABEL_DISABLE_CACHE=1 pod install
 
 ### rntester-visionos-build-1
 
-Cwd: `/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos/packages/rn-tester`. Exit **66**. Log: `T4-verify/native/rntester-visionos-build-1.log`.
+Cwd: `$REPO/packages/rn-tester`. Exit **66**. Log: `T4-verify/native/rntester-visionos-build-1.log`.
 
 ```sh
-BABEL_DISABLE_CACHE=1 xcodebuild -workspace RNTesterPods.xcworkspace -scheme RNTester-visionOS -sdk xrsimulator -configuration Debug -destination 'generic/platform=visionOS Simulator' -derivedDataPath /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/rntester-visionos -jobs 4 CODE_SIGNING_ALLOWED=NO build
+BABEL_DISABLE_CACHE=1 xcodebuild -workspace RNTesterPods.xcworkspace -scheme RNTester-visionOS -sdk xrsimulator -configuration Debug -destination 'generic/platform=visionOS Simulator' -derivedDataPath $SCRATCH/derived/rntester-visionos -jobs 4 CODE_SIGNING_ALLOWED=NO build
 ```
 
 ### rntester-ios-build-1
 
-Cwd: `/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos/packages/rn-tester`. Exit **66**. Log: `T4-verify/native/rntester-ios-build-1.log`.
+Cwd: `$REPO/packages/rn-tester`. Exit **66**. Log: `T4-verify/native/rntester-ios-build-1.log`.
 
 ```sh
-BABEL_DISABLE_CACHE=1 xcodebuild -workspace RNTesterPods.xcworkspace -scheme RNTester -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/rntester-ios -jobs 4 CODE_SIGNING_ALLOWED=NO build
+BABEL_DISABLE_CACHE=1 xcodebuild -workspace RNTesterPods.xcworkspace -scheme RNTester -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath $SCRATCH/derived/rntester-ios -jobs 4 CODE_SIGNING_ALLOWED=NO build
 ```
 
 ### rntester-project-list
 
-Cwd: `/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos/packages/rn-tester`. Exit **0**. Log: `T4-verify/native/rntester-project-list.log`.
+Cwd: `$REPO/packages/rn-tester`. Exit **0**. Log: `T4-verify/native/rntester-project-list.log`.
 
 ```sh
-xcodebuild -project RNTesterPods.xcodeproj -scheme RNTester-visionOS -derivedDataPath /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/rntester-project-list -list
+xcodebuild -project RNTesterPods.xcodeproj -scheme RNTester-visionOS -derivedDataPath $SCRATCH/derived/rntester-project-list -list
 ```
 
 ### workspace-probe
 
-Cwd: `/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos`. Exit **66**. Log: `T4-verify/native/workspace-probe.log`.
+Cwd: `$REPO`. Exit **66**. Log: `T4-verify/native/workspace-probe.log`.
 
 ```sh
-xcodebuild -workspace /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/T4-verify/workspace-probe/Probe.xcworkspace -scheme RNTester-visionOS -derivedDataPath /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/workspace-probe -list
+xcodebuild -workspace $SCRATCH/T4-verify/workspace-probe/Probe.xcworkspace -scheme RNTester-visionOS -derivedDataPath $SCRATCH/derived/workspace-probe -list
 ```
 
 ### rntester-visionos-pods-build-1
 
-Cwd: `/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos/packages/rn-tester`. Exit **65**. Log: `T4-verify/native/rntester-visionos-pods-build-1.log`.
+Cwd: `$REPO/packages/rn-tester`. Exit **65**. Log: `T4-verify/native/rntester-visionos-pods-build-1.log`.
 
 ```sh
-BABEL_DISABLE_CACHE=1 xcodebuild -project Pods/Pods.xcodeproj -scheme Pods-RNTester-visionOS -sdk xrsimulator -configuration Debug -destination 'generic/platform=visionOS Simulator' -derivedDataPath /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/rntester-visionos-pods -jobs 4 CODE_SIGNING_ALLOWED=NO build
+BABEL_DISABLE_CACHE=1 xcodebuild -project Pods/Pods.xcodeproj -scheme Pods-RNTester-visionOS -sdk xrsimulator -configuration Debug -destination 'generic/platform=visionOS Simulator' -derivedDataPath $SCRATCH/derived/rntester-visionos-pods -jobs 4 CODE_SIGNING_ALLOWED=NO build
 ```
 
 ### rntester-ios-pods-build-1
 
-Cwd: `/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos/packages/rn-tester`. Exit **65**. Log: `T4-verify/native/rntester-ios-pods-build-1.log`.
+Cwd: `$REPO/packages/rn-tester`. Exit **65**. Log: `T4-verify/native/rntester-ios-pods-build-1.log`.
 
 ```sh
-BABEL_DISABLE_CACHE=1 xcodebuild -project Pods/Pods.xcodeproj -scheme Pods-RNTester -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/rntester-ios-pods -jobs 2 CODE_SIGNING_ALLOWED=NO build
+BABEL_DISABLE_CACHE=1 xcodebuild -project Pods/Pods.xcodeproj -scheme Pods-RNTester -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath $SCRATCH/derived/rntester-ios-pods -jobs 2 CODE_SIGNING_ALLOWED=NO build
 ```
 
 ### rntester-ios-pods-build-2
 
-Cwd: `/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos/packages/rn-tester`. Exit **0**. Log: `T4-verify/native/rntester-ios-pods-build-2.log`.
+Cwd: `$REPO/packages/rn-tester`. Exit **0**. Log: `T4-verify/native/rntester-ios-pods-build-2.log`.
 
 ```sh
-BABEL_DISABLE_CACHE=1 xcodebuild -project Pods/Pods.xcodeproj -scheme Pods-RNTester -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/rntester-ios-pods -jobs 2 OBJROOT=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/rntester-ios-pods/Build/Intermediates.noindex CODE_SIGNING_ALLOWED=NO build
+BABEL_DISABLE_CACHE=1 xcodebuild -project Pods/Pods.xcodeproj -scheme Pods-RNTester -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath $SCRATCH/derived/rntester-ios-pods -jobs 2 OBJROOT=$SCRATCH/derived/rntester-ios-pods/Build/Intermediates.noindex CODE_SIGNING_ALLOWED=NO build
 ```
 
 ### rntester-visionos-pods-build-2
 
-Cwd: `/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos/packages/rn-tester`. Exit **0**. Log: `T4-verify/native/rntester-visionos-pods-build-2.log`.
+Cwd: `$REPO/packages/rn-tester`. Exit **0**. Log: `T4-verify/native/rntester-visionos-pods-build-2.log`.
 
 ```sh
-BABEL_DISABLE_CACHE=1 xcodebuild -project Pods/Pods.xcodeproj -scheme Pods-RNTester-visionOS -sdk xrsimulator -configuration Debug -destination 'generic/platform=visionOS Simulator' -derivedDataPath /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/rntester-visionos-pods -jobs 4 'OTHER_SWIFT_FLAGS=$(inherited) -disable-sandbox' CODE_SIGNING_ALLOWED=NO build
+BABEL_DISABLE_CACHE=1 xcodebuild -project Pods/Pods.xcodeproj -scheme Pods-RNTester-visionOS -sdk xrsimulator -configuration Debug -destination 'generic/platform=visionOS Simulator' -derivedDataPath $SCRATCH/derived/rntester-visionos-pods -jobs 4 'OTHER_SWIFT_FLAGS=$(inherited) -disable-sandbox' CODE_SIGNING_ALLOWED=NO build
 ```
 
 ### rntester-visionos-app-build-1
 
-Cwd: `/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos/packages/rn-tester`. Exit **0**. Log: `T4-verify/native/rntester-visionos-app-build-1.log`.
+Cwd: `$REPO/packages/rn-tester`. Exit **0**. Log: `T4-verify/native/rntester-visionos-app-build-1.log`.
 
 ```sh
-BABEL_DISABLE_CACHE=1 xcodebuild -project RNTesterPods.xcodeproj -scheme RNTester-visionOS -sdk xrsimulator -configuration Debug -destination 'generic/platform=visionOS Simulator' -derivedDataPath /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/rntester-visionos-app -jobs 4 BUILD_DIR=/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos/packages/rn-tester/build OBJROOT=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/rntester-visionos-app/Build/Intermediates.noindex 'OTHER_SWIFT_FLAGS=$(inherited) -disable-sandbox' CODE_SIGNING_ALLOWED=NO build
+BABEL_DISABLE_CACHE=1 xcodebuild -project RNTesterPods.xcodeproj -scheme RNTester-visionOS -sdk xrsimulator -configuration Debug -destination 'generic/platform=visionOS Simulator' -derivedDataPath $SCRATCH/derived/rntester-visionos-app -jobs 4 BUILD_DIR=$REPO/packages/rn-tester/build OBJROOT=$SCRATCH/derived/rntester-visionos-app/Build/Intermediates.noindex 'OTHER_SWIFT_FLAGS=$(inherited) -disable-sandbox' CODE_SIGNING_ALLOWED=NO build
 ```
 
 ### rntester-ios-app-build-1
 
-Cwd: `/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos/packages/rn-tester`. Exit **0**. Log: `T4-verify/native/rntester-ios-app-build-1.log`.
+Cwd: `$REPO/packages/rn-tester`. Exit **0**. Log: `T4-verify/native/rntester-ios-app-build-1.log`.
 
 ```sh
-BABEL_DISABLE_CACHE=1 xcodebuild -project RNTesterPods.xcodeproj -scheme RNTester -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/rntester-ios-app -jobs 4 BUILD_DIR=/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos/packages/rn-tester/build OBJROOT=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/rntester-ios-app/Build/Intermediates.noindex CODE_SIGNING_ALLOWED=NO build
+BABEL_DISABLE_CACHE=1 xcodebuild -project RNTesterPods.xcodeproj -scheme RNTester -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath $SCRATCH/derived/rntester-ios-app -jobs 4 BUILD_DIR=$REPO/packages/rn-tester/build OBJROOT=$SCRATCH/derived/rntester-ios-app/Build/Intermediates.noindex CODE_SIGNING_ALLOWED=NO build
 ```
 
 

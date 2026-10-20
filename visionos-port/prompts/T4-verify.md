@@ -9,7 +9,7 @@ Make the fork build and run for real on visionOS, and prove iOS is unaffected. I
 Environment notes:
 
 - Network access is enabled for `pod install` and Hermes downloads.
-- Use `-derivedDataPath /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/<name>` for every `xcodebuild`.
+- Use `-derivedDataPath $SCRATCH/derived/<name>` for every `xcodebuild`.
 - CocoaPods caches are writable.
 - Use the Yarn on `PATH`.
 - If `xcrun simctl` is unavailable from your sandbox, say so in the report; the orchestrator will run the simulator steps.

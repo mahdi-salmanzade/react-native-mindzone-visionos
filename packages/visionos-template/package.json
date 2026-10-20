@@ -4,7 +4,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mindzone/react-native-mindzone-visionos.git",
+    "url": "git+https://github.com/mahdi-salmanzade/react-native-mindzone-visionos.git",
     "directory": "packages/visionos-template"
   },
   "publishConfig": {

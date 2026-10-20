@@ -8,9 +8,9 @@ Produce `visionos-port/INVENTORY.md`, the complete work list the porting tasks (
 
 ## Inputs (read-only)
 
-- `visionos-port/reference/callstack-0.79.6-vs-upstream-0.79.6.patch` and `callstack-0.79.6-files.txt`. The full trees are `/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/vos-src/gh/upstream-0.79.6` and `/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/vos-src/gh/callstack-0.79`.
-- `visionos-port/reference/reactvision-0.86.4-vs-upstream-0.86.2.patch` and `reactvision-0.86.4-files.txt`. The full trees are `/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/vos-src/gh/upstream-0.86.2` and `/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/vos-src/gh/reactvision-0.86`.
-- The published packages and templates under `/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/vos-src/npm/` (see PLAN.md).
+- `visionos-port/reference/callstack-0.79.6-vs-upstream-0.79.6.patch` and `callstack-0.79.6-files.txt`. The full trees are `$SCRATCH/vos-src/gh/upstream-0.79.6` and `$SCRATCH/vos-src/gh/callstack-0.79`.
+- `visionos-port/reference/reactvision-0.86.4-vs-upstream-0.86.2.patch` and `reactvision-0.86.4-files.txt`. The full trees are `$SCRATCH/vos-src/gh/upstream-0.86.2` and `$SCRATCH/vos-src/gh/reactvision-0.86`.
+- The published packages and templates under `$SCRATCH/vos-src/npm/` (see PLAN.md).
 - This repo, which is upstream 0.88.0 and is the target.
 
 ## Method
@@ -37,7 +37,7 @@ Produce `visionos-port/INVENTORY.md`, the complete work list the porting tasks (
    - **CI and release scripts.**
    - **Anything 0.88 introduced since 0.86.2 that newly needs a visionOS guard:** new files using iOS-only UIKit APIs such as `UIScreen.mainScreen`, `UIDevice.orientation`, status bar, `statusBarManager`, haptics/`UIFeedbackGenerator`, `UIApplication.sharedApplication.keyWindow`, `UIScreen` brightness, or `UIWindowScene.interfaceOrientation`.
      - Grep `packages/react-native` for these and diff the hits against what the forks guarded.
-     - Also run `diff -rq` on the native sources (React/, ReactApple/, ReactCommon/, Libraries/) between `/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/vos-src/gh/upstream-0.86.2/packages/react-native` and this repo's `packages/react-native`. Inspect new and changed native files for iOS-only APIs.
+     - Also run `diff -rq` on the native sources (React/, ReactApple/, ReactCommon/, Libraries/) between `$SCRATCH/vos-src/gh/upstream-0.86.2/packages/react-native` and this repo's `packages/react-native`. Inspect new and changed native files for iOS-only APIs.
 
 ## Output format (`visionos-port/INVENTORY.md`)
 

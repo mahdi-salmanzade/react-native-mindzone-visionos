@@ -5,10 +5,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mindzone/react-native-mindzone-visionos",
+    "url": "https://github.com/mahdi-salmanzade/react-native-mindzone-visionos",
     "directory": "packages/react-native"
   },
-  "homepage": "https://github.com/mindzone/react-native-mindzone-visionos",
+  "homepage": "https://github.com/mahdi-salmanzade/react-native-mindzone-visionos",
   "keywords": [
     "react",
     "react-native",
@@ -19,7 +19,7 @@
     "app-framework",
     "mobile-development"
   ],
-  "bugs": "https://github.com/mindzone/react-native-mindzone-visionos/issues",
+  "bugs": "https://github.com/mahdi-salmanzade/react-native-mindzone-visionos/issues",
   "publishConfig": {
     "access": "public"
   },

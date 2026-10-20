@@ -39,7 +39,7 @@ The required `diff -rq` ran on all four native roots against upstream0.86.2. Add
 Commands below group repeated read-only invocations by purpose; `$REF` abbreviates the exact reference root from PLAN:
 
 ```sh
-REF=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/vos-src
+REF=$SCRATCH/vos-src
 cat AGENTS.md visionos-port/PLAN.md
 wc -l visionos-port/reference/*
 cat visionos-port/reference/callstack-0.79.6-files.txt
@@ -89,7 +89,7 @@ The final Android-isolation review ran this exact read-only probe with already-a
 
 ```sh
 node <<'JS'
-const p='/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/vos-src/gh/reactvision-0.86/packages/react-native/visionos_modules';
+const p='$SCRATCH/vos-src/gh/reactvision-0.86/packages/react-native/visionos_modules';
 const combine=require('./packages/react-native-codegen/lib/cli/combine/combine-js-to-schema.js');
 const java=require('./packages/react-native-codegen/lib/generators/modules/GenerateModuleJavaSpec.js');
 const schema=combine.combineSchemasInFileList([p],'android');

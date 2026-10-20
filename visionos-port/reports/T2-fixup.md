@@ -124,10 +124,10 @@ BABEL_DISABLE_CACHE=1 yarn test scripts/js-api/build-types --runInBand --watchma
 
 ### Codegen failure baseline proof
 
-First ran the same failing suite from the **exact requested reference cwd**, `/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/vos-src/gh/upstream-0.88.0`:
+First ran the same failing suite from the **exact requested reference cwd**, `$SCRATCH/vos-src/gh/upstream-0.88.0`:
 
 ```sh
-node /Users/intzero/Documents/Pingroom/react-native-mindzone-visionos/node_modules/jest/bin/jest.js packages/react-native/scripts/codegen/__tests__/generate-artifacts-executor-test.js --runInBand --watchman=false --silent
+node $REPO/node_modules/jest/bin/jest.js packages/react-native/scripts/codegen/__tests__/generate-artifacts-executor-test.js --runInBand --watchman=false --silent
 ```
 
 **Exit 1 before tests:** `Cannot find module 'jest-config'` from the reference `jest.config.js`, because the reference has no `node_modules`. Log: `/private/tmp/T2-fixup/jest-reference-direct.log`. No reference fixture writes occurred.

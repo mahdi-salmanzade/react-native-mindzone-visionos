@@ -2,7 +2,7 @@ You are task **T7-scene-crash-fix** in the visionOS port of this React Native 0.
 
 ## Bug: T6 introduced a launch crash on any non-window scene connection
 
-The orchestrator ran RNTester-visionOS in the Apple Vision Pro simulator (visionOS 27.0) with the T6 build. The app crashed with `EXC_BAD_ACCESS`, "Thread stack size exceeded due to excessive recursion", on the main thread. The crash report is at `/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/shots/RNTester-visionOS-2026-10-21-024255.ips`.
+The orchestrator ran RNTester-visionOS in the Apple Vision Pro simulator (visionOS 27.0) with the T6 build. The app crashed with `EXC_BAD_ACCESS`, "Thread stack size exceeded due to excessive recursion", on the main thread. The crash report is at `$SCRATCH/shots/RNTester-visionOS-2026-10-21-024255.ips`.
 
 The recursing frames, about 4,600 deep, are:
 

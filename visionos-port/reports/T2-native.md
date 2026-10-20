@@ -194,7 +194,7 @@ xcrun -sdk <sdk> clang -fsyntax-only -fobjc-arc -fmodules \
 ### Audit/search commands
 
 ```sh
-diff -rq /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/vos-src/gh/upstream-0.86.2/packages/react-native packages/react-native
+diff -rq $SCRATCH/vos-src/gh/upstream-0.86.2/packages/react-native packages/react-native
 ```
 
 Exit1, expected differences; counts and stable upstream comparison described above. Fabric-only diff also exit1; upstream0.86.2/current `RCTScheduler.mm` comparison exit0 (identical).

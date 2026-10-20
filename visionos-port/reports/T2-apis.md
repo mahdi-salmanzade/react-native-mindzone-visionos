@@ -199,7 +199,7 @@ Repeated visionOS/iOS Swift typechecks, visionOS ObjC++ syntax checks against ac
 
 # T2-apis SwiftExtensions check log
 
-All commands ran from `/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos`. No network, git writes, node_modules writes, full app build or simulator launch occurred. The temporary include tree contains symlinks to actual repository headers; it is not a replacement implementation. The minimal module maps below verify used symbols and Swift/ObjC boundaries, but do not verify CocoaPods-generated framework module maps or package linking.
+All commands ran from `$REPO`. No network, git writes, node_modules writes, full app build or simulator launch occurred. The temporary include tree contains symlinks to actual repository headers; it is not a replacement implementation. The minimal module maps below verify used symbols and Swift/ObjC boundaries, but do not verify CocoaPods-generated framework module maps or package linking.
 
 ## Temporary header preparation
 

@@ -32,6 +32,6 @@ Run and record:
 - `yarn test` for every suite touched in T2: XR, WindowManager, Keyboard, StatusBar, codegen, cocoapods Ruby tests, spm, community-cli-plugin, `scripts/__tests__`
 - `yarn test-generated-typescript`
 
-Fix anything the port introduced. Suites that fail identically on the base are pre-existing; prove it by running the same suite in `/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/vos-src/gh/upstream-0.88.0`, which has no `node_modules`. If you can't, explain why. Do not use `git stash`.
+Fix anything the port introduced. Suites that fail identically on the base are pre-existing; prove it by running the same suite in `$SCRATCH/vos-src/gh/upstream-0.88.0`, which has no `node_modules`. If you can't, explain why. Do not use `git stash`.
 
 Write `visionos-port/reports/T2-fixup.md` with what you changed, the exact commands you ran and their results, and anything still open.

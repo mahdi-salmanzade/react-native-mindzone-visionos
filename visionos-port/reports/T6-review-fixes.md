@@ -32,8 +32,8 @@ The launch-link delegate uses Apple's documented SwiftUI UIApplicationDelegateAd
 Commands run from the repository root unless a different cwd is specified:
 
 ```sh
-R=/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos
-S=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad
+R=$REPO
+S=$SCRATCH
 V="$S/T6-review-fixes"
 ```
 
@@ -194,7 +194,7 @@ Runtime scenario addition: trigger reload while opening/closing, attempt an imme
 Run from repository root unless noted.
 
 ```sh
-PATH=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/T4-verify/node22/bin:$PATH BABEL_DISABLE_CACHE=1 yarn test packages/react-native/scripts/codegen/__tests__ --runInBand --watchman=false --silent > /private/tmp/T6-codegen-jest.log 2>&1
+PATH=$SCRATCH/T4-verify/node22/bin:$PATH BABEL_DISABLE_CACHE=1 yarn test packages/react-native/scripts/codegen/__tests__ --runInBand --watchman=false --silent > /private/tmp/T6-codegen-jest.log 2>&1
 ```
 
 PASS: 3 suites, 60 tests, 24 snapshots. Includes actual CLI native generation with opposing ios/visionos exclusions; actual Xcode script invocation for iphonesimulator, xrsimulator and xros; matching and differing mixed-target codegen sets. The unchanged 24 snapshots cover existing iOS app provider output. Initial run before adding the script/mixed checks passed 55 tests; one development run with a mismatched legacy library name in the new mixed-target fixture failed one assertion, corrected to the modern single-codegenConfig fixture and rerun successfully.
@@ -239,7 +239,7 @@ GEM_HOME=/opt/homebrew/Cellar/cocoapods/1.16.2_2/libexec GEM_PATH=/opt/homebrew/
 PASS using real CocoaPods and temporary podspecs: actual `list_native_modules!` selects Shared + VisionOnly on visionOS, and its iOS result JSON is byte-identical to upstream 0.88.0's actual method. Both generated autolinking manifests are byte-identical to CLI input. The baseline method was evaluated from the read-only reference source without editing it.
 
 ```sh
-PATH=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/T4-verify/node22/bin:$PATH NODE_PATH=$PWD/node_modules node /private/tmp/T6-codegen-ios-parity.js > /private/tmp/T6-codegen-ios-parity.log 2>&1
+PATH=$SCRATCH/T4-verify/node22/bin:$PATH NODE_PATH=$PWD/node_modules node /private/tmp/T6-codegen-ios-parity.js > /private/tmp/T6-codegen-ios-parity.log 2>&1
 ```
 
 PASS: six generated iOS native files byte-identical to upstream 0.88.0 for shared, iOS-only and visionOS-only dependencies. Probe uses the upstream executor from the read-only reference with the installed same-version compiler via NODE_PATH, disables only its install/build helper, and compares full generated file paths and bytes. No reference files were written.
@@ -273,25 +273,25 @@ All four commands below finished with exit 0 and **BUILD SUCCEEDED**. Commands a
 ### visionos-pods
 
 ```sh
-BABEL_DISABLE_CACHE=1 xcodebuild -project Pods/Pods.xcodeproj -scheme Pods-RNTester-visionOS -sdk xrsimulator -configuration Debug -destination 'generic/platform=visionOS Simulator' -derivedDataPath /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/T6-visionos-pods -jobs 2 OBJROOT=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/T6-visionos-pods/Build/Intermediates.noindex 'OTHER_SWIFT_FLAGS=$(inherited) -disable-sandbox' CODE_SIGNING_ALLOWED=NO build
+BABEL_DISABLE_CACHE=1 xcodebuild -project Pods/Pods.xcodeproj -scheme Pods-RNTester-visionOS -sdk xrsimulator -configuration Debug -destination 'generic/platform=visionOS Simulator' -derivedDataPath $SCRATCH/derived/T6-visionos-pods -jobs 2 OBJROOT=$SCRATCH/derived/T6-visionos-pods/Build/Intermediates.noindex 'OTHER_SWIFT_FLAGS=$(inherited) -disable-sandbox' CODE_SIGNING_ALLOWED=NO build
 ```
 
 ### visionos-app
 
 ```sh
-BABEL_DISABLE_CACHE=1 xcodebuild -project RNTesterPods.xcodeproj -scheme RNTester-visionOS -sdk xrsimulator -configuration Debug -destination 'generic/platform=visionOS Simulator' -derivedDataPath /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/T6-visionos-app -jobs 4 BUILD_DIR=/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos/packages/rn-tester/build OBJROOT=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/T6-visionos-app/Build/Intermediates.noindex 'OTHER_SWIFT_FLAGS=$(inherited) -disable-sandbox' CODE_SIGNING_ALLOWED=NO build
+BABEL_DISABLE_CACHE=1 xcodebuild -project RNTesterPods.xcodeproj -scheme RNTester-visionOS -sdk xrsimulator -configuration Debug -destination 'generic/platform=visionOS Simulator' -derivedDataPath $SCRATCH/derived/T6-visionos-app -jobs 4 BUILD_DIR=$REPO/packages/rn-tester/build OBJROOT=$SCRATCH/derived/T6-visionos-app/Build/Intermediates.noindex 'OTHER_SWIFT_FLAGS=$(inherited) -disable-sandbox' CODE_SIGNING_ALLOWED=NO build
 ```
 
 ### ios-pods
 
 ```sh
-BABEL_DISABLE_CACHE=1 xcodebuild -project Pods/Pods.xcodeproj -scheme Pods-RNTester -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/T6-ios-pods -jobs 2 OBJROOT=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/T6-ios-pods/Build/Intermediates.noindex 'OTHER_SWIFT_FLAGS=$(inherited) -disable-sandbox' CODE_SIGNING_ALLOWED=NO build
+BABEL_DISABLE_CACHE=1 xcodebuild -project Pods/Pods.xcodeproj -scheme Pods-RNTester -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath $SCRATCH/derived/T6-ios-pods -jobs 2 OBJROOT=$SCRATCH/derived/T6-ios-pods/Build/Intermediates.noindex 'OTHER_SWIFT_FLAGS=$(inherited) -disable-sandbox' CODE_SIGNING_ALLOWED=NO build
 ```
 
 ### ios-app
 
 ```sh
-BABEL_DISABLE_CACHE=1 xcodebuild -project RNTesterPods.xcodeproj -scheme RNTester -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath /private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/T6-ios-app -jobs 4 BUILD_DIR=/Users/intzero/Documents/Pingroom/react-native-mindzone-visionos/packages/rn-tester/build OBJROOT=/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/derived/T6-ios-app/Build/Intermediates.noindex 'OTHER_SWIFT_FLAGS=$(inherited) -disable-sandbox' CODE_SIGNING_ALLOWED=NO build
+BABEL_DISABLE_CACHE=1 xcodebuild -project RNTesterPods.xcodeproj -scheme RNTester -sdk iphonesimulator -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath $SCRATCH/derived/T6-ios-app -jobs 4 BUILD_DIR=$REPO/packages/rn-tester/build OBJROOT=$SCRATCH/derived/T6-ios-app/Build/Intermediates.noindex 'OTHER_SWIFT_FLAGS=$(inherited) -disable-sandbox' CODE_SIGNING_ALLOWED=NO build
 ```
 
 Artifacts:
