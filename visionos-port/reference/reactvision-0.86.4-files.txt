@@ -1,0 +1,102 @@
+Only in reactvision-0.86/.github/actions: test-visionos-rntester
+Files upstream-0.86.2/.github/workflows/bump-podfile-lock.yml and reactvision-0.86/.github/workflows/bump-podfile-lock.yml differ
+Files upstream-0.86.2/.github/workflows/create-draft-release.yml and reactvision-0.86/.github/workflows/create-draft-release.yml differ
+Files upstream-0.86.2/.github/workflows/generate-changelog.yml and reactvision-0.86/.github/workflows/generate-changelog.yml differ
+Files upstream-0.86.2/.github/workflows/publish-npm.yml and reactvision-0.86/.github/workflows/publish-npm.yml differ
+Only in reactvision-0.86/.github/workflows: test-visionos.yml
+Files upstream-0.86.2/.gitignore and reactvision-0.86/.gitignore differ
+Files upstream-0.86.2/README.md and reactvision-0.86/README.md differ
+Files upstream-0.86.2/package.json and reactvision-0.86/package.json differ
+Files upstream-0.86.2/packages/jest-preset/jest/resolver.js and reactvision-0.86/packages/jest-preset/jest/resolver.js differ
+Files upstream-0.86.2/packages/react-native/Libraries/AppDelegate/RCTAppDelegate.h and reactvision-0.86/packages/react-native/Libraries/AppDelegate/RCTAppDelegate.h differ
+Files upstream-0.86.2/packages/react-native/Libraries/AppDelegate/RCTAppDelegate.mm and reactvision-0.86/packages/react-native/Libraries/AppDelegate/RCTAppDelegate.mm differ
+Files upstream-0.86.2/packages/react-native/Libraries/AppDelegate/RCTRootViewFactory.mm and reactvision-0.86/packages/react-native/Libraries/AppDelegate/RCTRootViewFactory.mm differ
+Files upstream-0.86.2/packages/react-native/Libraries/Components/Keyboard/Keyboard.js and reactvision-0.86/packages/react-native/Libraries/Components/Keyboard/Keyboard.js differ
+Files upstream-0.86.2/packages/react-native/Libraries/Components/Keyboard/KeyboardAvoidingView.js and reactvision-0.86/packages/react-native/Libraries/Components/Keyboard/KeyboardAvoidingView.js differ
+Files upstream-0.86.2/packages/react-native/Libraries/Components/ScrollView/ScrollView.js and reactvision-0.86/packages/react-native/Libraries/Components/ScrollView/ScrollView.js differ
+Files upstream-0.86.2/packages/react-native/Libraries/Components/StatusBar/StatusBar.js and reactvision-0.86/packages/react-native/Libraries/Components/StatusBar/StatusBar.js differ
+Files upstream-0.86.2/packages/react-native/Libraries/Components/TextInput/InputAccessoryView.js and reactvision-0.86/packages/react-native/Libraries/Components/TextInput/InputAccessoryView.js differ
+Files upstream-0.86.2/packages/react-native/Libraries/Core/ReactNativeVersion.js and reactvision-0.86/packages/react-native/Libraries/Core/ReactNativeVersion.js differ
+Files upstream-0.86.2/packages/react-native/Libraries/LinkingIOS/RCTLinkingManager.h and reactvision-0.86/packages/react-native/Libraries/LinkingIOS/RCTLinkingManager.h differ
+Files upstream-0.86.2/packages/react-native/Libraries/LinkingIOS/RCTLinkingManager.mm and reactvision-0.86/packages/react-native/Libraries/LinkingIOS/RCTLinkingManager.mm differ
+Files upstream-0.86.2/packages/react-native/Libraries/PushNotificationIOS/RCTPushNotificationManager.mm and reactvision-0.86/packages/react-native/Libraries/PushNotificationIOS/RCTPushNotificationManager.mm differ
+Only in reactvision-0.86/packages/react-native/Libraries: SwiftExtensions
+Files upstream-0.86.2/packages/react-native/Libraries/Text/Text/RCTTextView.mm and reactvision-0.86/packages/react-native/Libraries/Text/Text/RCTTextView.mm differ
+Files upstream-0.86.2/packages/react-native/Libraries/Text/TextInput/RCTBaseTextInputView.mm and reactvision-0.86/packages/react-native/Libraries/Text/TextInput/RCTBaseTextInputView.mm differ
+Only in reactvision-0.86/packages/react-native/Libraries: WindowManager
+Only in reactvision-0.86/packages/react-native/Libraries: XR
+Files upstream-0.86.2/packages/react-native/Package.swift and reactvision-0.86/packages/react-native/Package.swift differ
+Files upstream-0.86.2/packages/react-native/README.md and reactvision-0.86/packages/react-native/README.md differ
+Files upstream-0.86.2/packages/react-native/React/Base/RCTBundleURLProvider.mm and reactvision-0.86/packages/react-native/React/Base/RCTBundleURLProvider.mm differ
+Files upstream-0.86.2/packages/react-native/React/Base/RCTConstants.h and reactvision-0.86/packages/react-native/React/Base/RCTConstants.h differ
+Files upstream-0.86.2/packages/react-native/React/Base/RCTConstants.m and reactvision-0.86/packages/react-native/React/Base/RCTConstants.m differ
+Files upstream-0.86.2/packages/react-native/React/Base/RCTKeyCommands.m and reactvision-0.86/packages/react-native/React/Base/RCTKeyCommands.m differ
+Files upstream-0.86.2/packages/react-native/React/Base/RCTUtils.mm and reactvision-0.86/packages/react-native/React/Base/RCTUtils.mm differ
+Files upstream-0.86.2/packages/react-native/React/Base/RCTVersion.m and reactvision-0.86/packages/react-native/React/Base/RCTVersion.m differ
+Files upstream-0.86.2/packages/react-native/React/CoreModules/RCTAlertController.mm and reactvision-0.86/packages/react-native/React/CoreModules/RCTAlertController.mm differ
+Files upstream-0.86.2/packages/react-native/React/CoreModules/RCTAppearance.mm and reactvision-0.86/packages/react-native/React/CoreModules/RCTAppearance.mm differ
+Files upstream-0.86.2/packages/react-native/React/CoreModules/RCTDevMenu.mm and reactvision-0.86/packages/react-native/React/CoreModules/RCTDevMenu.mm differ
+Files upstream-0.86.2/packages/react-native/React/CoreModules/RCTDeviceInfo.mm and reactvision-0.86/packages/react-native/React/CoreModules/RCTDeviceInfo.mm differ
+Files upstream-0.86.2/packages/react-native/React/CoreModules/RCTKeyboardObserver.mm and reactvision-0.86/packages/react-native/React/CoreModules/RCTKeyboardObserver.mm differ
+Files upstream-0.86.2/packages/react-native/React/Fabric/Mounting/ComponentViews/InputAccessory/RCTInputAccessoryComponentView.mm and reactvision-0.86/packages/react-native/React/Fabric/Mounting/ComponentViews/InputAccessory/RCTInputAccessoryComponentView.mm differ
+Files upstream-0.86.2/packages/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm and reactvision-0.86/packages/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm differ
+Files upstream-0.86.2/packages/react-native/React/Fabric/Mounting/ComponentViews/Text/RCTParagraphComponentView.mm and reactvision-0.86/packages/react-native/React/Fabric/Mounting/ComponentViews/Text/RCTParagraphComponentView.mm differ
+Files upstream-0.86.2/packages/react-native/React/Fabric/Mounting/ComponentViews/TextInput/RCTTextInputComponentView.mm and reactvision-0.86/packages/react-native/React/Fabric/Mounting/ComponentViews/TextInput/RCTTextInputComponentView.mm differ
+Files upstream-0.86.2/packages/react-native/React/Fabric/Mounting/ComponentViews/TextInput/RCTTextInputUtils.mm and reactvision-0.86/packages/react-native/React/Fabric/Mounting/ComponentViews/TextInput/RCTTextInputUtils.mm differ
+Files upstream-0.86.2/packages/react-native/React/Fabric/RCTSurfacePointerHandler.mm and reactvision-0.86/packages/react-native/React/Fabric/RCTSurfacePointerHandler.mm differ
+Files upstream-0.86.2/packages/react-native/React/Fabric/RCTSurfaceTouchHandler.mm and reactvision-0.86/packages/react-native/React/Fabric/RCTSurfaceTouchHandler.mm differ
+Files upstream-0.86.2/packages/react-native/React/Fabric/Utils/RCTBoxShadow.mm and reactvision-0.86/packages/react-native/React/Fabric/Utils/RCTBoxShadow.mm differ
+Only in reactvision-0.86/packages/react-native/React: React-RCTFBReactNativeSpecVisionOS.podspec
+Files upstream-0.86.2/packages/react-native/React/Views/RCTModalHostViewController.m and reactvision-0.86/packages/react-native/React/Views/RCTModalHostViewController.m differ
+Files upstream-0.86.2/packages/react-native/React/Views/RCTViewManager.h and reactvision-0.86/packages/react-native/React/Views/RCTViewManager.h differ
+Files upstream-0.86.2/packages/react-native/React/Views/ScrollView/RCTScrollView.m and reactvision-0.86/packages/react-native/React/Views/ScrollView/RCTScrollView.m differ
+Files upstream-0.86.2/packages/react-native/React/Views/ScrollView/RCTScrollViewManager.h and reactvision-0.86/packages/react-native/React/Views/ScrollView/RCTScrollViewManager.h differ
+Files upstream-0.86.2/packages/react-native/React/Views/ScrollView/RCTScrollViewManager.m and reactvision-0.86/packages/react-native/React/Views/ScrollView/RCTScrollViewManager.m differ
+Files upstream-0.86.2/packages/react-native/React-Core.podspec and reactvision-0.86/packages/react-native/React-Core.podspec differ
+Files upstream-0.86.2/packages/react-native/React.podspec and reactvision-0.86/packages/react-native/React.podspec differ
+Files upstream-0.86.2/packages/react-native/ReactAndroid/gradle.properties and reactvision-0.86/packages/react-native/ReactAndroid/gradle.properties differ
+Files upstream-0.86.2/packages/react-native/ReactAndroid/src/main/java/com/facebook/react/modules/systeminfo/ReactNativeVersion.kt and reactvision-0.86/packages/react-native/ReactAndroid/src/main/java/com/facebook/react/modules/systeminfo/ReactNativeVersion.kt differ
+Files upstream-0.86.2/packages/react-native/ReactCommon/cxxreact/ReactNativeVersion.h and reactvision-0.86/packages/react-native/ReactCommon/cxxreact/ReactNativeVersion.h differ
+Files upstream-0.86.2/packages/react-native/ReactCommon/react/nativemodule/samples/platform/ios/ReactCommon/RCTSampleTurboModule.mm and reactvision-0.86/packages/react-native/ReactCommon/react/nativemodule/samples/platform/ios/ReactCommon/RCTSampleTurboModule.mm differ
+Files upstream-0.86.2/packages/react-native/ReactNativeApi.d.ts and reactvision-0.86/packages/react-native/ReactNativeApi.d.ts differ
+Files upstream-0.86.2/packages/react-native/index.js and reactvision-0.86/packages/react-native/index.js differ
+Files upstream-0.86.2/packages/react-native/index.js.flow and reactvision-0.86/packages/react-native/index.js.flow differ
+Only in reactvision-0.86/packages/react-native: local-cli
+Files upstream-0.86.2/packages/react-native/package.json and reactvision-0.86/packages/react-native/package.json differ
+Files upstream-0.86.2/packages/react-native/react-native.config.js and reactvision-0.86/packages/react-native/react-native.config.js differ
+Files upstream-0.86.2/packages/react-native/scripts/cocoapods/autolinking.rb and reactvision-0.86/packages/react-native/scripts/cocoapods/autolinking.rb differ
+Files upstream-0.86.2/packages/react-native/scripts/cocoapods/helpers.rb and reactvision-0.86/packages/react-native/scripts/cocoapods/helpers.rb differ
+Files upstream-0.86.2/packages/react-native/scripts/cocoapods/new_architecture.rb and reactvision-0.86/packages/react-native/scripts/cocoapods/new_architecture.rb differ
+Files upstream-0.86.2/packages/react-native/scripts/cocoapods/utils.rb and reactvision-0.86/packages/react-native/scripts/cocoapods/utils.rb differ
+Files upstream-0.86.2/packages/react-native/scripts/codegen/__tests__/__snapshots__/generate-artifacts-executor-test.js.snap and reactvision-0.86/packages/react-native/scripts/codegen/__tests__/__snapshots__/generate-artifacts-executor-test.js.snap differ
+Files upstream-0.86.2/packages/react-native/scripts/codegen/generate-artifacts-executor/constants.js and reactvision-0.86/packages/react-native/scripts/codegen/generate-artifacts-executor/constants.js differ
+Files upstream-0.86.2/packages/react-native/scripts/codegen/generate-artifacts-executor/generateFBReactNativeSpecIOS.js and reactvision-0.86/packages/react-native/scripts/codegen/generate-artifacts-executor/generateFBReactNativeSpecIOS.js differ
+Files upstream-0.86.2/packages/react-native/scripts/codegen/generate-artifacts-executor/generateNativeCode.js and reactvision-0.86/packages/react-native/scripts/codegen/generate-artifacts-executor/generateNativeCode.js differ
+Files upstream-0.86.2/packages/react-native/scripts/codegen/generate-artifacts-executor/utils.js and reactvision-0.86/packages/react-native/scripts/codegen/generate-artifacts-executor/utils.js differ
+Files upstream-0.86.2/packages/react-native/scripts/ios-prebuild/cli.js and reactvision-0.86/packages/react-native/scripts/ios-prebuild/cli.js differ
+Files upstream-0.86.2/packages/react-native/scripts/ios-prebuild/types.js and reactvision-0.86/packages/react-native/scripts/ios-prebuild/types.js differ
+Files upstream-0.86.2/packages/react-native/scripts/react-native-xcode.sh and reactvision-0.86/packages/react-native/scripts/react-native-xcode.sh differ
+Files upstream-0.86.2/packages/react-native/scripts/react_native_pods.rb and reactvision-0.86/packages/react-native/scripts/react_native_pods.rb differ
+Files upstream-0.86.2/packages/react-native/sdks/hermes-engine/hermes-engine.podspec and reactvision-0.86/packages/react-native/sdks/hermes-engine/hermes-engine.podspec differ
+Files upstream-0.86.2/packages/react-native/sdks/hermes-engine/utils/build-hermesc-xcode.sh and reactvision-0.86/packages/react-native/sdks/hermes-engine/utils/build-hermesc-xcode.sh differ
+Files upstream-0.86.2/packages/react-native/types/index.d.ts and reactvision-0.86/packages/react-native/types/index.d.ts differ
+Files upstream-0.86.2/packages/react-native/types/tsconfig.json and reactvision-0.86/packages/react-native/types/tsconfig.json differ
+Only in reactvision-0.86/packages/react-native: visionos_modules
+Files upstream-0.86.2/packages/rn-tester/Podfile and reactvision-0.86/packages/rn-tester/Podfile differ
+Only in reactvision-0.86/packages/rn-tester/RNTester: PrivacyInfo.xcprivacy
+Only in reactvision-0.86/packages/rn-tester: RNTester-visionOS
+Files upstream-0.86.2/packages/rn-tester/RNTesterPods.xcodeproj/project.pbxproj and reactvision-0.86/packages/rn-tester/RNTesterPods.xcodeproj/project.pbxproj differ
+Only in reactvision-0.86/packages/rn-tester/RNTesterPods.xcodeproj/xcshareddata/xcschemes: RNTester-visionOS.xcscheme
+Files upstream-0.86.2/packages/rn-tester/js/RNTesterApp.ios.js and reactvision-0.86/packages/rn-tester/js/RNTesterApp.ios.js differ
+Only in reactvision-0.86/packages/rn-tester/js/examples: SecondWindow
+Only in reactvision-0.86/packages/rn-tester/js/examples: XR
+Files upstream-0.86.2/packages/rn-tester/js/utils/RNTesterList.ios.js and reactvision-0.86/packages/rn-tester/js/utils/RNTesterList.ios.js differ
+Files upstream-0.86.2/packages/rn-tester/package.json and reactvision-0.86/packages/rn-tester/package.json differ
+Only in reactvision-0.86/packages/rn-tester/scripts: add-visionos-target.rb
+Files upstream-0.86.2/private/helloworld/package.json and reactvision-0.86/private/helloworld/package.json differ
+Files upstream-0.86.2/scripts/e2e/verdaccio.yml and reactvision-0.86/scripts/e2e/verdaccio.yml differ
+Only in reactvision-0.86/scripts: monorepo
+Only in reactvision-0.86/scripts: new-github-release-url.js
+Only in reactvision-0.86/scripts: oot-release.js
+Files upstream-0.86.2/scripts/releases/__tests__/__snapshots__/upload-release-assets-for-dotslash-test.js.snap and reactvision-0.86/scripts/releases/__tests__/__snapshots__/upload-release-assets-for-dotslash-test.js.snap differ
+Files upstream-0.86.2/scripts/releases/upload-release-assets-for-dotslash.js and reactvision-0.86/scripts/releases/upload-release-assets-for-dotslash.js differ

@@ -1,0 +1,81 @@
+Files upstream-0.79.6/.github/actions/test-ios-helloworld/action.yml and callstack-0.79/.github/actions/test-ios-helloworld/action.yml differ
+Files upstream-0.79.6/.github/actions/test-ios-rntester/action.yml and callstack-0.79/.github/actions/test-ios-rntester/action.yml differ
+Only in callstack-0.79/.github/actions: test-visionos-rntester
+Files upstream-0.79.6/.github/workflows/test-all.yml and callstack-0.79/.github/workflows/test-all.yml differ
+Files upstream-0.79.6/.gitignore and callstack-0.79/.gitignore differ
+Files upstream-0.79.6/README.md and callstack-0.79/README.md differ
+Files upstream-0.79.6/jest.config.js and callstack-0.79/jest.config.js differ
+Files upstream-0.79.6/packages/helloworld/package.json and callstack-0.79/packages/helloworld/package.json differ
+Files upstream-0.79.6/packages/react-native/Libraries/AppDelegate/RCTAppDelegate.h and callstack-0.79/packages/react-native/Libraries/AppDelegate/RCTAppDelegate.h differ
+Files upstream-0.79.6/packages/react-native/Libraries/AppDelegate/RCTAppDelegate.mm and callstack-0.79/packages/react-native/Libraries/AppDelegate/RCTAppDelegate.mm differ
+Files upstream-0.79.6/packages/react-native/Libraries/AppDelegate/RCTRootViewFactory.mm and callstack-0.79/packages/react-native/Libraries/AppDelegate/RCTRootViewFactory.mm differ
+Files upstream-0.79.6/packages/react-native/Libraries/Components/Keyboard/Keyboard.js and callstack-0.79/packages/react-native/Libraries/Components/Keyboard/Keyboard.js differ
+Files upstream-0.79.6/packages/react-native/Libraries/Components/Keyboard/KeyboardAvoidingView.js and callstack-0.79/packages/react-native/Libraries/Components/Keyboard/KeyboardAvoidingView.js differ
+Files upstream-0.79.6/packages/react-native/Libraries/Components/ScrollView/ScrollView.js and callstack-0.79/packages/react-native/Libraries/Components/ScrollView/ScrollView.js differ
+Files upstream-0.79.6/packages/react-native/Libraries/Components/StatusBar/StatusBar.js and callstack-0.79/packages/react-native/Libraries/Components/StatusBar/StatusBar.js differ
+Files upstream-0.79.6/packages/react-native/Libraries/Components/TextInput/InputAccessoryView.js and callstack-0.79/packages/react-native/Libraries/Components/TextInput/InputAccessoryView.js differ
+Files upstream-0.79.6/packages/react-native/Libraries/LinkingIOS/RCTLinkingManager.h and callstack-0.79/packages/react-native/Libraries/LinkingIOS/RCTLinkingManager.h differ
+Files upstream-0.79.6/packages/react-native/Libraries/LinkingIOS/RCTLinkingManager.mm and callstack-0.79/packages/react-native/Libraries/LinkingIOS/RCTLinkingManager.mm differ
+Files upstream-0.79.6/packages/react-native/Libraries/NewAppScreen/components/Header.js and callstack-0.79/packages/react-native/Libraries/NewAppScreen/components/Header.js differ
+Files upstream-0.79.6/packages/react-native/Libraries/PushNotificationIOS/RCTPushNotificationManager.mm and callstack-0.79/packages/react-native/Libraries/PushNotificationIOS/RCTPushNotificationManager.mm differ
+Only in callstack-0.79/packages/react-native/Libraries: SwiftExtensions
+Files upstream-0.79.6/packages/react-native/Libraries/Text/Text/RCTTextView.mm and callstack-0.79/packages/react-native/Libraries/Text/Text/RCTTextView.mm differ
+Files upstream-0.79.6/packages/react-native/Libraries/Text/TextInput/RCTBaseTextInputView.mm and callstack-0.79/packages/react-native/Libraries/Text/TextInput/RCTBaseTextInputView.mm differ
+Only in callstack-0.79/packages/react-native/Libraries: WindowManager
+Only in callstack-0.79/packages/react-native/Libraries: XR
+Files upstream-0.79.6/packages/react-native/React/Base/RCTBundleURLProvider.mm and callstack-0.79/packages/react-native/React/Base/RCTBundleURLProvider.mm differ
+Files upstream-0.79.6/packages/react-native/React/Base/RCTConstants.h and callstack-0.79/packages/react-native/React/Base/RCTConstants.h differ
+Files upstream-0.79.6/packages/react-native/React/Base/RCTConstants.m and callstack-0.79/packages/react-native/React/Base/RCTConstants.m differ
+Files upstream-0.79.6/packages/react-native/React/Base/RCTKeyCommands.m and callstack-0.79/packages/react-native/React/Base/RCTKeyCommands.m differ
+Files upstream-0.79.6/packages/react-native/React/Base/RCTUtils.m and callstack-0.79/packages/react-native/React/Base/RCTUtils.m differ
+Files upstream-0.79.6/packages/react-native/React/Base/UIKitProxies/RCTKeyWindowValuesProxy.mm and callstack-0.79/packages/react-native/React/Base/UIKitProxies/RCTKeyWindowValuesProxy.mm differ
+Files upstream-0.79.6/packages/react-native/React/CoreModules/RCTAlertController.mm and callstack-0.79/packages/react-native/React/CoreModules/RCTAlertController.mm differ
+Files upstream-0.79.6/packages/react-native/React/CoreModules/RCTAppearance.mm and callstack-0.79/packages/react-native/React/CoreModules/RCTAppearance.mm differ
+Files upstream-0.79.6/packages/react-native/React/CoreModules/RCTDevMenu.mm and callstack-0.79/packages/react-native/React/CoreModules/RCTDevMenu.mm differ
+Files upstream-0.79.6/packages/react-native/React/CoreModules/RCTDeviceInfo.mm and callstack-0.79/packages/react-native/React/CoreModules/RCTDeviceInfo.mm differ
+Files upstream-0.79.6/packages/react-native/React/CoreModules/RCTKeyboardObserver.mm and callstack-0.79/packages/react-native/React/CoreModules/RCTKeyboardObserver.mm differ
+Files upstream-0.79.6/packages/react-native/React/Fabric/Mounting/ComponentViews/InputAccessory/RCTInputAccessoryComponentView.mm and callstack-0.79/packages/react-native/React/Fabric/Mounting/ComponentViews/InputAccessory/RCTInputAccessoryComponentView.mm differ
+Files upstream-0.79.6/packages/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm and callstack-0.79/packages/react-native/React/Fabric/Mounting/ComponentViews/ScrollView/RCTScrollViewComponentView.mm differ
+Files upstream-0.79.6/packages/react-native/React/Fabric/Mounting/ComponentViews/Text/RCTParagraphComponentView.mm and callstack-0.79/packages/react-native/React/Fabric/Mounting/ComponentViews/Text/RCTParagraphComponentView.mm differ
+Files upstream-0.79.6/packages/react-native/React/Fabric/Mounting/ComponentViews/TextInput/RCTTextInputComponentView.mm and callstack-0.79/packages/react-native/React/Fabric/Mounting/ComponentViews/TextInput/RCTTextInputComponentView.mm differ
+Files upstream-0.79.6/packages/react-native/React/Fabric/Mounting/ComponentViews/TextInput/RCTTextInputUtils.mm and callstack-0.79/packages/react-native/React/Fabric/Mounting/ComponentViews/TextInput/RCTTextInputUtils.mm differ
+Files upstream-0.79.6/packages/react-native/React/Fabric/RCTSurfacePointerHandler.mm and callstack-0.79/packages/react-native/React/Fabric/RCTSurfacePointerHandler.mm differ
+Files upstream-0.79.6/packages/react-native/React/Fabric/RCTSurfaceTouchHandler.mm and callstack-0.79/packages/react-native/React/Fabric/RCTSurfaceTouchHandler.mm differ
+Files upstream-0.79.6/packages/react-native/React/Modules/RCTUIManager.mm and callstack-0.79/packages/react-native/React/Modules/RCTUIManager.mm differ
+Files upstream-0.79.6/packages/react-native/React/Views/RCTModalHostViewController.m and callstack-0.79/packages/react-native/React/Views/RCTModalHostViewController.m differ
+Files upstream-0.79.6/packages/react-native/React/Views/RCTViewManager.h and callstack-0.79/packages/react-native/React/Views/RCTViewManager.h differ
+Files upstream-0.79.6/packages/react-native/React/Views/ScrollView/RCTScrollView.m and callstack-0.79/packages/react-native/React/Views/ScrollView/RCTScrollView.m differ
+Files upstream-0.79.6/packages/react-native/React/Views/ScrollView/RCTScrollViewManager.h and callstack-0.79/packages/react-native/React/Views/ScrollView/RCTScrollViewManager.h differ
+Files upstream-0.79.6/packages/react-native/React/Views/ScrollView/RCTScrollViewManager.m and callstack-0.79/packages/react-native/React/Views/ScrollView/RCTScrollViewManager.m differ
+Files upstream-0.79.6/packages/react-native/React-Core.podspec and callstack-0.79/packages/react-native/React-Core.podspec differ
+Files upstream-0.79.6/packages/react-native/React.podspec and callstack-0.79/packages/react-native/React.podspec differ
+Files upstream-0.79.6/packages/react-native/ReactCommon/react/nativemodule/samples/platform/ios/ReactCommon/RCTSampleTurboModule.mm and callstack-0.79/packages/react-native/ReactCommon/react/nativemodule/samples/platform/ios/ReactCommon/RCTSampleTurboModule.mm differ
+Files upstream-0.79.6/packages/react-native/ReactCommon/react/runtime/ReactInstance.cpp and callstack-0.79/packages/react-native/ReactCommon/react/runtime/ReactInstance.cpp differ
+Files upstream-0.79.6/packages/react-native/index.js and callstack-0.79/packages/react-native/index.js differ
+Files upstream-0.79.6/packages/react-native/index.js.flow and callstack-0.79/packages/react-native/index.js.flow differ
+Only in callstack-0.79/packages/react-native: local-cli
+Files upstream-0.79.6/packages/react-native/package.json and callstack-0.79/packages/react-native/package.json differ
+Files upstream-0.79.6/packages/react-native/react-native.config.js and callstack-0.79/packages/react-native/react-native.config.js differ
+Files upstream-0.79.6/packages/react-native/scripts/cocoapods/helpers.rb and callstack-0.79/packages/react-native/scripts/cocoapods/helpers.rb differ
+Files upstream-0.79.6/packages/react-native/scripts/cocoapods/utils.rb and callstack-0.79/packages/react-native/scripts/cocoapods/utils.rb differ
+Files upstream-0.79.6/packages/react-native/scripts/react-native-xcode.sh and callstack-0.79/packages/react-native/scripts/react-native-xcode.sh differ
+Files upstream-0.79.6/packages/react-native/scripts/react_native_pods.rb and callstack-0.79/packages/react-native/scripts/react_native_pods.rb differ
+Files upstream-0.79.6/packages/react-native/sdks/hermes-engine/hermes-engine.podspec and callstack-0.79/packages/react-native/sdks/hermes-engine/hermes-engine.podspec differ
+Files upstream-0.79.6/packages/react-native/sdks/hermes-engine/utils/build-hermesc-xcode.sh and callstack-0.79/packages/react-native/sdks/hermes-engine/utils/build-hermesc-xcode.sh differ
+Files upstream-0.79.6/packages/react-native/types/index.d.ts and callstack-0.79/packages/react-native/types/index.d.ts differ
+Files upstream-0.79.6/packages/react-native/types/tsconfig.json and callstack-0.79/packages/react-native/types/tsconfig.json differ
+Only in callstack-0.79/packages/react-native: visionos_modules
+Files upstream-0.79.6/packages/react-native-test-library/package.json and callstack-0.79/packages/react-native-test-library/package.json differ
+Files upstream-0.79.6/packages/rn-tester/Podfile and callstack-0.79/packages/rn-tester/Podfile differ
+Only in callstack-0.79/packages/rn-tester/RNTester: PrivacyInfo.xcprivacy
+Only in callstack-0.79/packages/rn-tester: RNTester-visionOS
+Files upstream-0.79.6/packages/rn-tester/RNTesterPods.xcodeproj/project.pbxproj and callstack-0.79/packages/rn-tester/RNTesterPods.xcodeproj/project.pbxproj differ
+Files upstream-0.79.6/packages/rn-tester/js/RNTesterApp.ios.js and callstack-0.79/packages/rn-tester/js/RNTesterApp.ios.js differ
+Only in callstack-0.79/packages/rn-tester/js/examples: SecondWindow
+Only in callstack-0.79/packages/rn-tester/js/examples: XR
+Files upstream-0.79.6/packages/rn-tester/js/utils/RNTesterList.ios.js and callstack-0.79/packages/rn-tester/js/utils/RNTesterList.ios.js differ
+Files upstream-0.79.6/packages/rn-tester/package.json and callstack-0.79/packages/rn-tester/package.json differ
+Files upstream-0.79.6/scripts/e2e/verdaccio.yml and callstack-0.79/scripts/e2e/verdaccio.yml differ
+Only in callstack-0.79/scripts/monorepo: for-each-package.js
+Only in callstack-0.79/scripts: new-github-release-url.js
+Only in callstack-0.79/scripts: oot-release.js

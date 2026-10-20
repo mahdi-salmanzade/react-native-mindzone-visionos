@@ -2,6 +2,25 @@
 
 A framework for building native applications using React.
 
+## This fork: react-native-mindzone-visionos
+
+This repository is a fork of React Native **0.88.0**. Its base is the upstream commit `5c35c82`, tagged locally as `base/upstream-v0.88.0`. The fork adds Apple **visionOS** support and is published as the npm package **`react-native-mindzone-visionos`**.
+
+The goal is to provide everything `@callstack/react-native-visionos@0.79.6` provided, ported to 0.88. Use `@reactvision/react-native-visionos@0.86.4` (based on upstream 0.86.2) as the most recent prior port. The plan, the task list and who owns which files are in [`visionos-port/PLAN.md`](visionos-port/PLAN.md).
+
+Rules for every agent working here:
+
+- **No git writes.** Never create branches, worktrees, tags or commits, and never push or publish anything (npm, GitHub, CocoaPods). Don't run `git stash`, `git reset` or `git checkout -- <path>`. The orchestrator reviews and commits.
+- **Keep the diff against upstream small and easy to rebase.**
+  - Guard visionOS code in existing files with `#if TARGET_OS_VISION` (Objective-C/C++) or `#if os(visionOS)` (Swift). Do the same for the reverse, `#if !TARGET_OS_VISION` around iOS-only APIs.
+  - Don't restructure, rename or reformat upstream code you don't need to touch.
+  - Put new visionOS-only code in new files and directories.
+- **No behaviour change anywhere else.** iOS, macOS and Android builds must compile and behave exactly as upstream. Every change must compile out, or be a no-op, off visionOS.
+- **`Platform.OS` stays `'ios'` on visionOS,** as in both reference forks. JS detects visionOS through `Platform.isVision`.
+- **Stay inside your file ownership** (see `visionos-port/PLAN.md`). If you need a change in a file another task owns, write the exact change to `visionos-port/requests/<your-task-id>.md` instead of editing it.
+- **Report what you did.** Write `visionos-port/reports/<your-task-id>.md`: what you ported, from which reference fork, every deviation from the references and why, everything you could not port or verify, and the commands you ran with their results. Don't claim something builds or runs unless you ran it.
+- **Reference material is read-only and outside this repo.** The paths are listed in `visionos-port/PLAN.md`. The two reference diffs are also committed under `visionos-port/reference/`.
+
 ## Repo structure
 
 React Native is a monorepo: the `react-native` package, the packages published alongside it, and the apps and tooling used to develop them.
