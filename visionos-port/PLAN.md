@@ -36,7 +36,7 @@ Tooling:
 - **Yarn 1.22.22** is at `/private/tmp/claude-501/-Users-intzero-Documents-Pingroom/4ce8d510-41a7-4917-afd8-31efd347e46c/scratchpad/tools/node_modules/.bin/yarn`; it is already on `PATH` for agent runs.
 - **Node** is v26.
 - **Xcode** is 27.1, with the `xros27.0` and `xrsimulator27.0` SDKs installed.
-- **The visionOS simulator runtime** is being downloaded. Check with `xcrun simctl list runtimes | grep -i vision`.
+- **The visionOS 27.0 simulator runtime** (24M362) is installed, with the device type "Apple Vision Pro".
 
 ## Tasks and file ownership
 
@@ -45,9 +45,9 @@ Ownership is exclusive within a phase. Paths are relative to the repo root, and 
 | ID | Phase | Owns | Summary |
 | --- | --- | --- | --- |
 | T1-inventory | 1 | `visionos-port/INVENTORY.md` | Map every hunk of both reference diffs to its 0.88 target: apply, already-upstream, obsolete (file removed or arch gone) or redesign. Assign each item to a T2/T3 owner. |
-| T2-build | 2 | `RN/package.json`, `RN/react-native.config.js`, `RN/cli.js`, `RN/local-cli/**`, `RN/scripts/**`, `RN/sdks/**`, every `*.podspec` under `RN/` except the ones listed under T2-apis, root `package.json`, `scripts/**`, `.github/**`, `.gitignore`, `README.md` | Package identity (`react-native-mindzone-visionos`, version `0.88.0`), CocoaPods `visionos` platform in `min_supported_versions` and every podspec, Hermes for xros, prebuilt-core handling (React.xcframework has no xros slice, so visionOS builds from source), codegen, `run-visionos` CLI wiring, release script (`oot-release.js`), CI workflow |
+| T2-build | 2 | `RN/package.json`, `RN/react-native.config.js`, `RN/cli.js`, `RN/local-cli/**`, `RN/scripts/**`, `RN/sdks/**`, every `*.podspec` under `RN/` except the ones listed under T2-apis, `RN/Package.swift`, `RN/README.md`, root `package.json`, root `jest.config.js`, `yarn.lock` (only for the B-26 root `react-native` link), `packages/community-cli-plugin/**`, `scripts/**`, `.github/**`, `.gitignore`, `README.md` | Package identity (`react-native-mindzone-visionos`, version `0.88.0`), CocoaPods `visionos` platform in `min_supported_versions` and every podspec, Hermes for xros, prebuilt-core handling (React.xcframework has no xros slice, so visionOS builds from source), codegen, `run-visionos` CLI wiring, release script (`oot-release.js`), CI workflow |
 | T2-native | 2 | `RN/React/**`, `RN/ReactApple/**`, `RN/ReactCommon/**`, native files (`.m .mm .h .cpp .swift`) under `RN/Libraries/**` except the new visionOS dirs below | `TARGET_OS_VISION` guards and visionOS code paths in the runtime: scenes/windows, key-window lookup, device info and dimensions, alerts, dev menu, linking, keyboard, scroll view, text input, pointer/hover handling, app delegate and root view factory |
-| T2-apis | 2 | `RN/Libraries/XR/**`, `RN/Libraries/WindowManager/**`, `RN/Libraries/SwiftExtensions/**`, `RN/visionos_modules/**`, `RN/React/React-RCTFBReactNativeSpecVisionOS.podspec` (new), `RN/index.js`, `RN/index.js.flow`, JS files under `RN/Libraries/**` and `RN/src/**`, `RN/types/**`, `RN/ReactNativeApi.d.ts` | The visionOS JS/native APIs and their codegen specs, `Platform.isVision`, public exports, TypeScript types and regenerated API snapshots |
+| T2-apis | 2 | `RN/Libraries/XR/**`, `RN/Libraries/WindowManager/**`, `RN/Libraries/SwiftExtensions/**`, `RN/visionos_modules/**`, `RN/React/React-RCTFBReactNativeSpecVisionOS.podspec` (new), `RN/index.js`, `RN/index.js.flow`, JS files under `RN/Libraries/**` and `RN/src/**`, `RN/types/**`, `RN/types_generated/**`, `RN/types_DEPRECATED/**`, `RN/__typetests__/**`, `RN/ReactNativeApi.d.ts` | The visionOS JS/native APIs and their codegen specs, `Platform.isVision`, public exports, TypeScript types and regenerated API snapshots |
 | T3-apps | 3 | `packages/rn-tester/**`, `packages/visionos-template/**` (new), `private/helloworld/**`, `packages/react-native-test-library/**`, `packages/jest-preset/**` | RNTester visionOS target, scheme and examples (`XR`, `SecondWindow`). A new template package `react-native-mindzone-visionos-template` derived from the ReactVision 0.86.4 template and updated for 0.88 |
 | T4-verify | 4 | whole repo (sole agent) | Install, codegen, `pod install`, `xcodebuild` RNTester-visionOS and the template app for `xrsimulator`, fix what breaks, launch in the visionOS simulator, prove iOS still builds |
 | T5-review | 5 | read-only | Independent review of the full diff against `base/upstream-v0.88.0` |
@@ -68,7 +68,7 @@ Ownership is exclusive within a phase. Paths are relative to the repo root, and 
 
 | ID | State |
 | --- | --- |
-| T1-inventory | pending |
+| T1-inventory | done: 121 items; reviewed by the orchestrator. Ownership gaps it flagged are now assigned above |
 | T2-build | pending |
 | T2-native | pending |
 | T2-apis | pending |
