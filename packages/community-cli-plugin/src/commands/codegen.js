@@ -10,6 +10,8 @@
 
 import type {Command, Config} from '@react-native-community/cli-types';
 
+import path from 'node:path';
+
 export type CodegenCommandArgs = {
   path: string,
   platform: string,
@@ -47,7 +49,12 @@ const codegenCommand: Command = {
     args: CodegenCommandArgs,
   ): void => {
     const generateArtifactsExecutor = require.resolve(
-      'react-native/scripts/codegen/generate-artifacts-executor/index',
+      config.reactNativePath != null
+        ? path.join(
+            config.reactNativePath,
+            'scripts/codegen/generate-artifacts-executor/index.js',
+          )
+        : 'react-native/scripts/codegen/generate-artifacts-executor/index',
       {paths: [config.root]},
     );
     // $FlowFixMe[unsupported-syntax] dynamic require of a resolved path

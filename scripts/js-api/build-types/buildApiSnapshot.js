@@ -178,7 +178,11 @@ async function findPackagesWithTypedef() {
 
       return {
         directory: pkg,
-        name: packageJson.name as string,
+        // Source imports retain the react-native npm alias in this fork.
+        name:
+          pkg === 'react-native'
+            ? 'react-native'
+            : (packageJson.name as string),
       };
     }),
   );

@@ -35,6 +35,7 @@ import type {
  *   - scaffoldAll(opts): orchestrator over autolinking.json
  */
 
+const {applePlatformDeclaration} = require('./apple-platform');
 const {
   SpmNameCollisionError,
   defaultReadConfig,
@@ -566,6 +567,7 @@ type EmitContext = {
   // (<appRoot>/build/xcframeworks). Only referenced when remote == null.
   localXcfwPackageDir?: ?string,
   iosDeploymentTarget?: ?string,
+  platform?: 'ios' | 'visionos',
 };
 */
 
@@ -584,6 +586,11 @@ function emitScaffoldedPackageSwift(
     ctx.cacheSlotLabel != null ? `\n// Cache slot: ${ctx.cacheSlotLabel}` : '';
   const iosDeploymentTarget /*: string */ =
     ctx.iosDeploymentTarget ?? MIN_IOS_VERSION_SUPPORTED;
+  const platformDeclaration = applePlatformDeclaration(
+    ctx.platform,
+    iosDeploymentTarget,
+  );
+  const linkerPlatform = ctx.platform === 'visionos' ? 'visionOS' : 'iOS';
 
   // React headers need NO search paths — they come from the React /
   // ReactNativeHeaders binaryTargets and the ReactAppHeaders product (see
@@ -654,7 +661,7 @@ function emitScaffoldedPackageSwift(
   const linkerEntries = [
     ...linkedFrameworks.map(f => `.linkedFramework("${f}")`),
     ...spec.weakFrameworks.map(
-      f => `.linkedFramework("${f}", .when(platforms: [.iOS]))`,
+      f => `.linkedFramework("${f}", .when(platforms: [.${linkerPlatform}]))`,
     ),
   ];
 
@@ -771,7 +778,7 @@ import PackageDescription
 
 let package = Package(
     name: "${spec.swiftName}",
-    platforms: [.iOS("${iosDeploymentTarget}")],
+    platforms: [${platformDeclaration}],
     products: [
         .library(name: "${spec.swiftName}", targets: ["${spec.swiftName}"]),
     ],
@@ -870,6 +877,7 @@ type ScaffoldContext = {
   swiftNameByNpm?: Map<string, string>,
   remote: ?{url: string, version: string, identity: string},
   iosDeploymentTarget?: ?string,
+  platform?: 'ios' | 'visionos',
 };
 */
 
@@ -1070,6 +1078,7 @@ function scaffoldPackageSwiftForDep(
     cacheSlotLabel: ctx.cacheSlotLabel,
     remote: ctx.remote,
     iosDeploymentTarget: ctx.iosDeploymentTarget,
+    platform: ctx.platform,
     codegenPackageDir: relFromManifest('build', 'generated', 'ios'),
     localXcfwPackageDir: relFromManifest('build', 'xcframeworks'),
   });
@@ -1290,6 +1299,7 @@ type ScaffoldAllOptions = {
   cacheSlotLabel?: ?string,
   autolinkingJsonPath?: string,
   iosDeploymentTarget?: ?string,
+  platform?: 'ios' | 'visionos',
   // npm dep names to skip entirely — used when the user declined the
   // confirmation prompt for first-time scaffolds. Skipped deps still
   // appear in the returned results array with status='skipped-opt-out'.
@@ -1379,6 +1389,7 @@ function scaffoldAll(
     dryRun: opts.dryRun === true,
     cacheSlotLabel: opts.cacheSlotLabel ?? null,
     iosDeploymentTarget: opts.iosDeploymentTarget ?? null,
+    platform: opts.platform,
     podToNpm,
     swiftNameByNpm,
     remote,

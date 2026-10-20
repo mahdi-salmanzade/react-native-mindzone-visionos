@@ -130,6 +130,10 @@ BUNDLE_FILE="$CONFIGURATION_BUILD_DIR/$BUNDLE_NAME.jsbundle"
 EXTRA_ARGS=()
 
 case "$PLATFORM_NAME" in
+  "xros"|"xrsimulator")
+    BUNDLE_PLATFORM="ios"
+    EXTRA_ARGS+=("--resolver-option" "platformExtension=visionos")
+    ;;
   "macosx")
     BUNDLE_PLATFORM="macos"
     ;;

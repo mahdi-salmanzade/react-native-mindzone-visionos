@@ -403,6 +403,12 @@ module.exports = {
     );
     return require('./Libraries/UTFSequence').default;
   },
+  get WindowManager() {
+    return require('./Libraries/WindowManager/WindowManager').default;
+  },
+  get XR() {
+    return require('./Libraries/XR/XR').default;
+  },
   get Vibration() {
     return require('./Libraries/Vibration/Vibration').default;
   },

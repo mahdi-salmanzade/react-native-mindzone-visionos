@@ -5,21 +5,11 @@
 
 require "json"
 
-begin
-  react_native_path = File.dirname(Pod::Executable.execute_command('node', ['-p',
-    'require.resolve(
-    "react-native",
-    {paths: [process.argv[1]]},
-    )', __dir__]).strip
-  )
-rescue => e
-  # Fallback to the parent directory if the above command fails (e.g when building locally in OOT Platform)
-  react_native_path = File.join(__dir__, "..", "..")
-end
-
-# package.json
-package = JSON.parse(File.read(File.join(react_native_path, "package.json")))
+# Read the package that owns this podspec, including direct or npm-alias installs.
+# Resolving "react-native" can select a coinstalled upstream package instead.
+package = JSON.parse(File.read(File.join(__dir__, "..", "package.json")))
 version = package['version']
+upstream_version = package['reactNativeUpstreamVersion'] || version
 
 source = ReactNativeDependenciesUtils.resolve_podspec_source()
 
@@ -82,7 +72,7 @@ Pod::Spec.new do |spec|
         CONFIG="Debug"
       fi
 
-      "$NODE_BINARY" "$REACT_NATIVE_PATH/third-party-podspecs/replace_dependencies_version.js" -c "$CONFIG" -r "#{version}" -p "$PODS_ROOT"
+      "$NODE_BINARY" "$REACT_NATIVE_PATH/third-party-podspecs/replace_dependencies_version.js" -c "$CONFIG" -r "#{upstream_version}" -p "$PODS_ROOT"
       EOS
     }
 

@@ -6,6 +6,7 @@
 require "json"
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 version = package['version']
+upstream_version = package['reactNativeUpstreamVersion'] || version
 
 source = ReactNativeCoreUtils.resolve_podspec_source()
 Pod::Spec.new do |s|
@@ -15,7 +16,8 @@ Pod::Spec.new do |s|
   s.homepage               = "https://reactnative.dev/"
   s.license                = package["license"]
   s.author                 = "Meta Platforms, Inc. and its affiliates"
-  s.platforms              = min_supported_versions
+  # The upstream React.xcframework does not contain an xros slice.
+  s.platforms              = { :ios => min_ios_version_supported }
   s.source                 = source
 
   # We vend two xcframeworks that ship together in the prebuilt tarball:
@@ -90,7 +92,7 @@ Pod::Spec.new do |s|
         CONFIG="Debug"
       fi
 
-      "$NODE_BINARY" "$REACT_NATIVE_PATH/scripts/replace-rncore-version.js" -c "$CONFIG" -r "#{version}" -p "$PODS_ROOT"
+      "$NODE_BINARY" "$REACT_NATIVE_PATH/scripts/replace-rncore-version.js" -c "$CONFIG" -r "#{upstream_version}" -p "$PODS_ROOT"
       EOS
     }
 

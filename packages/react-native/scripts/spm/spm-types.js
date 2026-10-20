@@ -11,6 +11,7 @@
 /*::
 import type {SwiftpmNameOutcome} from './swiftpm-config';
 export type SetupArgs = {
+  platform: 'ios' | 'visionos' | null,
   action: 'add' | 'update' | 'deinit' | 'sync' | 'codegen' | 'download' | 'scaffold' | null,
   version: string | null,
   // Local two-flavor artifact source (advanced). The directory contains
@@ -36,6 +37,7 @@ export type SetupArgs = {
 };
 
 export type DownloadArgs = {
+  platform?: 'ios' | 'visionos',
   version: string | null,
   flavor: string,
   output: string | null,
@@ -62,6 +64,7 @@ export type ArtifactResultEntry =
   | {name: string, error: string};
 
 export type AutolinkingArgs = {
+  platform?: 'ios' | 'visionos',
   appRoot: string,
   reactNativeRoot: string | null,
   autolinkingJson: string | null,
@@ -168,7 +171,7 @@ export type AutolinkedDep = {
 export type CliConfigJson = {
   root?: ?string,
   reactNativePath?: ?string,
-  project?: ?{ios?: ?{sourceDir?: ?string, ...}, ...},
+  project?: ?{ios?: ?{sourceDir?: ?string, ...}, visionos?: ?{sourceDir?: ?string, ...}, ...},
   ...
 };
 
@@ -209,6 +212,7 @@ export type AggregatorInput = {
   pluginPackageDeps?: ReadonlyArray<PluginPackageDep>,
   pluginProductDeps?: ReadonlyArray<PluginProductDep>,
   iosDeploymentTarget?: ?string,
+  platform?: 'ios' | 'visionos',
 };
 
 // --- Autolinking plugins (PREVIEW / unstable contract) ---
@@ -381,10 +385,12 @@ export type SynthPackageSpec = {
   // dep's own `common/cpp/` subtree.
   headerSearchPaths?: ?Array<string>,
   iosDeploymentTarget?: ?string,
+  platform?: 'ios' | 'visionos',
 };
 
 
 export type GeneratePackageArgs = {
+  platform?: 'ios' | 'visionos',
   appRoot: string,
   reactNativeRoot: string | null,
   version: string | null,

@@ -9,6 +9,10 @@
 
 #import <UIKit/UIKit.h>
 
+#if TARGET_OS_VISION
+#import <React/RCTUtils.h>
+#endif
+
 #import <mach/thread_act.h>
 #import <pthread.h>
 
@@ -290,6 +294,9 @@ struct FrameData {
 
 - (UIWindow *)_getKeyWindow
 {
+#if TARGET_OS_VISION
+  return RCTKeyWindow();
+#else
   for (UIScene *scene in UIApplication.sharedApplication.connectedScenes) {
     if (scene.activationState == UISceneActivationStateForegroundActive &&
         [scene isKindOfClass:[UIWindowScene class]]) {
@@ -302,6 +309,7 @@ struct FrameData {
     }
   }
   return nil;
+#endif
 }
 
 @end

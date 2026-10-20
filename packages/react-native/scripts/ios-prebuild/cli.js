@@ -18,6 +18,8 @@ const platforms /*: ReadonlyArray<Platform> */ = [
   'ios',
   'ios-simulator',
   'mac-catalyst',
+  'visionos',
+  'visionos-simulator',
 ];
 
 // CI can't use commas in cache keys, so 'macOS,variant=Mac Catalyst' was creating troubles
@@ -26,6 +28,8 @@ const platformToDestination /*: Readonly<{|[Platform]: Destination|}> */ = {
   ios: 'iOS',
   'ios-simulator': 'iOS Simulator',
   'mac-catalyst': 'macOS,variant=Mac Catalyst',
+  visionos: 'visionOS',
+  'visionos-simulator': 'visionOS Simulator',
 };
 
 const cli = yargs
@@ -51,7 +55,7 @@ const cli = yargs
   .option('platforms', {
     alias: 'p',
     type: 'array',
-    default: platforms,
+    default: ['ios', 'ios-simulator', 'mac-catalyst'],
     describe: 'Specify one or more platforms to build for',
   })
   .option('flavor', {

@@ -34,8 +34,12 @@ RCT_EXPORT_MODULE()
 
 - (void)initialize
 {
+#if TARGET_OS_VISION
+  CGSize screenSize = RCTKeyWindow().bounds.size;
+#else
   UIScreen *mainScreen = UIScreen.mainScreen;
   CGSize screenSize = mainScreen.bounds.size;
+#endif
 
   _constants = facebook::react::typedConstants<JS::NativeSampleTurboModule::Constants>({
       .const1 = YES,

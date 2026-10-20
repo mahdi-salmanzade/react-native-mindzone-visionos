@@ -1,0 +1,37 @@
+name: Test visionOS
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths-ignore:
+      - '**/*.md'
+      - '**/__docs__/**'
+  push:
+    branches:
+      - main
+      - '*-stable'
+    paths-ignore:
+      - '**/*.md'
+      - '**/__docs__/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test_visionos_rntester:
+    runs-on: macos-15
+    strategy:
+      fail-fast: false
+      matrix:
+        flavor: [Debug, Release]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Build visionOS RNTester
+        uses: ./.github/actions/test-visionos-rntester
+        with:
+          flavor: ${{ matrix.flavor }}

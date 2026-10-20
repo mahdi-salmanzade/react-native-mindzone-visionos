@@ -123,7 +123,10 @@ function execute(
         platform,
       );
       const libraries = codegenEnabledLibraries.filter(
-        ({name}) => !disabledLibraries.includes(name),
+        ({name, config}) =>
+          !disabledLibraries.includes(name) &&
+          (platform !== 'android' ||
+            config.name !== 'FBReactNativeSpec_visionOS'),
       );
 
       const outputPath = computeOutputPath(

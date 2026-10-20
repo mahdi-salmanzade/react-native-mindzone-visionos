@@ -90,6 +90,17 @@ RCT_EXPORT_MODULE()
 
   _currentInterfaceDimensions = [self _exportedDimensions];
 
+#if TARGET_OS_VISION
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(visionWindowDidChange:)
+                                               name:UIWindowDidBecomeKeyNotification
+                                             object:nil];
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(visionWindowDidChange:)
+                                               name:RCTWindowFrameDidChangeNotification
+                                             object:nil];
+#endif
+
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(interfaceOrientationDidChange)
                                                name:UIApplicationDidBecomeActiveNotification
@@ -162,6 +173,11 @@ RCT_EXPORT_MODULE()
 
   [[NSNotificationCenter defaultCenter] removeObserver:self name:RCTBridgeWillInvalidateModulesNotification object:nil];
 
+#if TARGET_OS_VISION
+  [[NSNotificationCenter defaultCenter] removeObserver:self name:UIWindowDidBecomeKeyNotification object:nil];
+  [[NSNotificationCenter defaultCenter] removeObserver:self name:RCTWindowFrameDidChangeNotification object:nil];
+#endif
+
   [_applicationWindow removeObserver:self forKeyPath:kFrameKeyPath];
 
 #if TARGET_OS_IOS
@@ -193,6 +209,11 @@ static NSDictionary *RCTExportedDimensions(CGFloat fontScale)
 {
   RCTAssertMainQueue();
   UIWindow *mainWindow = RCTKeyWindow();
+#if TARGET_OS_VISION
+  CGSize windowSize = mainWindow != nil ? mainWindow.bounds.size : CGSizeZero;
+  CGSize screenSize = windowSize;
+  CGFloat scale = (mainWindow != nil ? mainWindow.traitCollection : UITraitCollection.currentTraitCollection).displayScale;
+#else
   UIScreen *screen = mainWindow.screen;
   if (screen == nil) {
     screen = UIScreen.screens.firstObject;
@@ -201,18 +222,20 @@ static NSDictionary *RCTExportedDimensions(CGFloat fontScale)
 
   // We fallback to screen size if a key window is not found.
   CGSize windowSize = mainWindow != nil ? mainWindow.bounds.size : screenSize;
+  CGFloat scale = screen.scale;
+#endif
 
   NSDictionary<NSString *, NSNumber *> *dimsWindow = @{
     @"width" : @(windowSize.width),
     @"height" : @(windowSize.height),
-    @"scale" : @(screen.scale),
+    @"scale" : @(scale),
     @"fontScale" : @(fontScale)
   };
 
   NSDictionary<NSString *, NSNumber *> *dimsScreen = @{
     @"width" : @(screenSize.width),
     @"height" : @(screenSize.height),
-    @"scale" : @(screen.scale),
+    @"scale" : @(scale),
     @"fontScale" : @(fontScale)
   };
   return @{@"window" : dimsWindow, @"screen" : dimsScreen};
@@ -220,6 +243,16 @@ static NSDictionary *RCTExportedDimensions(CGFloat fontScale)
 
 - (NSDictionary *)_exportedDimensions
 {
+#if TARGET_OS_VISION
+  RCTAssertMainQueue();
+  UIWindow *window = RCTKeyWindow();
+  if (_applicationWindow != window && !_invalidated.load()) {
+    [_applicationWindow removeObserver:self forKeyPath:kFrameKeyPath];
+    _applicationWindow = window;
+    [_applicationWindow addObserver:self forKeyPath:kFrameKeyPath options:NSKeyValueObservingOptionNew context:nil];
+  }
+#endif
+
   // if a window size provider has been set, use that. If nil is returned from the provider
   // it will fall back to the default behavior.
   if (_dimensionsProvider != nil) {
@@ -311,6 +344,24 @@ static NSDictionary *RCTExportedDimensions(CGFloat fontScale)
     [weakSelf _interfaceFrameDidChange];
   });
 }
+
+#if TARGET_OS_VISION
+- (void)visionWindowDidChange:(NSNotification *)notification
+{
+  // KVO already delivered our own frame notification. SwiftUI also posts this
+  // notification after attaching, focusing or resizing a React window.
+  if (notification.object == self) {
+    return;
+  }
+  __weak __typeof(self) weakSelf = self;
+  RCTExecuteOnMainQueue(^{
+    __typeof(self) strongSelf = weakSelf;
+    if (strongSelf != nil && !strongSelf->_invalidated.load()) {
+      [strongSelf _interfaceFrameDidChange];
+    }
+  });
+}
+#endif
 
 - (void)_interfaceFrameDidChange
 {

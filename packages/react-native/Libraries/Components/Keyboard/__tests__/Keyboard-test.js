@@ -81,3 +81,51 @@ describe('Keyboard', () => {
     });
   });
 });
+
+describe('Keyboard on visionOS', () => {
+  it('does not subscribe to keyboard events or remove other subscriptions', () => {
+    jest.isolateModules(() => {
+      const Platform = require('../../../Utilities/Platform').default;
+      const NativeEventEmitter =
+        require('../../../EventEmitter/NativeEventEmitter').default;
+      const isVision = jest
+        .spyOn(Platform, 'isVision', 'get')
+        .mockReturnValue(true);
+      const addListener = jest.spyOn(
+        NativeEventEmitter.prototype,
+        'addListener',
+      );
+      const removeAllListeners = jest.spyOn(
+        NativeEventEmitter.prototype,
+        'removeAllListeners',
+      );
+      const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      try {
+        const VisionKeyboard = require('../Keyboard').default;
+        expect(addListener).not.toHaveBeenCalled();
+        expect(warn).not.toHaveBeenCalled();
+
+        const subscription = VisionKeyboard.addListener(
+          'keyboardDidShow',
+          jest.fn(),
+        );
+        VisionKeyboard.addListener('keyboardDidHide', jest.fn()).remove();
+        subscription.remove();
+        subscription.remove();
+        VisionKeyboard.removeAllListeners('keyboardDidShow');
+
+        expect(addListener).not.toHaveBeenCalled();
+        expect(removeAllListeners).not.toHaveBeenCalled();
+        expect(warn).toHaveBeenCalledTimes(1);
+        expect(VisionKeyboard.isVisible()).toBe(false);
+        expect(VisionKeyboard.metrics()).toBeUndefined();
+      } finally {
+        warn.mockRestore();
+        removeAllListeners.mockRestore();
+        addListener.mockRestore();
+        isVision.mockRestore();
+      }
+    });
+  });
+});

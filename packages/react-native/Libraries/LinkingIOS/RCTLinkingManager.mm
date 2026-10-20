@@ -16,6 +16,9 @@
 #import "RCTLinkingPlugins.h"
 
 static NSString *const kOpenURLNotification = @"RCTOpenURLNotification";
+#if TARGET_OS_VISION
+static NSURL *initialURL = nil;
+#endif
 
 @interface RCTLinkingManager () <NativeLinkingManagerSpec>
 
@@ -141,6 +144,17 @@ RCT_EXPORT_MODULE()
   [self sendEventWithName:@"url" body:notification.userInfo];
 }
 
+#if TARGET_OS_VISION
++ (void)onOpenURL:(NSURL *)url
+{
+  if (initialURL == nil) {
+    initialURL = url;
+  }
+  // Observers may already be listening when the first URL opens a running app.
+  [self postNotificationWithURL:url];
+}
+#endif
+
 - (void)openURL:(NSString *)urlString resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject
 {
   NSURL *URL = [RCTConvert NSURL:urlString];
@@ -206,6 +220,7 @@ RCT_EXPORT_MODULE()
 
 - (void)getInitialURL:(RCTPromiseResolveBlock)resolve reject:(__unused RCTPromiseRejectBlock)reject
 {
+#if !TARGET_OS_VISION
   NSURL *initialURL = nil;
   if (self.bridge.launchOptions[UIApplicationLaunchOptionsURLKey] != nullptr) {
     initialURL = self.bridge.launchOptions[UIApplicationLaunchOptionsURLKey];
@@ -216,6 +231,7 @@ RCT_EXPORT_MODULE()
       initialURL = ((NSUserActivity *)userActivityDictionary[@"UIApplicationLaunchOptionsUserActivityKey"]).webpageURL;
     }
   }
+#endif
   resolve(RCTNullIfNil(initialURL.absoluteString));
 }
 

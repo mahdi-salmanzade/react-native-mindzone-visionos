@@ -379,12 +379,44 @@ CGFloat RCTFontSizeMultiplier(void)
 #if !TARGET_OS_TV
 UIDeviceOrientation RCTDeviceOrientation(void)
 {
+#if TARGET_OS_VISION
+  return UIDeviceOrientationPortrait;
+#else
   return [[UIDevice currentDevice] orientation];
+#endif
+}
+#endif
+
+#if TARGET_OS_VISION
+// A spatial window can resize at any time. Refresh on the main queue, and serve
+// the last nonzero size to other queues until the next main-queue lookup.
+static CGSize RCTVisionWindowSize(void)
+{
+  static std::atomic<CGSize> lastKnownSize{CGSizeZero};
+
+  if (RCTIsMainQueue()) {
+    CGSize windowSize = RCTKeyWindow().bounds.size;
+    if (!CGSizeEqualToSize(windowSize, CGSizeZero)) {
+      lastKnownSize.store(windowSize, std::memory_order_relaxed);
+    }
+  } else if (CGSizeEqualToSize(lastKnownSize.load(std::memory_order_relaxed), CGSizeZero)) {
+    RCTUnsafeExecuteOnMainQueueSync(^{
+      CGSize windowSize = RCTKeyWindow().bounds.size;
+      if (!CGSizeEqualToSize(windowSize, CGSizeZero)) {
+        lastKnownSize.store(windowSize, std::memory_order_relaxed);
+      }
+    });
+  }
+
+  return lastKnownSize.load(std::memory_order_relaxed);
 }
 #endif
 
 CGSize RCTScreenSize(void)
 {
+#if TARGET_OS_VISION
+  return RCTVisionWindowSize();
+#else
   static std::atomic<CGSize> cachedSize;
   __block CGSize size = cachedSize.load(std::memory_order_relaxed);
 
@@ -410,6 +442,7 @@ CGSize RCTScreenSize(void)
   // tvOS doesn't have device orientation, always return landscape size
   return CGSizeMake(size.height, size.width);
 #endif
+#endif // TARGET_OS_VISION
 }
 
 CGSize RCTViewportSize(void)
@@ -608,6 +641,23 @@ UIApplication *__nullable RCTSharedApplication(void)
   return [[UIApplication class] performSelector:@selector(sharedApplication)];
 }
 
+#if TARGET_OS_VISION
+static UIWindow *RCTVisionPresentationWindow(UIWindow *window)
+{
+  // UIKit does not expose an ornament-window type. Match the reference ports'
+  // heuristic so presenting a modal from an ornament uses its content window.
+  if ([window.debugDescription containsString:@"Ornament"]) {
+    for (UIWindow *sceneWindow in window.windowScene.windows) {
+      if (sceneWindow != window && ![sceneWindow.debugDescription containsString:@"Ornament"]) {
+        return sceneWindow;
+      }
+    }
+    return nil;
+  }
+  return window;
+}
+#endif
+
 UIWindow *__nullable RCTKeyWindow(void)
 {
   if (RCTRunningInAppExtension()) {
@@ -616,6 +666,50 @@ UIWindow *__nullable RCTKeyWindow(void)
 
   NSSet<UIScene *> *connectedScenes = RCTSharedApplication().connectedScenes;
 
+#if TARGET_OS_VISION
+  id<UIApplicationDelegate> delegate = RCTSharedApplication().delegate;
+  SEL lastFocusedWindowSelector = NSSelectorFromString(@"lastFocusedWindow");
+  if ([delegate respondsToSelector:lastFocusedWindowSelector]) {
+    UIWindow *lastFocusedWindow = ((UIWindow * (*)(id, SEL)) objc_msgSend)(delegate, lastFocusedWindowSelector);
+    UIWindowScene *focusedScene = lastFocusedWindow.windowScene;
+    if (focusedScene != nil && [connectedScenes containsObject:focusedScene] &&
+        ![focusedScene.session.role isEqualToString:UISceneSessionRoleImmersiveSpaceApplication] &&
+        (focusedScene.activationState == UISceneActivationStateForegroundActive ||
+         focusedScene.activationState == UISceneActivationStateForegroundInactive)) {
+      UIWindow *window = RCTVisionPresentationWindow(lastFocusedWindow);
+      if (window != nil) {
+        return window;
+      }
+    }
+  }
+
+  UIWindow *foregroundInactiveWindow = nil;
+  for (UIScene *scene in connectedScenes) {
+    if (![scene isKindOfClass:[UIWindowScene class]] ||
+        [scene.session.role isEqualToString:UISceneSessionRoleImmersiveSpaceApplication]) {
+      continue;
+    }
+
+    UIWindowScene *windowScene = (UIWindowScene *)scene;
+    UIWindow *keyWindow = windowScene.keyWindow;
+    if (keyWindow == nil) {
+      for (UIWindow *window in windowScene.windows) {
+        if (window.isKeyWindow) {
+          keyWindow = window;
+          break;
+        }
+      }
+    }
+    keyWindow = RCTVisionPresentationWindow(keyWindow);
+    if (keyWindow != nil && scene.activationState == UISceneActivationStateForegroundActive) {
+      return keyWindow;
+    }
+    if (foregroundInactiveWindow == nil && scene.activationState == UISceneActivationStateForegroundInactive) {
+      foregroundInactiveWindow = keyWindow;
+    }
+  }
+  return foregroundInactiveWindow;
+#else
   UIScene *foregroundActiveScene;
   UIScene *foregroundInactiveScene;
 
@@ -675,6 +769,7 @@ UIWindow *__nullable RCTKeyWindow(void)
   }
 
   return nil;
+#endif // TARGET_OS_VISION
 }
 
 BOOL RCTIsSceneDelegateApp(void)

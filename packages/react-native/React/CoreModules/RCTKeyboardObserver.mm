@@ -113,6 +113,9 @@ static NSString *RCTAnimationNameForCurve(UIViewAnimationCurve curve)
 
 static NSDictionary *RCTParseKeyboardNotification(NSNotification *notification)
 {
+#if TARGET_OS_VISION
+  return @{};
+#else
   NSDictionary *userInfo = notification.userInfo;
   CGRect beginFrame = [userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
   CGRect endFrame = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
@@ -132,6 +135,7 @@ static NSDictionary *RCTParseKeyboardNotification(NSNotification *notification)
     @"easing" : RCTAnimationNameForCurve(curve),
     @"isEventFromThisApp" : isLocalUserInfoKey == 1 ? @YES : @NO,
   };
+#endif
 }
 
 #else

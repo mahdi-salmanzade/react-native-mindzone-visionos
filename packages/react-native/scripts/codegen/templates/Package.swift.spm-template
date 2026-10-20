@@ -28,7 +28,7 @@ let headersDep: [Target.Dependency] = [
 
 let package = Package(
     name: "React-GeneratedCode",
-    platforms: [.iOS(.v15), .macCatalyst(SupportedPlatform.MacCatalystVersion.v13)],
+    platforms: [.visionOS(.v1), .iOS(.v15), .macCatalyst(SupportedPlatform.MacCatalystVersion.v13)],
     products: [
         .library(
             name: "ReactCodegen",

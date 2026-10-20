@@ -35,6 +35,7 @@
  * is needed.
  */
 
+const {assertSupportedBinaryPlatform} = require('./apple-platform');
 const {prepareFlavoredFrameworks} = require('./flavored-frameworks');
 const {
   REACT_HEADERS_TARGET_DIR,
@@ -59,6 +60,15 @@ const {log} = makeLogger('generate-spm-package');
 
 function parseArgs(argv /*: Array<string> */) /*: GeneratePackageArgs */ {
   const parsed = yargs(argv)
+    .option('platform', {
+      type: 'string',
+      choices: ['ios', 'visionos'],
+      default: ['xros', 'xrsimulator'].includes(process.env.PLATFORM_NAME ?? '')
+        ? 'visionos'
+        : 'ios',
+      describe:
+        'Apple target platform (visionOS requires the source package or CocoaPods)',
+    })
     .version(false)
     .option('app-root', {
       type: 'string',
@@ -106,6 +116,7 @@ function parseArgs(argv /*: Array<string> */) /*: GeneratePackageArgs */ {
     .parseSync();
 
   return {
+    platform: parsed.platform,
     appRoot: parsed['app-root'],
     reactNativeRoot: parsed['react-native-root'] ?? null,
     version: parsed.version ?? null,
@@ -171,7 +182,10 @@ function findSourcePath(
  * references this sub-package via XCLocalSwiftPackageReference; the codegen
  * Package.swift also imports it as a named package dependency.
  */
-function generateXCFrameworksPackageSwift() /*: string */ {
+function generateXCFrameworksPackageSwift(
+  platform /*: ?string */,
+) /*: string */ {
+  assertSupportedBinaryPlatform(platform);
   // Each product's target follows from its KIND, not from its position in the
   // list: the umbrella is a Clang target over the staged headers, and every
   // xcframework-backed product gets a binaryTarget of the same name.
@@ -214,6 +228,7 @@ function main(
   dependencies /*:: ?: {prepareFlavoredFrameworks?: typeof prepareFlavoredFrameworks} */,
 ) /*: void */ {
   const args = parseArgs(argv ?? process.argv.slice(2));
+  assertSupportedBinaryPlatform(args.platform);
   // Ensure appRoot is always absolute so path.join/path.resolve produce absolute paths
   // even when called with --app-root . or other relative paths.
   const appRoot = path.resolve(args.appRoot);

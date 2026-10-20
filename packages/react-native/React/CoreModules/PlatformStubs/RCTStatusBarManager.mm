@@ -5,6 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+#import <TargetConditionals.h>
+
+// CocoaPods selects this stub for visionOS, tvOS and macOS. SwiftPM includes
+// both implementations and must select the stub only for visionOS.
+#if TARGET_OS_VISION || !defined(SWIFT_PACKAGE)
+
 #import "RCTStatusBarManager.h"
 #import "CoreModulesPlugins.h"
 
@@ -19,6 +25,9 @@ RCT_EXPORT_MODULE()
 
 - (void)getHeight:(RCTResponseSenderBlock)callback
 {
+#if TARGET_OS_VISION
+  callback(@[ @{@"height" : @0} ]);
+#endif
 }
 
 - (void)setStyle:(NSString *)style animated:(BOOL)animated
@@ -54,3 +63,5 @@ Class RCTStatusBarManagerCls(void)
 {
   return RCTStatusBarManager.class;
 }
+
+#endif // TARGET_OS_VISION || !defined(SWIFT_PACKAGE)

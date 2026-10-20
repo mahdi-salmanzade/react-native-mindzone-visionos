@@ -70,8 +70,25 @@ try {
   }
 }
 
+let apple;
+try {
+  apple = findCommunityPlatformPackage(
+    '@react-native-community/cli-platform-apple',
+  );
+} catch {
+  if (verbose) {
+    console.warn(
+      '@react-native-community/cli-platform-apple not found, visionOS commands will be unavailable.',
+    );
+  }
+}
+
 const commands /*: Array<Command> */ = [];
 
+const {
+  createCodegenCommand,
+  createSpmCommand,
+} = require('./local-cli/coreCommands');
 const {
   bundleCommand,
   codegenCommand,
@@ -79,15 +96,32 @@ const {
   startCommand,
 } = require('@react-native/community-cli-plugin');
 
-commands.push(bundleCommand, startCommand, spmCommand, codegenCommand);
+commands.push(
+  bundleCommand,
+  startCommand,
+  createSpmCommand(spmCommand),
+  createCodegenCommand(codegenCommand),
+);
 
 const config = {
   commands,
   platforms: {} /*:: as {[string]: Readonly<{
+      npmPackageName?: string,
       projectConfig: unknown,
       dependencyConfig: unknown,
     }>} */,
 };
+
+if (apple != null) {
+  config.commands.push(
+    ...require('./local-cli/localCommands').createCommands(apple),
+  );
+  config.platforms.visionos = {
+    npmPackageName: require('./local-cli/resolvePackageName')(__dirname),
+    projectConfig: apple.getProjectConfig({platformName: 'visionos'}),
+    dependencyConfig: apple.getDependencyConfig({platformName: 'visionos'}),
+  };
+}
 
 if (ios != null) {
   config.commands.push(...ios.commands);

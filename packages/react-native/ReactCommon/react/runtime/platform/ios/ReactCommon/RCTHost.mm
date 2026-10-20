@@ -145,6 +145,9 @@ class RCTHostHostTargetDelegate : public facebook::react::jsinspector_modern::Ho
   bool onSetEmulatedMedia(const SetEmulatedMediaRequest &request) override
   {
     RCTAssertMainQueue();
+#if TARGET_OS_VISION
+    UIWindow *keyWindow = RCTKeyWindow();
+#else
     UIWindow *keyWindow = nil;
     for (UIScene *scene in RCTSharedApplication().connectedScenes) {
       if (scene.activationState == UISceneActivationStateForegroundActive &&
@@ -162,6 +165,7 @@ class RCTHostHostTargetDelegate : public facebook::react::jsinspector_modern::Ho
       }
     }
 
+#endif
     if (keyWindow == nil) {
       return false;
     }
@@ -181,6 +185,9 @@ class RCTHostHostTargetDelegate : public facebook::react::jsinspector_modern::Ho
 #if TARGET_OS_IPHONE && defined(REACT_NATIVE_DEBUGGER_ENABLED)
   std::optional<std::string> captureScreenshot(const PageCaptureScreenshotRequest &request) override
   {
+#if TARGET_OS_VISION
+    UIWindow *keyWindow = RCTKeyWindow();
+#else
     UIWindow *keyWindow = nil;
     for (UIScene *scene in UIApplication.sharedApplication.connectedScenes) {
       if (scene.activationState == UISceneActivationStateForegroundActive &&
@@ -198,6 +205,7 @@ class RCTHostHostTargetDelegate : public facebook::react::jsinspector_modern::Ho
       }
     }
 
+#endif
     if (keyWindow == nil) {
       return std::nullopt;
     }

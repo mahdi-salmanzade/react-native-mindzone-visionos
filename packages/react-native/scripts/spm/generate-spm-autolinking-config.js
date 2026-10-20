@@ -45,6 +45,7 @@ type CliRunner = (
 ) => CliRunnerResult;
 type Options = {
   projectRoot: string,
+  platform?: 'ios' | 'visionos',
   configCommand?: Array<string>,
   cliRunner?: CliRunner,
 };
@@ -169,6 +170,7 @@ function generateAutolinkingConfig(
 ) /*: GenerateAutolinkingConfigResult */ {
   const {
     projectRoot,
+    platform = 'ios',
     configCommand = resolveConfigCommand(projectRoot),
     cliRunner = defaultCliRunner,
   } = opts;
@@ -190,10 +192,10 @@ function generateAutolinkingConfig(
   const rawJson = result.stdout;
   const config /*: CliConfigJson */ = JSON.parse(rawJson);
 
-  const iosSourceDir = config?.project?.ios?.sourceDir;
+  const iosSourceDir = config?.project?.[platform]?.sourceDir;
   if (typeof iosSourceDir !== 'string' || iosSourceDir.length === 0) {
     throw new Error(
-      'generate-spm-autolinking-config: CLI config did not provide project.ios.sourceDir',
+      `generate-spm-autolinking-config: CLI config did not provide project.${platform}.sourceDir`,
     );
   }
 

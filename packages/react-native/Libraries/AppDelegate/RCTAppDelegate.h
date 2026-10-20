@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
  * using the UIScene lifecycle, implement your own `SceneDelegate` with `RCTReactNativeFactory` (see integration
  * docs). For AppDelegate-only apps, use `RCTReactNativeFactory` directly.
  *
- * Scene-based apps must keep `UIApplicationSupportsMultipleScenes` set to `false` in Info.plist. Define
+ * Scene-based iOS apps must keep `UIApplicationSupportsMultipleScenes` set to `false` in Info.plist. Define
  * `RN_ALLOW_MULTIPLE_SCENES` on the app target to downgrade the unsupported-configuration crash to a warning.
  *
  * The RCTAppDelegate is an utility class that implements some base configurations for all the React Native apps.
@@ -64,6 +64,11 @@ __attribute__((deprecated(
 
 /// The window object, used to render the UViewControllers
 @property (nonatomic, strong, nonnull) UIWindow *window;
+
+#if TARGET_OS_VISION
+/// Store the last focused window to handle multiple SwiftUI windows.
+@property (nonatomic, weak, nullable) UIWindow *lastFocusedWindow;
+#endif
 
 @property (nonatomic, strong, nullable) NSString *moduleName;
 @property (nonatomic, strong, nullable) NSDictionary *initialProps;

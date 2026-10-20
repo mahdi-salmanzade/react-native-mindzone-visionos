@@ -1,14 +1,14 @@
 {
-  "name": "react-native",
+  "name": "react-native-mindzone-visionos",
   "version": "0.88.0",
-  "description": "A framework for building native apps using React",
+  "description": "React Native 0.88 with Apple visionOS support",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/react/react-native.git",
+    "url": "https://github.com/mindzone/react-native-mindzone-visionos",
     "directory": "packages/react-native"
   },
-  "homepage": "https://reactnative.dev/",
+  "homepage": "https://github.com/mindzone/react-native-mindzone-visionos",
   "keywords": [
     "react",
     "react-native",
@@ -19,7 +19,11 @@
     "app-framework",
     "mobile-development"
   ],
-  "bugs": "https://github.com/react/react-native/issues",
+  "bugs": "https://github.com/mindzone/react-native-mindzone-visionos/issues",
+  "publishConfig": {
+    "access": "public"
+  },
+  "reactNativeUpstreamVersion": "0.88.0",
   "engines": {
     "node": "^22.13.0 || ^24.3.0 || >= 26.0.0"
   },
@@ -78,7 +82,9 @@
     "index.js",
     "index.js.flow",
     "Libraries",
+    "local-cli",
     "LICENSE",
+    "Package.swift",
     "React-Core.podspec",
     "React-Core-prebuilt.podspec",
     "react-native.config.js",
@@ -109,6 +115,8 @@
     "scripts/hermes/hermes-utils.js",
     "scripts/hermes/prepare-hermes-for-build.js",
     "scripts/ios-configure-glog.sh",
+    "scripts/ios-prebuild.js",
+    "scripts/ios-prebuild",
     "scripts/native_modules.rb",
     "scripts/node-binary.sh",
     "scripts/packager-reporter.js",
@@ -133,6 +141,7 @@
     "third-party-podspecs",
     "types_DEPRECATED",
     "types_generated",
+    "visionos_modules",
     "!**/__docs__/**",
     "!**/__fixtures__/**",
     "!**/__flowtests__/**",
@@ -216,6 +225,12 @@
         },
         "android": {},
         "jsSrcsDir": "src"
+      },
+      {
+        "name": "FBReactNativeSpec_visionOS",
+        "type": "modules",
+        "jsSrcsDir": "visionos_modules",
+        "ios": {}
       }
     ]
   }

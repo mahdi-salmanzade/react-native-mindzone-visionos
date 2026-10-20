@@ -71,6 +71,7 @@ Pod::Spec.new do |s|
       "React/DevSupport/**/*",
       "React/Fabric/**/*",
       "React/FBReactNativeSpec/**/*",
+      "React/FBReactNativeSpec_visionOS/**/*",
       "React/Tests/**/*",
       "React/Inspector/**/*",
       "React/Runtime/**/*",
@@ -105,6 +106,16 @@ Pod::Spec.new do |s|
   header_subspecs.each do |name, headers|
     s.subspec name do |ss|
       ss.source_files = headers
+      ss.dependency "React-Core/Default"
+    end
+  end
+
+  {
+    'RCTXRHeaders' => 'Libraries/XR/*.h',
+    'RCTWindowManagerHeaders' => 'Libraries/WindowManager/*.h',
+  }.each do |name, headers|
+    s.subspec name do |ss|
+      ss.visionos.source_files = headers
       ss.dependency "React-Core/Default"
     end
   end

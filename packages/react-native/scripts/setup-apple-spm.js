@@ -74,6 +74,7 @@
  * Package.swift is generated or required.
  */
 
+const {assertSupportedBinaryPlatform} = require('./spm/apple-platform');
 const {
   main: downloadArtifacts,
   resolveCacheSlotVersion,
@@ -161,6 +162,12 @@ function parseArgs(argv /*: Array<string> */) /*: SetupArgs */ {
         'Action to run: add, update, deinit, or scaffold. ' +
         'Defaults to add (or update if SPM is already set up).',
     })
+    .option('platform', {
+      type: 'string',
+      choices: ['ios', 'visionos'],
+      describe:
+        'Apple target platform (visionOS requires the source package or CocoaPods)',
+    })
     .option('version', {
       type: 'string',
       describe:
@@ -233,6 +240,7 @@ function parseArgs(argv /*: Array<string> */) /*: SetupArgs */ {
 
   return {
     action: requestedAction,
+    platform: parsed.platform ?? null,
     version: parsed.version ?? null,
     artifacts: parsed.artifacts ?? null,
     skipCodegen: parsed['skip-codegen'],
@@ -1054,6 +1062,16 @@ async function main(argv /*:: ?: Array<string> */) /*: Promise<void> */ {
   let appRoot = process.cwd();
   const projectRoot = findProjectRoot(appRoot);
   const args = parseArgs(argv ?? process.argv.slice(2));
+  const platform =
+    args.platform ??
+    (['xros', 'xrsimulator'].includes(process.env.PLATFORM_NAME ?? '') ||
+    path.basename(appRoot).toLowerCase() === 'visionos'
+      ? 'visionos'
+      : 'ios');
+  if (args.action !== 'deinit') {
+    // Reject before downloading artifacts, writing generated files or migrating pods.
+    assertSupportedBinaryPlatform(platform);
+  }
 
   // Standard-RN-layout redirect: if invoked from the JS root and there's an
   // `ios/` subdir, route the run there. Runs BEFORE resolveAction so the

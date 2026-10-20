@@ -5,6 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+#import <TargetConditionals.h>
+
+#if !TARGET_OS_VISION
+
 #import "RCTStatusBarManager.h"
 #import "CoreModulesPlugins.h"
 
@@ -197,3 +201,5 @@ Class RCTStatusBarManagerCls(void)
 {
   return RCTStatusBarManager.class;
 }
+
+#endif // !TARGET_OS_VISION

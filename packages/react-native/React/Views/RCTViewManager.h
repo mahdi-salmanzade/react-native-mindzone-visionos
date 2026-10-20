@@ -80,6 +80,21 @@ typedef void (^RCTViewManagerUIBlock)(RCTUIManager *uiManager, NSDictionary<NSNu
   }
 
 /**
+ * These macros export view properties only on the corresponding platforms.
+ */
+#if TARGET_OS_VISION
+#define RCT_EXPORT_NOT_VISIONOS_VIEW_PROPERTY(name, type)
+#define RCT_EXPORT_VISIONOS_VIEW_PROPERTY(name, type) RCT_EXPORT_VIEW_PROPERTY(name, type)
+#define RCT_REMAP_NOT_VISIONOS_VIEW_PROPERTY(name, keyPath, type)
+#define RCT_REMAP_VISIONOS_VIEW_PROPERTY(name, keyPath, type) RCT_REMAP_VIEW_PROPERTY(name, keyPath, type)
+#else
+#define RCT_EXPORT_NOT_VISIONOS_VIEW_PROPERTY(name, type) RCT_EXPORT_VIEW_PROPERTY(name, type)
+#define RCT_EXPORT_VISIONOS_VIEW_PROPERTY(name, type)
+#define RCT_REMAP_NOT_VISIONOS_VIEW_PROPERTY(name, keyPath, type) RCT_REMAP_VIEW_PROPERTY(name, keyPath, type)
+#define RCT_REMAP_VISIONOS_VIEW_PROPERTY(name, keyPath, type)
+#endif
+
+/**
  * This macro can be used when you need to provide custom logic for setting
  * view properties. The macro should be followed by a method body, which can
  * refer to "json", "view" and "defaultView" to implement the required logic.

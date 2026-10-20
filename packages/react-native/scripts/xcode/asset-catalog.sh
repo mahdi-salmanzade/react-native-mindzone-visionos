@@ -62,7 +62,15 @@ asset_catalog_compile() {
   # version. On Catalyst the platform is macosx but MACOSX_DEPLOYMENT_TARGET is a
   # macOS version (e.g. 10.15); passing that as the target makes actool silently
   # emit loose files instead of a compiled Assets.car, so it must not be used.
-  actool_args+=("--minimum-deployment-target" "${IPHONEOS_DEPLOYMENT_TARGET:-15.1}")
+  # visionOS also bundles as "ios", but has its own deployment version.
+  case "$PLATFORM_NAME" in
+    xros|xrsimulator)
+      actool_args+=("--minimum-deployment-target" "${XROS_DEPLOYMENT_TARGET:-1.0}")
+      ;;
+    *)
+      actool_args+=("--minimum-deployment-target" "${IPHONEOS_DEPLOYMENT_TARGET:-15.1}")
+      ;;
+  esac
   case "${TARGETED_DEVICE_FAMILY:-1}" in *1*) actool_args+=("--target-device" "iphone") ;; esac
   case "${TARGETED_DEVICE_FAMILY:-1}" in *2*) actool_args+=("--target-device" "ipad") ;; esac
   if [[ "${IS_MACCATALYST:-NO}" == "YES" ]]; then

@@ -36,6 +36,19 @@ class ReactNativeCoreUtils
     @@use_nightly = false
     @@download_dsyms = false
 
+    # The upstream React.xcframework has no xros slice. Core mode and podspec
+    # evaluation are process-global, so a mixed Podfile must select source core
+    # before its first use_react_native! call, including any iOS targets.
+    def self.ensure_source_for_visionos!(platform)
+        return unless platform&.name == :visionos
+
+        if ENV['RCT_USE_PREBUILT_RNCORE'] != '0' || !@@build_from_source || ENV['RCT_TESTONLY_RNCORE_TARBALL_PATH']
+            raise "visionOS requires React Native core from source: set RCT_USE_PREBUILT_RNCORE=0 before the first use_react_native! call " \
+                  "(including iOS targets in a mixed Podfile), and remove RCT_TESTONLY_RNCORE_TARBALL_PATH. " \
+                  "React.xcframework has no xros slice. RCT_USE_RN_DEP may remain enabled."
+        end
+    end
+
     ## Sets up wether ReactNative Core should be built from source or not.
     ## If RCT_USE_PREBUILT_RNCORE is set to 1 and the artifacts exists on Maven, it will
     ## not build from source. Otherwise, it will build from source.

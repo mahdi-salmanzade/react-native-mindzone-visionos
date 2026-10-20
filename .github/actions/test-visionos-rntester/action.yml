@@ -1,0 +1,91 @@
+name: test-visionos-rntester
+description: Build visionOS RNTester with source React Native core
+inputs:
+  ruby-version:
+    description: The Ruby version to use
+    default: '3.3'
+  xcode-version:
+    description: Installed Xcode version with visionOS support
+    default: latest-stable
+  flavor:
+    description: Build configuration (Debug or Release)
+    default: Debug
+  use-frameworks:
+    description: Build with dynamic frameworks
+    default: 'false'
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Xcode
+      uses: ./.github/actions/setup-xcode
+      with:
+        xcode-version: ${{ inputs.xcode-version }}
+    - name: Install the visionOS platform
+      shell: bash
+      run: |
+        sudo xcodebuild -runFirstLaunch
+        sudo xcodebuild -downloadPlatform visionOS
+        sudo xcodebuild -runFirstLaunch
+        xcodebuild -version
+        xcrun --sdk xros --show-sdk-version
+        xcrun --sdk xrsimulator --show-sdk-version
+    - name: Setup Node.js
+      uses: ./.github/actions/setup-node
+    - name: Install JavaScript dependencies
+      uses: ./.github/actions/yarn-install
+    - name: Build codegen and generate the core specs
+      shell: bash
+      run: |
+        yarn --cwd packages/react-native-codegen build
+        yarn --cwd packages/react-native prepack
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ inputs.ruby-version }}
+    - name: Install CocoaPods dependencies
+      shell: bash
+      env:
+        # Set before the first use_react_native!, including mixed iOS targets.
+        RCT_USE_PREBUILT_RNCORE: '0'
+        RCT_USE_RN_DEP: '1'
+        USE_DYNAMIC_FRAMEWORKS: ${{ inputs.use-frameworks }}
+      run: |
+        if [[ "$USE_DYNAMIC_FRAMEWORKS" == "true" ]]; then
+          export USE_FRAMEWORKS=dynamic
+        fi
+        cd packages/rn-tester
+        bundle install
+        bundle exec pod install
+    - name: Build RNTester-visionOS
+      shell: bash
+      env:
+        BUILD_FLAVOR: ${{ inputs.flavor }}
+      run: |
+        case "$BUILD_FLAVOR" in Debug|Release) ;; *) echo "Invalid build configuration" >&2; exit 1 ;; esac
+        mkdir -p "$RUNNER_TEMP/RNTesterVisionOS"
+        set -o pipefail
+        xcodebuild \
+          -scheme RNTester-visionOS \
+          -workspace packages/rn-tester/RNTesterPods.xcworkspace \
+          -configuration "$BUILD_FLAVOR" \
+          -sdk xrsimulator \
+          -destination 'generic/platform=visionOS Simulator' \
+          -derivedDataPath "$RUNNER_TEMP/RNTesterVisionOS/DerivedData" \
+          -resultBundlePath "$RUNNER_TEMP/RNTesterVisionOS/Build.xcresult" \
+          CODE_SIGNING_ALLOWED=NO \
+          | tee "$RUNNER_TEMP/RNTesterVisionOS/xcodebuild.log"
+    - name: Upload build diagnostics
+      if: always()
+      uses: actions/upload-artifact@v6
+      with:
+        name: RNTester-visionOS-diagnostics-${{ inputs.flavor }}-${{ inputs.use-frameworks }}
+        path: |
+          ${{ runner.temp }}/RNTesterVisionOS/xcodebuild.log
+          ${{ runner.temp }}/RNTesterVisionOS/Build.xcresult
+    - name: Upload RNTester-visionOS app
+      uses: actions/upload-artifact@v6
+      with:
+        name: RNTester-visionOS-${{ inputs.flavor }}-${{ inputs.use-frameworks }}
+        path: ${{ runner.temp }}/RNTesterVisionOS/DerivedData/Build/Products/${{ inputs.flavor }}-xrsimulator/*.app
+        if-no-files-found: error

@@ -88,6 +88,14 @@ async function setup(
   link('Libraries/NativeAnimation', 'React');
   link('Libraries/LinkingIOS', 'React');
   link('Libraries/Settings', 'React');
+  // Headers used by the separate visionOS SwiftPM source targets.
+  if (fs.existsSync(path.join(root, 'Libraries/XR'))) {
+    link('Libraries/XR', 'React');
+    link('Libraries/WindowManager', 'React');
+    link('Libraries/SwiftExtensions', 'React');
+    link('Libraries/AppDelegate', 'React-RCTAppDelegate');
+    link('React/FBReactNativeSpec_visionOS', 'FBReactNativeSpec_visionOS');
+  }
 
   link('Libraries/PushNotificationIOS', 'React');
   link('Libraries/Settings', 'React');

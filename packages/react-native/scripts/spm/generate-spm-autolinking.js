@@ -58,6 +58,10 @@ import type {
  *   - npm packages with their own Package.swift use .package(url: ...) instead of inline targets
  */
 
+const {
+  applePlatformDeclaration,
+  assertSupportedBinaryPlatform,
+} = require('./apple-platform');
 const {discoverPlugins, invokePlugins} = require('./autolinking-plugins');
 const {
   SpmNameCollisionError,
@@ -191,6 +195,15 @@ function toPosix(p /*: string */) /*: string */ {
 
 function parseArgs(argv /*: Array<string> */) /*: AutolinkingArgs */ {
   const parsed = yargs(argv)
+    .option('platform', {
+      type: 'string',
+      choices: ['ios', 'visionos'],
+      default: ['xros', 'xrsimulator'].includes(process.env.PLATFORM_NAME ?? '')
+        ? 'visionos'
+        : 'ios',
+      describe:
+        'Apple target platform (visionOS requires the source package or CocoaPods)',
+    })
     .option('app-root', {
       type: 'string',
       default: process.cwd(),
@@ -225,6 +238,7 @@ function parseArgs(argv /*: Array<string> */) /*: AutolinkingArgs */ {
     .parseSync();
 
   return {
+    platform: parsed.platform,
     appRoot: parsed['app-root'],
     reactNativeRoot: parsed['react-native-root'] ?? null,
     autolinkingJson: parsed['autolinking-json'] ?? null,
@@ -954,6 +968,10 @@ function generateAutolinkedPackageSwift(
     input.pluginProductDeps ?? [];
   const iosDeploymentTarget /*: string */ =
     input.iosDeploymentTarget ?? MIN_IOS_VERSION_SUPPORTED;
+  const platformDeclaration = applePlatformDeclaration(
+    input.platform,
+    iosDeploymentTarget,
+  );
 
   // Package-level dependencies: one .package(path:) per autolinked dep,
   // plus ReactNative if any inline target needs to import React headers.
@@ -1087,7 +1105,7 @@ import Foundation
 
 ${guardBlock}let package = Package(
     name: "${AUTOLINKED_PACKAGE_NAME}",
-    platforms: [.iOS("${iosDeploymentTarget}")],
+    platforms: [${platformDeclaration}],
     products: [
         .library(name: "${AUTOLINKED_PACKAGE_NAME}", targets: ["AutolinkedAggregate"]),
     ],
@@ -1139,6 +1157,10 @@ function generateSynthPackageSwift(spec /*: SynthPackageSpec */) /*: string */ {
     spec.siblingSynthAbsolutePaths ?? {};
   const iosDeploymentTarget /*: string */ =
     spec.iosDeploymentTarget ?? MIN_IOS_VERSION_SUPPORTED;
+  const platformDeclaration = applePlatformDeclaration(
+    spec.platform,
+    iosDeploymentTarget,
+  );
 
   // Package dependencies — ReactNative + each spm sibling synth package.
   // The React + codegen package paths are plain relative strings computed by
@@ -1237,7 +1259,7 @@ import PackageDescription
 
 let package = Package(
     name: "${swiftName}",
-    platforms: [.iOS("${iosDeploymentTarget}")],
+    platforms: [${platformDeclaration}],
     products: [
         .library(name: "${swiftName}"${isDynamic ? ', type: .dynamic' : ''}, targets: ["${swiftName}"]),
     ],
@@ -1256,6 +1278,7 @@ ${packageDepsBlock}    targets: [
 
 function main(argv /*:: ?: Array<string> */) /*: void */ {
   const args = parseArgs(argv ?? process.argv.slice(2));
+  assertSupportedBinaryPlatform(args.platform);
   // Resolve to absolute so path.join() produces absolute paths everywhere —
   // entryAbsDirs, the headers farm, etc. all assume an absolute appRoot.
   const appRoot = path.resolve(args.appRoot);

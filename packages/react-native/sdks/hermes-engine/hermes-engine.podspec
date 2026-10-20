@@ -7,17 +7,9 @@ require "json"
 require "pathname"
 require_relative "./hermes-utils.rb"
 
-begin
-  react_native_path = File.dirname(Pod::Executable.execute_command('node', ['-p',
-    'require.resolve(
-    "react-native",
-    {paths: [process.argv[1]]},
-    )', __dir__]).strip
-  )
-rescue => e
-  # Fallback to the parent directory if the above command fails (e.g when building locally in OOT Platform)
-  react_native_path = File.join(__dir__, "..", "..")
-end
+# Use the package that owns this podspec, also when upstream React Native is
+# coinstalled beside a directly imported visionOS fork.
+react_native_path = File.expand_path("../..", __dir__)
 
 # package.json
 package = JSON.parse(File.read(File.join(react_native_path, "package.json")))
@@ -115,6 +107,13 @@ Pod::Spec.new do |spec|
 
   elsif HermesEngineSourceType::isFromSource(source_type) then
 
+    # Preserve the iOS output declaration; xros builds place hermesvm under lib.
+    spec.pod_target_xcconfig = spec.attributes_hash['pod_target_xcconfig'].merge({
+      'RN_HERMES_BUILD_OUTPUT' => '${PODS_ROOT}/hermes-engine/build/iphonesimulator/API/hermes/hermesvm.framework/hermesvm',
+      'RN_HERMES_BUILD_OUTPUT[sdk=xros*]' => '${PODS_ROOT}/hermes-engine/build/$(PLATFORM_NAME)/lib/hermesvm.framework/hermesvm',
+      'RN_HERMES_BUILD_OUTPUT[sdk=xrsimulator*]' => '${PODS_ROOT}/hermes-engine/build/$(PLATFORM_NAME)/lib/hermesvm.framework/hermesvm'
+    })
+
     spec.subspec 'Hermes' do |ss|
       ss.source_files = ''
       ss.public_header_files = 'API/hermes/*.h'
@@ -166,7 +165,7 @@ Pod::Spec.new do |spec|
           :name => '[RN] [2] Build Hermes',
           :input_files => ["#{hermesc_path}/ImportHostCompilers.cmake"],
           :output_files => [
-            "${PODS_ROOT}/hermes-engine/build/iphonesimulator/API/hermes/hermesvm.framework/hermesvm"
+            "$(RN_HERMES_BUILD_OUTPUT)"
           ],
           :script => <<-EOS
           . "${REACT_NATIVE_PATH}/scripts/xcode/with-environment.sh"

@@ -61,6 +61,7 @@
  *   <output>/artifacts.json        ← maps target names to xcframework paths
  */
 
+const {assertSupportedBinaryPlatform} = require('./apple-platform');
 const {
   defaultCacheDir,
   displayPath,
@@ -77,6 +78,15 @@ const {log, warn, die} = makeLogger('download-spm-artifacts');
 
 function parseArgs(argv /*: Array<string> */) /*: DownloadArgs */ {
   const parsed = yargs(argv)
+    .option('platform', {
+      type: 'string',
+      choices: ['ios', 'visionos'],
+      default: ['xros', 'xrsimulator'].includes(process.env.PLATFORM_NAME ?? '')
+        ? 'visionos'
+        : 'ios',
+      describe:
+        'Apple target platform (visionOS requires the source package or CocoaPods)',
+    })
     .version(false)
     .option('version', {
       alias: 'v',
@@ -122,6 +132,7 @@ function parseArgs(argv /*: Array<string> */) /*: DownloadArgs */ {
     .parseSync();
 
   return {
+    platform: parsed.platform,
     version: parsed.version ?? null,
     flavor: parsed.flavor.toLowerCase(),
     output: parsed.output ?? null,
@@ -1142,6 +1153,7 @@ async function processArtifact(
 
 async function main(argv /*:: ?: Array<string> */) /*: Promise<void> */ {
   const args = parseArgs(argv ?? process.argv.slice(2));
+  assertSupportedBinaryPlatform(args.platform);
   const rnRoot = path.resolve(__dirname, '../..');
   const flavor = args.flavor;
 

@@ -84,6 +84,10 @@ module Helpers
             return '15.1'
         end
 
+        def self.min_visionos_version_supported
+            return '1.0'
+        end
+
         def self.min_xcode_version_supported
             return '16.1'
         end

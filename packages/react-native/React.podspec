@@ -53,6 +53,10 @@ Pod::Spec.new do |s|
   s.dependency "React-RCTSettings", version
   s.dependency "React-RCTText", version
   s.dependency "React-RCTVibration", version
+  s.visionos.dependency "React-RCTSwiftExtensions", version
+  s.visionos.dependency "React-RCTXR", version
+  s.visionos.dependency "React-RCTWindowManager", version
+  s.visionos.dependency "React-RCTFBReactNativeSpecVisionOS", version
 
   mark_as_react_native_build(s)
 end

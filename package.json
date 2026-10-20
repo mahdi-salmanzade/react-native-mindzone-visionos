@@ -109,6 +109,7 @@
     "nullthrows": "^1.1.1",
     "prettier": "3.9.4",
     "react": "19.3.0",
+    "react-native": "link:./packages/react-native",
     "react-test-renderer": "19.3.0",
     "rimraf": "^3.0.2",
     "shelljs": "^0.8.5",

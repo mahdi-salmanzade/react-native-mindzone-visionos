@@ -13,6 +13,7 @@ const {
   CODEGEN_REPO_PATH,
   CORE_LIBRARIES_WITH_OUTPUT_FOLDER,
   REACT_NATIVE,
+  REACT_NATIVE_PACKAGE_ROOT_FOLDER,
 } = require('./constants');
 const {execSync} = require('node:child_process');
 const fs = require('node:fs');
@@ -167,7 +168,18 @@ function findCodegenEnabledLibraries(
     libraries.push(
       ...findLibrariesFromReactNativeConfig(projectRoot, reactNativeConfig),
     );
-    return libraries;
+    const seenCoreLibraries /*: Set<string> */ = new Set();
+    return libraries.filter(library => {
+      if (!isReactNativeCoreLibrary(library.config.name)) {
+        return true;
+      }
+      const key = `${fs.realpathSync(library.libraryPath)}:${library.config.name}`;
+      if (seenCoreLibraries.has(key)) {
+        return false;
+      }
+      seenCoreLibraries.add(key);
+      return true;
+    });
   }
 }
 
@@ -221,6 +233,12 @@ function findLibrariesFromReactNativeConfig(
       return [];
     }
 
+    // Compare the resolved package identity, so an npm alias named react-native
+    // keeps this fork's main and visionOS specs. Apply to autolinking and fallback
+    // discovery: 0.88 usually skips the fallback after pod install.
+    if (REACT_NATIVE !== 'react-native' && configFile.name === 'react-native') {
+      return [];
+    }
     return extractLibrariesFromJSON(configFile, codegenConfigFileDir);
   });
 }
@@ -284,6 +302,12 @@ function findExternalLibraries(
     }
     const configFile = JSON.parse(fs.readFileSync(configFilePath, 'utf8'));
     const codegenConfigFileDir = path.dirname(configFilePath);
+    // Compare the resolved package identity, so an npm alias named react-native
+    // keeps this fork's main and visionOS specs. Apply to autolinking and fallback
+    // discovery: 0.88 usually skips the fallback after pod install.
+    if (REACT_NATIVE !== 'react-native' && configFile.name === 'react-native') {
+      return [];
+    }
     return extractLibrariesFromJSON(configFile, codegenConfigFileDir);
   });
 }
@@ -475,6 +499,11 @@ function findDisabledLibrariesByPlatform(
 }
 
 function findReactNativeRootPath(projectRoot /* : string */) /* : string */ {
+  if (REACT_NATIVE !== 'react-native') {
+    // A direct out-of-tree install may coexist with upstream react-native.
+    // Generated source-package references must point at the executing fork.
+    return REACT_NATIVE_PACKAGE_ROOT_FOLDER;
+  }
   const reactNativePackageJsonPath = require.resolve(
     path.join('react-native', 'package.json'),
     {

@@ -9,6 +9,18 @@ set -x -e
 hermesc_dir_path="$1"; shift
 jsi_path="$1"
 
+# Check the target SDK before replacing SDKROOT with the macOS host SDK.
+case "$PLATFORM_NAME" in
+  xros|xrsimulator)
+    cmake_version=$("$CMAKE_BINARY" --version)
+    if [[ ! "$cmake_version" =~ cmake\ version\ ([0-9]+)\.([0-9]+)\.([0-9]+) ]] ||
+       (( 10#${BASH_REMATCH[1]:-0} < 3 || (10#${BASH_REMATCH[1]:-0} == 3 && 10#${BASH_REMATCH[2]:-0} < 28) )); then
+      echo "error: Building Hermes for visionOS requires CMake 3.28.0 or newer." >&2
+      exit 1
+    fi
+    ;;
+esac
+
 # This script is supposed to be executed from Xcode "run script" phase.
 # Xcode sets up its build environment based on the build target (iphone, iphonesimulator, macosx).
 # We want to make sure that hermesc is built for mac.

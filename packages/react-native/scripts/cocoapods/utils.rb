@@ -429,6 +429,9 @@ class ReactNativePodsUtils
     def self.updateOSDeploymentTarget(installer)
         installer.target_installation_results.pod_target_installation_results
             .each do |pod_name, target_installation_result|
+                if target_installation_result.target.respond_to?(:platform) && target_installation_result.target.platform.name == :visionos
+                    next
+                end
                 target_installation_result.native_target.build_configurations.each do |config|
                     old_iphone_deploy_target = config.build_settings["IPHONEOS_DEPLOYMENT_TARGET"] ?
                         config.build_settings["IPHONEOS_DEPLOYMENT_TARGET"] :
@@ -436,6 +439,37 @@ class ReactNativePodsUtils
                     config.build_settings["IPHONEOS_DEPLOYMENT_TARGET"] = [Helpers::Constants.min_ios_version_supported.to_f, old_iphone_deploy_target.to_f].max.to_s
                 end
             end
+    end
+
+    def self.update_visionos_build_settings(installer)
+        installer.target_installation_results.pod_target_installation_results.each_value do |result|
+            next unless result.target.platform.name == :visionos
+
+            targets = [result.native_target] + result.resource_bundle_targets + result.test_native_targets + result.app_native_targets.values
+            targets += result.test_resource_bundle_targets.values.flatten + result.app_resource_bundle_targets.values.flatten + result.test_app_host_targets
+            targets.compact.uniq.each do |target|
+                self.set_visionos_build_settings(target)
+            end
+        end
+        installer.aggregate_targets.each do |aggregate_target|
+            next unless aggregate_target.platform.name == :visionos
+
+            aggregate_target.user_targets.each { |target| self.set_visionos_build_settings(target) }
+            aggregate_target.user_project.save
+        end
+    end
+
+    def self.set_visionos_build_settings(target)
+        target.build_configurations.each do |config|
+            minimum = Helpers::Constants.min_visionos_version_supported
+            current = config.build_settings['XROS_DEPLOYMENT_TARGET'] || minimum
+            if Gem::Version.correct?(current.to_s)
+                config.build_settings['XROS_DEPLOYMENT_TARGET'] = [Gem::Version.new(minimum), Gem::Version.new(current.to_s)].max.to_s
+            end
+            config.build_settings['SUPPORTED_PLATFORMS'] = 'xros xrsimulator'
+            config.build_settings['TARGETED_DEVICE_FAMILY'] = '7'
+            config.build_settings['SUPPORTS_MACCATALYST'] = 'NO'
+        end
     end
 
     def self.set_dynamic_frameworks_flags(installer)
@@ -716,6 +750,10 @@ class ReactNativePodsUtils
             "React-RCTText",
             "React-RCTTest",
             "React-RCTVibration",
+            "React-RCTXR",
+            "React-RCTWindowManager",
+            "React-RCTSwiftExtensions",
+            "React-RCTFBReactNativeSpecVisionOS",
             "React-callinvoker",
             "React-cxxreact",
             "React-graphics",

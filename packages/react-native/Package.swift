@@ -406,7 +406,8 @@ let reactCoreRCTWebsocket = RNTarget(
 let reactCoreModules = RNTarget(
   name: .reactCoreModules,
   path: "React/CoreModules",
-  excludedPaths: ["PlatformStubs/RCTStatusBarManager.mm"],
+  // Each implementation is guarded for the build destination.
+  excludedPaths: [],
   dependencies: [.reactNativeDependencies, .jsi, .yoga, .reactTurboModuleCore, .reactFeatureFlags]
 )
 
@@ -445,7 +446,7 @@ let reactCore = RNTarget(
     "ReactCommon/react/runtime/platform/ios", // explicit header search path to break circular dependency. RCTHost imports `RCTDefines.h` in ReactCore, ReacCore needs to import RCTHost
   ],
   linkedFrameworks: ["CoreServices"],
-  excludedPaths: ["Fabric", "Tests", "Resources", "Runtime/RCTJscInstanceFactory.mm", "I18n/strings", "CxxBridge/JSCExecutorFactory.mm", "CoreModules"],
+  excludedPaths: ["Fabric", "Tests", "Resources", "Runtime/RCTJscInstanceFactory.mm", "I18n/strings", "CxxBridge/JSCExecutorFactory.mm", "CoreModules", "FBReactNativeSpec_visionOS"],
   dependencies: [.reactNativeDependencies, .reactCxxReact, .reactPerfLogger, .jsi, .reactJsiExecutor, .reactUtils, .reactFeatureFlags, .reactRuntimeScheduler, .yoga, .reactJsInspector, .reactJsiTooling, .rctDeprecation, .reactCoreRCTWebsocket, .reactRCTImage, .reactTurboModuleCore, .reactRCTText, .reactRCTBlob, .reactRCTAnimation, .reactRCTNetwork, .reactFabric, .hermesPrebuilt],
   sources: [".", "Runtime/RCTHermesInstanceFactory.mm"],
   publicHeadersPath: publicHeadersPathForReactCore
@@ -745,19 +746,70 @@ let targets = [
   reactRuntimeExecutor,
 ]
 
+// visionOS modules are separate from the existing iOS/Catalyst source graph.
+// SwiftPM does not permit Swift and Objective-C in one target.
+let visionOSTargets: [BaseTarget] = [
+  RNTarget(
+    name: "FBReactNativeSpec_visionOS",
+    path: "React/FBReactNativeSpec_visionOS",
+    dependencies: [.reactNativeDependencies, .reactCore, .jsi, .reactTurboModuleCore]
+  ),
+  RNTarget(
+    name: "RCTXR",
+    path: "Libraries/XR",
+    sources: ["ImmersiveBridge.swift"],
+    publicHeadersPath: nil
+  ),
+  RNTarget(
+    name: "React-RCTXR",
+    path: "Libraries/XR",
+    dependencies: [.reactCore, .reactTurboModuleCore, "FBReactNativeSpec_visionOS", "RCTXR"],
+    sources: ["RCTXRModule.mm"],
+    defines: [.define("SWIFT_PACKAGE", to: "1")]
+  ),
+  RNTarget(
+    name: "React-RCTWindowManager",
+    path: "Libraries/WindowManager",
+    dependencies: [.reactCore, .reactTurboModuleCore, "FBReactNativeSpec_visionOS"],
+    sources: ["RCTWindowManager.mm"]
+  ),
+  RNTarget(
+    name: "RCTSwiftExtensionsObjC",
+    path: "Libraries/SwiftExtensions",
+    dependencies: [.reactCore, .reactAppDelegate],
+    sources: ["RCTReactViewController.m"]
+  ),
+  RNTarget(
+    name: "RCTSwiftExtensions",
+    path: "Libraries/SwiftExtensions",
+    dependencies: [.reactCore, "RCTSwiftExtensionsObjC", "React-RCTXR", "React-RCTWindowManager"],
+    sources: ["RCTMainWindow.swift", "RCTReactContext.swift", "RCTRootViewRepresentable.swift", "RCTWindow.swift"],
+    publicHeadersPath: nil
+  ),
+]
+
 // MARK: Package object
 
 let package = Package(
   name: react,
-  platforms: [.iOS(.v15), .macCatalyst(SupportedPlatform.MacCatalystVersion.v13)],
+  platforms: [.visionOS(.v1), .iOS(.v15), .macCatalyst(SupportedPlatform.MacCatalystVersion.v13)],
   products: [
     .library(
       name: react,
       type: .dynamic,
-      targets: targets.map { $0.name }
+      targets: targets.map { $0.name } + ["ReactVisionOS"]
     )
   ],
-  targets: targets.map { $0.target(targets: targets) }
+  targets: (targets + visionOSTargets).map { $0.target(targets: targets + visionOSTargets) } + [
+    .target(
+      name: "ReactVisionOS",
+      dependencies: [
+        .target(name: "RCTSwiftExtensions", condition: .when(platforms: [.visionOS])),
+      ],
+      path: "scripts/spm/visionos",
+      sources: ["ReactVisionOS.swift"]
+    ),
+  ]
 )
 
 // MARK: Support & Utility Classes

@@ -75,6 +75,7 @@ node_modules
 *.log
 .nvm
 package-lock.json
+/packages/react-native/*.tgz
 
 # OS X
 .DS_Store
@@ -137,6 +138,7 @@ vendor/
 
 # @react-native/codegen
 /packages/react-native/React/FBReactNativeSpec/
+/packages/react-native/React/FBReactNativeSpec_visionOS/
 /packages/react-native-codegen/lib
 /packages/react-native-codegen/tmp/
 /packages/rn-tester/NativeModuleExample/ScreenshotManagerSpec*

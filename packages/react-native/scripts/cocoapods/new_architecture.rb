@@ -158,6 +158,15 @@ class NewArchitectureHelper
         return package["version"]
     end
 
+    def self.extract_react_native_upstream_version(react_native_path, file_manager: File, json_parser: JSON)
+        package_json_file = File.join(react_native_path, "package.json")
+        if !file_manager.exist?(package_json_file)
+            raise "Couldn't find the React Native package.json file at #{package_json_file}"
+        end
+        package = json_parser.parse(file_manager.read(package_json_file))
+        return package["reactNativeUpstreamVersion"] || package["version"]
+    end
+
     # Deprecated method. This has been restored because some libraries (e.g. react-native-exit-app) still use it.
     def self.folly_compiler_flags
       folly_config = Helpers::Constants.folly_config

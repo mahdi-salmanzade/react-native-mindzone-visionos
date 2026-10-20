@@ -10,8 +10,11 @@
 
 import type {Command, Config} from '@react-native-community/cli-types';
 
+import path from 'node:path';
+
 export type SpmCommandArgs = {
   version?: string,
+  platform?: string,
   yes?: boolean,
   xcodeproj?: string,
   productName?: string,
@@ -28,6 +31,10 @@ const spmCommand: Command = {
     'Actions: add, update, deinit, scaffold. With no action: add (or update ' +
     'if SPM is already set up).',
   options: [
+    {
+      name: '--platform <string>',
+      description: 'Apple platform: ios (default) or visionos.',
+    },
     {
       name: '--version <string>',
       description:
@@ -80,11 +87,19 @@ const spmCommand: Command = {
     }
     const stringOpts: Array<
       [
-        'version' | 'productName' | 'xcodeproj' | 'artifacts' | 'download',
+        (
+          | 'version'
+          | 'platform'
+          | 'productName'
+          | 'xcodeproj'
+          | 'artifacts'
+          | 'download'
+        ),
         string,
       ],
     > = [
       ['version', '--version'],
+      ['platform', '--platform'],
       ['productName', '--product-name'],
       ['xcodeproj', '--xcodeproj'],
       ['artifacts', '--artifacts'],
@@ -107,7 +122,9 @@ const spmCommand: Command = {
       }
     }
     const setupAppleSpm = require.resolve(
-      'react-native/scripts/setup-apple-spm',
+      config.reactNativePath != null
+        ? path.join(config.reactNativePath, 'scripts/setup-apple-spm.js')
+        : 'react-native/scripts/setup-apple-spm',
       {paths: [config.root]},
     );
     // $FlowFixMe[unsupported-syntax] dynamic require of a resolved path

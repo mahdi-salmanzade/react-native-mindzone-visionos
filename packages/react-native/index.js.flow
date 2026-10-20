@@ -456,6 +456,16 @@ export {default as useWindowDimensions} from './Libraries/Utilities/useWindowDim
 export {default as UTFSequence} from './Libraries/UTFSequence';
 export {default as Vibration} from './Libraries/Vibration/Vibration';
 
+export type {
+  Window,
+  WindowManagerStatic,
+  WindowStatic,
+} from './Libraries/WindowManager/WindowManager';
+export {default as WindowManager} from './Libraries/WindowManager/WindowManager';
+
+export type {XRStatic} from './Libraries/XR/XR';
+export {default as XR} from './Libraries/XR/XR';
+
 // #endregion
 // #region APIs (types only)
 

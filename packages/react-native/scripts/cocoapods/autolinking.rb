@@ -38,7 +38,10 @@ def list_native_modules!(config_command)
   config = JSON.parse(json)
 
   packages = config["dependencies"]
-  ios_project_root = Pathname.new(config["project"]["ios"]["sourceDir"])
+  # The CLI's ios.sourceDir can point at a sibling iOS app. For visionOS,
+  # relative pod paths and the codegen manifest belong beside this Podfile.
+  installation_root = Pod::Config.instance.installation_root if current_target_definition.platform&.name == :visionos
+  ios_project_root = Pathname.new(installation_root || config["project"]["ios"]["sourceDir"])
   react_native_path = Pathname.new(config["reactNativePath"])
   codegen_output_path = ios_project_root.join("build/generated/autolinking/autolinking.json")
 

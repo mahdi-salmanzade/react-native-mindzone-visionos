@@ -37,11 +37,15 @@ def min_ios_version_supported
   return Helpers::Constants.min_ios_version_supported
 end
 
+def min_visionos_version_supported
+  return Helpers::Constants.min_visionos_version_supported
+end
+
 # This function returns the min supported OS versions supported by React Native
 # By using this function, you won't have to manually change your Podfile
 # when we change the minimum version supported by the framework.
 def min_supported_versions
-  return  { :ios => min_ios_version_supported }
+  return  { :ios => min_ios_version_supported, :visionos => min_visionos_version_supported }
 end
 
 # This function prepares the project for React Native, before processing
@@ -98,6 +102,7 @@ def use_react_native! (
 )
   error_if_try_to_use_jsc_from_core()
   warn_if_new_arch_disabled()
+  ReactNativeCoreUtils.ensure_source_for_visionos!(current_target_definition.platform)
 
   react_native_path = Pod::Config.instance.installation_root.join(path)
   prefix = react_native_path.relative_path_from(Pod::Config.instance.installation_root)
@@ -137,6 +142,7 @@ def use_react_native! (
   # We are relying on this flag also in third parties libraries to proper install dependencies.
   # Better to rely and enable this environment flag if the new architecture is turned on using flags.
   react_native_version = NewArchitectureHelper.extract_react_native_version(react_native_path)
+  react_native_upstream_version = NewArchitectureHelper.extract_react_native_upstream_version(react_native_path)
   fabric_enabled = true
 
   ENV['RCT_FABRIC_ENABLED'] = "1"
@@ -146,10 +152,10 @@ def use_react_native! (
   ReactNativePodsUtils.warn_if_not_on_arm64()
 
   # Update ReactNativeDependencies so that we can easily switch between source and prebuilt
-  ReactNativeDependenciesUtils.setup_react_native_dependencies(prefix, react_native_version)
+  ReactNativeDependenciesUtils.setup_react_native_dependencies(prefix, react_native_upstream_version)
 
   # Update ReactNativeCoreUtils so that we can easily switch between source and prebuilt
-  ReactNativeCoreUtils.setup_rncore(prefix, react_native_version)
+  ReactNativeCoreUtils.setup_rncore(prefix, react_native_upstream_version)
 
   # In prebuilt mode, generate the facade podspecs the core pods are installed as
   # (instead of their source podspecs) so they don't ship shadowing headers.
@@ -180,6 +186,12 @@ def use_react_native! (
   pod 'React-RCTSettings', :path => "#{prefix}/Libraries/Settings"
   pod 'React-RCTText', :path => "#{prefix}/Libraries/Text"
   pod 'React-RCTVibration', :path => "#{prefix}/Libraries/Vibration"
+  if current_target_definition.platform&.name == :visionos
+    pod 'React-RCTSwiftExtensions', :path => "#{prefix}/Libraries/SwiftExtensions"
+    pod 'React-RCTXR', :path => "#{prefix}/Libraries/XR", :modular_headers => true
+    pod 'React-RCTWindowManager', :path => "#{prefix}/Libraries/WindowManager", :modular_headers => true
+    pod 'React-RCTFBReactNativeSpecVisionOS', :path => "#{prefix}/React", :modular_headers => true
+  end
   rncore_pod 'React-Core/RCTWebSocket', :path => "#{prefix}/"
   pod 'React-cxxreact', :path => "#{prefix}/ReactCommon/cxxreact"
   pod 'React-cxxstableapi', :path => "#{prefix}/ReactCommon/react/cxxstableapi"
@@ -251,7 +263,7 @@ def use_react_native! (
 
     # Facades: community pods' hardcoded s.dependency "RCT-Folly"/"glog"/... must
     # resolve locally instead of from trunk. See __docs__/prebuilt-deps.md.
-    RNDepsFacades.generate(react_native_path, Pod::Config.instance.installation_root, min_ios_version_supported)
+    RNDepsFacades.generate(react_native_path, Pod::Config.instance.installation_root, min_supported_versions)
     pod 'DoubleConversion', :path => RNDepsFacades.facade_path('DoubleConversion')
     pod 'glog', :path => RNDepsFacades.facade_path('glog')
     pod 'boost', :path => RNDepsFacades.facade_path('boost')
@@ -630,6 +642,7 @@ def react_native_post_install(
 
   ReactNativePodsUtils.set_ccache_compiler_and_linker_build_settings(installer, react_native_path, ccache_enabled)
   ReactNativePodsUtils.updateOSDeploymentTarget(installer)
+  ReactNativePodsUtils.update_visionos_build_settings(installer)
   ReactNativePodsUtils.set_dynamic_frameworks_flags(installer)
   ReactNativePodsUtils.add_ndebug_flag_to_pods_in_release(installer)
 

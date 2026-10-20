@@ -68,6 +68,7 @@ interface PlatformAndroidStatic extends PlatformStatic {
     uiMode: 'car' | 'desk' | 'normal' | 'tv' | 'watch' | 'unknown';
   };
   OS: 'android';
+  isVision: boolean;
   Version: number;
 }
 
