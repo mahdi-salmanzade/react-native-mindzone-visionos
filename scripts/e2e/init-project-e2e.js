@@ -247,6 +247,7 @@ function _prepareHelloWorld(
   updateDependencies(packageJson.devDependencies);
 
   if (pathToLocalReactNative != null) {
+    delete packageJson.dependencies['react-native-mindzone-visionos'];
     packageJson.dependencies['react-native'] = `file:${pathToLocalReactNative}`;
   }
 

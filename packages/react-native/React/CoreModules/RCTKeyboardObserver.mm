@@ -85,6 +85,7 @@ IMPLEMENT_KEYBOARD_HANDLER(keyboardDidChangeFrame)
 @end
 
 #if !TARGET_OS_TV
+#if !TARGET_OS_VISION
 NS_INLINE NSDictionary *RCTRectDictionaryValue(CGRect rect)
 {
   return @{
@@ -110,6 +111,7 @@ static NSString *RCTAnimationNameForCurve(UIViewAnimationCurve curve)
       return @"keyboard";
   }
 }
+#endif
 
 static NSDictionary *RCTParseKeyboardNotification(NSNotification *notification)
 {

@@ -28,6 +28,9 @@ function with intercepted `fs.writeFileSync` confirmed the current output
 contains both the stale registry fork and the new local alias. No E2E install,
 Git operation or network command was run. T3 does not own this script.
 
+**Resolved during T4-verify:** applied the exact deletion in the local HelloWorld
+override branch. The independent template branch is unchanged.
+
 ## T2-build / orchestrator: retain the new RNTester shared scheme
 
 Target: root `.gitignore`, immediately after `/packages/rn-tester/**/*.xcodeproj`.
