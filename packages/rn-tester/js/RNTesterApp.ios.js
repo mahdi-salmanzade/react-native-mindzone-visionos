@@ -16,7 +16,7 @@ import SnapshotViewIOS from './examples/Snapshot/SnapshotViewIOS.ios';
 import RNTesterApp from './RNTesterAppShared';
 import RNTesterList from './utils/RNTesterList';
 import * as React from 'react';
-import {AppRegistry} from 'react-native';
+import {AppRegistry, Platform} from 'react-native';
 
 AppRegistry.registerComponent('SetPropertiesExampleApp', () =>
   require('./examples/SetPropertiesExample/SetPropertiesExampleApp'),
@@ -25,6 +25,12 @@ AppRegistry.registerComponent('RootViewSizeFlexibilityExampleApp', () =>
   require('./examples/RootViewSizeFlexibilityExample/RootViewSizeFlexibilityExampleApp'),
 );
 AppRegistry.registerComponent('RNTesterApp', () => RNTesterApp);
+
+if (Platform.isVision) {
+  AppRegistry.registerComponent('SecondWindow', () =>
+    require('./examples/SecondWindow/SecondWindow'),
+  );
+}
 
 // Register suitable examples for snapshot tests
 RNTesterList.Components.concat(RNTesterList.APIs).forEach(

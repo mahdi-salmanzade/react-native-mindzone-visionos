@@ -11,6 +11,7 @@
 import type {RNTesterModule, RNTesterModuleInfo} from '../types/RNTesterTypes';
 
 import * as RNTesterListFbInternal from './RNTesterListFbInternal';
+import {Platform} from 'react-native';
 
 const Components: Array<RNTesterModuleInfo> = [
   {
@@ -406,6 +407,14 @@ const APIs: Array<RNTesterModuleInfo> = (
         ]
       : []),
     ...RNTesterListFbInternal.APIs,
+    ...(Platform.isVision
+      ? [
+          {
+            key: 'XRExample',
+            module: require('../examples/XR/XRExample'),
+          },
+        ]
+      : []),
   ] as Array<?RNTesterModuleInfo>
 ).filter(Boolean);
 

@@ -15,6 +15,7 @@
   "scripts": {
     "start": "react-native start",
     "android": "react-native run-android",
+    "visionos": "react-native run-visionos --scheme RNTester-visionOS",
     "install-android": "../../gradlew :packages:rn-tester:android:app:installDebug",
     "clean-android": "rm -rf android/app/build",
     "prepare-ios": "node ./cli.js bootstrap ios",
@@ -36,7 +37,7 @@
   },
   "peerDependencies": {
     "react": "19.3.0",
-    "react-native": "0.88.0"
+    "react-native-mindzone-visionos": "0.88.0"
   },
   "codegenConfig": {
     "name": "AppSpecs",
@@ -56,6 +57,7 @@
   "devDependencies": {
     "@react-native-community/cli": "20.2.0",
     "@react-native-community/cli-platform-android": "20.2.0",
+    "@react-native-community/cli-platform-apple": "20.2.0",
     "@react-native-community/cli-platform-ios": "20.2.0",
     "@react-native/core-cli-utils": "*",
     "commander": "^12.0.0",

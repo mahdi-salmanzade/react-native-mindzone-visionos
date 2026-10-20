@@ -11,13 +11,19 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DDEF0101F84BF7B00DBDF73 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2DDEF00F1F84BF7B00DBDF73 /* Images.xcassets */; };
 		383889DA23A7398900D06C3E /* RCTConvert_UIColorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 383889D923A7398900D06C3E /* RCTConvert_UIColorTests.m */; };
+		3B70E5A1A9C0FBBFD6C0F1C2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54747D8B81FD0E2F23B9653 /* AppDelegate.swift */; };
 		3D2AFAF51D646CF80089D1A3 /* legacy_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D2AFAF41D646CF80089D1A3 /* legacy_image@2x.png */; };
 		3F4D148C63BBF774A25488A6 /* libPods-RNTesterIntegrationTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93A243F0D4D5C54911E811C4 /* libPods-RNTesterIntegrationTests.a */; };
 		46C0FD761B0B9B1E8662B759 /* libPods-RNTesterUnitTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B312B0EEE90BA411618B015 /* libPods-RNTesterUnitTests.a */; };
+		4E5C58A507E2625B2B9738CA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B36DD6034E14C2D10E5ABDFC /* Preview Assets.xcassets */; };
+		4FAB81F284DCAFB268EC8E75 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2BE5ECBC8B329BE3D6C4E94A /* Assets.xcassets */; };
 		5C60EB1C226440DB0018C04F /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5C60EB1B226440DB0018C04F /* AppDelegate.mm */; };
 		79B29C2E2E607A99007612A5 /* SceneDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 79B29C2D2E607A99007612A5 /* SceneDelegate.mm */; };
 		8145AE06241172D900A3F8DA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8145AE05241172D900A3F8DA /* LaunchScreen.storyboard */; };
 		832F45BB2A8A6E1F0097B4E6 /* SwiftTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832F45BA2A8A6E1F0097B4E6 /* SwiftTest.swift */; };
+		83CD13E0D805EF8614CC4A18 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C081AE25E6DC9E726A9202 /* Foundation.framework */; };
+		93798CEA7F5B180805492D63 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415CF4A6FB13580233FD657C /* App.swift */; };
+		A4BDE6CE32F713D2DCE4BB26 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = F0D621C22BBB9E38005960AC /* PrivacyInfo.xcprivacy */; };
 		A975CA6C2C05EADF0043F72A /* RCTNetworkTaskTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A975CA6B2C05EADE0043F72A /* RCTNetworkTaskTests.m */; };
 		C175B6D9ED9336FB66637943 /* libPods-RNTester.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C706D402EE4AF9BE838CBA9 /* libPods-RNTester.a */; };
 		CD10C7A5290BD4EB0033E1ED /* RCTEventEmitterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CD10C7A4290BD4EB0033E1ED /* RCTEventEmitterTests.m */; };
@@ -75,6 +81,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		060645D2C2EC851DA83BA9E3 /* RNTester-visionOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RNTester-visionOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0EA618022BE537D3001875EF /* RNTesterBundle.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = RNTesterBundle.bundle; path = RNTester/RNTesterBundle.bundle; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* RNTester.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RNTester.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RNTester/AppDelegate.h; sourceTree = "<group>"; };
@@ -86,10 +93,12 @@
 		27F441E81BEBE5030039B79C /* FlexibleSizeExampleView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = FlexibleSizeExampleView.mm; path = RNTester/NativeExampleViews/FlexibleSizeExampleView.mm; sourceTree = "<group>"; };
 		27F441EA1BEBE5030039B79C /* FlexibleSizeExampleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlexibleSizeExampleView.h; path = RNTester/NativeExampleViews/FlexibleSizeExampleView.h; sourceTree = "<group>"; };
 		2B312B0EEE90BA411618B015 /* libPods-RNTesterUnitTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNTesterUnitTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2BE5ECBC8B329BE3D6C4E94A /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2DDEF00F1F84BF7B00DBDF73 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = RNTester/Images.xcassets; sourceTree = "<group>"; };
 		383889D923A7398900D06C3E /* RCTConvert_UIColorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTConvert_UIColorTests.m; sourceTree = "<group>"; };
 		3D2AFAF41D646CF80089D1A3 /* legacy_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "legacy_image@2x.png"; path = "RNTester/legacy_image@2x.png"; sourceTree = "<group>"; };
 		3FF60722627F93D8F62FA1E3 /* Pods-RNTesterUnitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNTesterUnitTests.release.xcconfig"; path = "Target Support Files/Pods-RNTesterUnitTests/Pods-RNTesterUnitTests.release.xcconfig"; sourceTree = "<group>"; };
+		415CF4A6FB13580233FD657C /* App.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		4C706D402EE4AF9BE838CBA9 /* libPods-RNTester.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNTester.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		51BC9297B6C3163C14532020 /* Pods-RNTester.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNTester.release.xcconfig"; path = "Target Support Files/Pods-RNTester/Pods-RNTester.release.xcconfig"; sourceTree = "<group>"; };
 		5C60EB1B226440DB0018C04F /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = RNTester/AppDelegate.mm; sourceTree = "<group>"; };
@@ -98,12 +107,15 @@
 		8145AE05241172D900A3F8DA /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = RNTester/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		832F45BA2A8A6E1F0097B4E6 /* SwiftTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SwiftTest.swift; path = RNTester/SwiftTest.swift; sourceTree = "<group>"; };
 		93A243F0D4D5C54911E811C4 /* libPods-RNTesterIntegrationTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RNTesterIntegrationTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A54747D8B81FD0E2F23B9653 /* AppDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A975CA6B2C05EADE0043F72A /* RCTNetworkTaskTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTNetworkTaskTests.m; sourceTree = "<group>"; };
 		AC474BFB29BBD4A1002BDAED /* RNTester.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = RNTester.xctestplan; path = RNTester/RNTester.xctestplan; sourceTree = "<group>"; };
 		B0E70A8A05E03E868F8703FE /* Pods-RNTesterIntegrationTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNTesterIntegrationTests.release.xcconfig"; path = "Target Support Files/Pods-RNTesterIntegrationTests/Pods-RNTesterIntegrationTests.release.xcconfig"; sourceTree = "<group>"; };
+		B36DD6034E14C2D10E5ABDFC /* Preview Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		CA59C9994B1822826D8983F0 /* Pods-RNTester.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNTester.debug.xcconfig"; path = "Target Support Files/Pods-RNTester/Pods-RNTester.debug.xcconfig"; sourceTree = "<group>"; };
 		CD10C7A4290BD4EB0033E1ED /* RCTEventEmitterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTEventEmitterTests.m; sourceTree = "<group>"; };
 		D134EB89DD98253FCF879A47 /* Pods-RNTesterUnitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RNTesterUnitTests.debug.xcconfig"; path = "Target Support Files/Pods-RNTesterUnitTests/Pods-RNTesterUnitTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E4C081AE25E6DC9E726A9202 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E771AEEA22B44E3100EA1189 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = RNTester/Info.plist; sourceTree = "<group>"; };
 		E7C1241922BEC44B00DA25C0 /* RNTesterIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNTesterIntegrationTests.m; sourceTree = "<group>"; };
 		E7DB209F22B2BA84005AC45F /* RNTesterUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RNTesterUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -161,6 +173,8 @@
 		E7DB218B22B41FCD005AC45F /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		F0D621C22BBB9E38005960AC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		F1A0B1C23D4E5F6071829301 /* RCTTurboModuleArrayBufferTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTTurboModuleArrayBufferTests.mm; sourceTree = "<group>"; };
+		FA081FA61830865F2D2E7361 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FF01FA799801764AE1EDCF65 /* RNTester-visionOS.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = "RNTester-visionOS.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +183,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				C175B6D9ED9336FB66637943 /* libPods-RNTester.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DB83D07D93D7C3F041DAF5AA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83CD13E0D805EF8614CC4A18 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,6 +216,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0B3E7828631FAF1041A6056B /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				B36DD6034E14C2D10E5ABDFC /* Preview Assets.xcassets */,
+			);
+			name = "Preview Content";
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 		1323F18D1C04ABAC0091BED0 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -263,6 +294,7 @@
 				4C706D402EE4AF9BE838CBA9 /* libPods-RNTester.a */,
 				93A243F0D4D5C54911E811C4 /* libPods-RNTesterIntegrationTests.a */,
 				2B312B0EEE90BA411618B015 /* libPods-RNTesterUnitTests.a */,
+				AE0A33097B6936765EE71913 /* visionOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -284,6 +316,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2DE7E7D81FB2A4F3009E225D /* Frameworks */,
 				E23BD6487B06BD71F1A86914 /* Pods */,
+				C6CB3BBD52EC204D8BFA0D90 /* RNTester-visionOS */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -296,8 +329,31 @@
 				13B07F961A680F5B00A75B9A /* RNTester.app */,
 				E7DB209F22B2BA84005AC45F /* RNTesterUnitTests.xctest */,
 				E7DB215322B2F332005AC45F /* RNTesterIntegrationTests.xctest */,
+				060645D2C2EC851DA83BA9E3 /* RNTester-visionOS.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		AE0A33097B6936765EE71913 /* visionOS */ = {
+			isa = PBXGroup;
+			children = (
+				E4C081AE25E6DC9E726A9202 /* Foundation.framework */,
+			);
+			name = visionOS;
+			sourceTree = "<group>";
+		};
+		C6CB3BBD52EC204D8BFA0D90 /* RNTester-visionOS */ = {
+			isa = PBXGroup;
+			children = (
+				0B3E7828631FAF1041A6056B /* Preview Content */,
+				415CF4A6FB13580233FD657C /* App.swift */,
+				A54747D8B81FD0E2F23B9653 /* AppDelegate.swift */,
+				2BE5ECBC8B329BE3D6C4E94A /* Assets.xcassets */,
+				FA081FA61830865F2D2E7361 /* Info.plist */,
+				FF01FA799801764AE1EDCF65 /* RNTester-visionOS.entitlements */,
+			);
+			name = "RNTester-visionOS";
+			path = "RNTester-visionOS";
 			sourceTree = "<group>";
 		};
 		E23BD6487B06BD71F1A86914 /* Pods */ = {
@@ -386,6 +442,24 @@
 			productReference = 13B07F961A680F5B00A75B9A /* RNTester.app */;
 			productType = "com.apple.product-type.application";
 		};
+		762E0FABE6ECF0CC333FFA8B /* RNTester-visionOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FB9A73DDCF12B0BF80E67743 /* Build configuration list for PBXNativeTarget "RNTester-visionOS" */;
+			buildPhases = (
+				B3008E0CC38BAB00DD53AAB5 /* Sources */,
+				DB83D07D93D7C3F041DAF5AA /* Frameworks */,
+				6310A4320556BB64DE8BD0C9 /* Resources */,
+				C523AD0071CFC7684C94D3AF /* Build JS Bundle */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "RNTester-visionOS";
+			productName = "RNTester-visionOS";
+			productReference = 060645D2C2EC851DA83BA9E3 /* RNTester-visionOS.app */;
+			productType = "com.apple.product-type.application";
+		};
 		E7DB209E22B2BA84005AC45F /* RNTesterUnitTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E7DB20A622B2BA84005AC45F /* Build configuration list for PBXNativeTarget "RNTesterUnitTests" */;
@@ -465,6 +539,7 @@
 				13B07F861A680F5B00A75B9A /* RNTester */,
 				E7DB209E22B2BA84005AC45F /* RNTesterUnitTests */,
 				E7DB215222B2F332005AC45F /* RNTesterIntegrationTests */,
+				762E0FABE6ECF0CC333FFA8B /* RNTester-visionOS */,
 			);
 		};
 /* End PBXProject section */
@@ -479,6 +554,16 @@
 				0EA618032BE537D3001875EF /* RNTesterBundle.bundle in Resources */,
 				F0D621C32BBB9E38005960AC /* PrivacyInfo.xcprivacy in Resources */,
 				3D2AFAF51D646CF80089D1A3 /* legacy_image@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6310A4320556BB64DE8BD0C9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FAB81F284DCAFB268EC8E75 /* Assets.xcassets in Resources */,
+				4E5C58A507E2625B2B9738CA /* Preview Assets.xcassets in Resources */,
+				A4BDE6CE32F713D2DCE4BB26 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -662,6 +747,26 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		C523AD0071CFC7684C94D3AF /* Build JS Bundle */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env",
+			);
+			name = "Build JS Bundle";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nexport PROJECT_ROOT=\"$SRCROOT\"\nexport ENTRY_FILE=\"$SRCROOT/js/RNTesterApp.ios.js\"\nexport SOURCEMAP_FILE=\"$CONFIGURATION_BUILD_DIR/RNTester-visionOS.map\"\nexport PODFILE_DIR=\"$SRCROOT\"\n\nWITH_ENVIRONMENT=\"$SRCROOT/../react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$SRCROOT/../react-native/scripts/react-native-xcode.sh\"\n\n\"$WITH_ENVIRONMENT\" \"$REACT_NATIVE_XCODE\"\n";
+		};
 		DFEE284B22AD5E88BBF1026A /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -739,6 +844,15 @@
 				832F45BB2A8A6E1F0097B4E6 /* SwiftTest.swift in Sources */,
 				5C60EB1C226440DB0018C04F /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B3008E0CC38BAB00DD53AAB5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				93798CEA7F5B180805492D63 /* App.swift in Sources */,
+				3B70E5A1A9C0FBBFD6C0F1C2 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -874,6 +988,67 @@
 				PRODUCT_NAME = RNTester;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		41015D7DC498438457CD212E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "RNTester-visionOS/RNTester-visionOS.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_ASSET_PATHS = "\"RNTester-visionOS/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "RNTester-visionOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.meta.RNTester.localDevelopment.RNTester-visionOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = xros;
+				SUPPORTED_PLATFORMS = "xros xrsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 7;
+				XROS_DEPLOYMENT_TARGET = 1.0;
+			};
+			name = Debug;
+		};
+		8154FE7C71D9C73D26AB9D6C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "RNTester-visionOS/RNTester-visionOS.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_ASSET_PATHS = "\"RNTester-visionOS/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "RNTester-visionOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.meta.RNTester.localDevelopment.RNTester-visionOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = xros;
+				SUPPORTED_PLATFORMS = "xros xrsimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 7;
+				XROS_DEPLOYMENT_TARGET = 1.0;
 			};
 			name = Release;
 		};
@@ -1256,6 +1431,15 @@
 			buildConfigurations = (
 				E7DB215B22B2F332005AC45F /* Debug */,
 				E7DB215C22B2F332005AC45F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FB9A73DDCF12B0BF80E67743 /* Build configuration list for PBXNativeTarget "RNTester-visionOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8154FE7C71D9C73D26AB9D6C /* Release */,
+				41015D7DC498438457CD212E /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

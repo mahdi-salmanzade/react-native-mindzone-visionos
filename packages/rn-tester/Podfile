@@ -69,6 +69,15 @@ target 'RNTesterIntegrationTests' do
   pod 'React-RCTTest', :path => "./RCTTest"
 end
 
+# Source-core mode must be selected before the first target in this mixed
+# installation. Keep the default iOS-only pod graph and prebuilt-core behavior.
+if ENV['RCT_USE_PREBUILT_RNCORE'] == '0'
+  target 'RNTester-visionOS' do
+    platform :visionos, min_visionos_version_supported
+    pods('RNTester-visionOS')
+  end
+end
+
 post_install do |installer|
   react_native_post_install(installer, @prefix_path, :mac_catalyst_enabled => false)
 end

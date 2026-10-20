@@ -1,0 +1,21 @@
+{
+  "name": "react-native-mindzone-visionos-template",
+  "version": "0.88.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mindzone/react-native-mindzone-visionos.git",
+    "directory": "packages/visionos-template"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "commonjs",
+  "files": [
+    "template/*",
+    "!template/node_modules/**",
+    "template.config.js",
+    "postInitScript.js"
+  ],
+  "description": "React Native 0.88 application template for visionOS, iOS and Android"
+}

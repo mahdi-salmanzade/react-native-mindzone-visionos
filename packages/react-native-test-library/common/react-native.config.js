@@ -14,6 +14,7 @@ module.exports = {
   dependency: {
     platforms: {
       ios: {},
+      visionos: {},
     },
   },
 };

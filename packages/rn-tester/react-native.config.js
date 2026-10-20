@@ -21,6 +21,9 @@ module.exports = {
     ios: {
       sourceDir: '.',
     },
+    visionos: {
+      sourceDir: '.',
+    },
     android: {
       sourceDir: '../../',
       // To remove once the CLI fix for manifestPath search path is landed.

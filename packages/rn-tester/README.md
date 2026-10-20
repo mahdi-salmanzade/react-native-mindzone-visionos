@@ -11,6 +11,59 @@ cd react-native
 yarn install
 ```
 
+### Running on visionOS
+
+The fork includes the `RNTester-visionOS` target and shared scheme in
+`RNTesterPods.xcodeproj`. Xcode with the visionOS SDK and an Apple Vision Pro
+simulator runtime is required. The target declares visionOS 1.0; its deployment
+minimum follows `min_visionos_version_supported` in React Native's pod helpers.
+
+Build codegen once from the repository root, then install pods with source React
+core selected before any target is evaluated:
+
+```sh
+yarn --cwd packages/react-native-codegen build
+yarn --cwd packages/react-native prepack
+cd packages/rn-tester
+RCT_USE_PREBUILT_RNCORE=0 bundle exec pod install
+```
+
+`RCT_USE_PREBUILT_RNCORE=0` enables the visionOS pod target alongside the existing
+iOS targets. The setting is required because the prebuilt React core archive has
+no xros slice. Keep the default prebuilt Hermes and React Native dependencies;
+they include xros. Without this environment setting, the Podfile retains its
+existing iOS-only targets and prebuilt-core defaults. When changing installation
+modes, rerun pod installation with the intended environment.
+
+Start Metro with `yarn start` from the repository root. Open
+`RNTesterPods.xcworkspace`, select `RNTester-visionOS`, and choose an Apple Vision
+Pro simulator. The command-line equivalent, after pod installation, is:
+
+```sh
+xcodebuild -workspace packages/rn-tester/RNTesterPods.xcworkspace \
+  -scheme RNTester-visionOS -configuration Debug -sdk xrsimulator \
+  -destination 'generic/platform=visionOS Simulator' CODE_SIGNING_ALLOWED=NO
+```
+
+Run that build command from the repository root. Debug simulator launches load
+`js/RNTesterApp.ios.js` from Metro; Release loads the bundled `main.jsbundle`.
+The XR example uses the `TestImmersiveSpace` and `SecondWindow` scene identifiers
+declared in `RNTester-visionOS/App.swift`. Its plist enables multiple scenes and
+the `rntester` URL scheme. The visionOS target reuses the root privacy manifest;
+its empty entitlements file requests no additional capabilities.
+
+After rebasing the Xcode project onto upstream, restore the target with:
+
+```sh
+bundle exec ruby packages/rn-tester/scripts/add-visionos-target.rb
+```
+
+Run the generator from the repository root. It adds only the visionOS target and
+scheme, inherits upstream C++ settings, and leaves existing targets untouched.
+It is safe to rerun and can recreate a missing shared scheme. CocoaPods generates
+its own build phases and linkage at pod installation. The bundle phase reads the
+tracked `.xcode.env`; `.xcode.env.local` remains an optional local override.
+
 ### Running on iOS
 
 If you are testing non-fabric component, search for and modify the `fabric_enabled` flag in [RNTester's Podfile](https://github.com/facebook/react-native/blob/main/packages/rn-tester/Podfile).

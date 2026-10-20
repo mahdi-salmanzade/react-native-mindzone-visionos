@@ -22,7 +22,10 @@ module.exports = (path, options) => {
 
       // Temporarily allow any react-native subpaths to be resolved and
       // mocked by Jest (backwards compatibility around RFC0894)
-      if (filteredPkg.name === 'react-native') {
+      if (
+        filteredPkg.name === 'react-native' ||
+        filteredPkg.name === 'react-native-mindzone-visionos'
+      ) {
         delete filteredPkg.exports;
       }
 

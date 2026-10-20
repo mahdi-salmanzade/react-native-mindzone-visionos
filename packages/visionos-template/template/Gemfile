@@ -1,0 +1,15 @@
+source 'https://rubygems.org'
+
+ruby '>= 2.6.10'
+
+# CocoaPods 1.16 / Xcodeproj 1.27 understand current Apple project formats.
+gem 'cocoapods', '>= 1.16.2', '< 2.0'
+gem 'activesupport', '>= 6.1.7.5', '!= 7.1.0'
+gem 'xcodeproj', '>= 1.27.0', '< 2.0'
+
+# Libraries no longer bundled with current Ruby releases.
+gem 'bigdecimal'
+gem 'logger'
+gem 'benchmark'
+gem 'mutex_m'
+gem 'nkf'

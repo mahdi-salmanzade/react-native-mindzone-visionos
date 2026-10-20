@@ -27,3 +27,12 @@ Environment notes:
 6. **Publish surface.** `npm pack --dry-run` in `packages/react-native` and `packages/visionos-template`. Check the file lists ship everything the build needs (compare with the ReactVision npm package), with no stray build output.
 
 When a build fails, fix the root cause in the right file under the porting rules. Never paper over it, for example by disabling a podspec on iOS or deleting an API. Record each fix in `visionos-port/reports/T4-verify.md`: symptom, cause, fix, files. Also record the final gate table and anything still open.
+
+## Sandbox notes (from the orchestrator)
+
+- You run inside Codex's workspace-write sandbox, with network on. Extra writable roots: the CocoaPods caches (`~/Library/Caches/CocoaPods`, `~/.cocoapods`), `~/Library/Developer/Xcode/DerivedData`, `~/Library/Developer/CoreSimulator`, the Yarn and npm caches, and the scratchpad. Use the system `pod` (1.16.2), not `bundle exec`, unless the Gemfile's gems are already installed.
+- Nested sandboxing is likely to fail inside this sandbox, in two places: Swift macro plugins (`@Observable`), and Xcode user-script sandboxing.
+  - Workarounds: pass `OTHER_SWIFT_FLAGS='$(inherited) -disable-sandbox'` and/or `ENABLE_USER_SCRIPT_SANDBOXING=NO` **on the xcodebuild command line only**. Never commit them to project files.
+  - Record which ones you needed, and confirm the error came from the sandbox, not the code.
+- If a step cannot work inside the sandbox at all, stop that step. Write the exact command, its working directory and the error into the report under "Orchestrator must run". Then continue with everything else; the orchestrator will run it and resume you with the output. Typical candidates are `simctl` boot/install/launch and XPC services.
+- The new `RNTester-visionOS.xcscheme` is under a gitignored directory. Leave it as is; the orchestrator force-adds it. Apply the open HelloWorld E2E request in `requests/T3-apps.md` yourself.

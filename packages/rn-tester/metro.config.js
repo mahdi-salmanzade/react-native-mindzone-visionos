@@ -37,6 +37,7 @@ const config = {
     path.resolve(__dirname, '../react-native-test-library/common'),
   ],
   resolver: {
+    resolveRequest: require('./scripts/visionos-resolver'),
     blockList: [/..\/react-native\/sdks\/hermes/],
     extraNodeModules: {
       'react-native': path.resolve(__dirname, '../react-native'),
