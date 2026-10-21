@@ -45,6 +45,41 @@ export interface Spec extends TurboModule { ping(): void; }
 export default TurboModuleRegistry.getEnforcing<Spec>('${name}');`;
 }
 
+it.each([undefined, 'visionos'])(
+  'generates the visionOS core spec for app dependency platform %s only when selected',
+  dependencyPlatform => {
+    write('package.json', {
+      name: 'fixture',
+      codegenConfig: {
+        libraries: [
+          {name: 'SharedFixture', type: 'modules', jsSrcsDir: 'shared'},
+          {
+            name: 'FBReactNativeSpec_visionOS',
+            type: 'modules',
+            jsSrcsDir: 'visionos_modules',
+            ios: {},
+          },
+        ],
+      },
+    });
+    write('shared/NativeSharedFixture.js', moduleSpec('SharedFixture'));
+    write(
+      'visionos_modules/NativeVisionFixture.js',
+      moduleSpec('VisionFixture'),
+    );
+    const output = path.join(root, 'out');
+    execute(root, 'ios', output, 'app', true, true, dependencyPlatform);
+    const files = fs.readdirSync(
+      path.join(output, 'build/generated/ios/ReactCodegen'),
+      {recursive: true},
+    );
+    expect(files.includes('SharedFixture/SharedFixture.h')).toBe(true);
+    expect(
+      files.includes('FBReactNativeSpec_visionOS/FBReactNativeSpec_visionOS.h'),
+    ).toBe(dependencyPlatform === 'visionos');
+  },
+);
+
 it.each(['android', 'all'])(
   'isolates visionOS modules during actual %s generation',
   platform => {

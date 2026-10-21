@@ -6,6 +6,7 @@
 import * as React from 'react';
 import {
   View,
+  Platform,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -22,7 +23,10 @@ function App(): React.ReactNode {
 
   return (
     <View style={[styles.container, colors]}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+      {/* visionOS has no status bar; rendering one only logs a warning. */}
+      {!Platform.isVision && (
+        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+      )}
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         contentContainerStyle={styles.content}>

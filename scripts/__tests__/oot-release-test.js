@@ -65,8 +65,6 @@ function fixture() {
     'types_DEPRECATED/index.d.ts',
     'types_generated/index.d.ts',
     'Package.swift',
-    'scripts/ios-prebuild.js',
-    'scripts/ios-prebuild/cli.js',
     'scripts/spm/visionos/ReactVisionOS.swift',
   ]) {
     write(`packages/core/${file}`);
@@ -94,6 +92,7 @@ function fixture() {
     'LICENSE',
     'README.md',
     'template.config.js',
+    'template/LICENSE',
     'template/visionos/Podfile',
     'template/visionos/HelloWorld.xcodeproj/project.pbxproj',
   ]) {
@@ -197,6 +196,9 @@ test('prepares both real offline tarballs, rewrites nested manifests, preserves 
   expect(core.version).toBe('0.88.1');
   expect(core.dependencies['hermes-compiler']).toBe('260318099.0.4');
   expect(
+    execFileSync('tar', ['-tf', coreTarball], {encoding: 'utf8'}),
+  ).not.toContain('scripts/ios-prebuild');
+  expect(
     execFileSync('tar', ['-tvf', coreTarball, 'package/cli.js'], {
       encoding: 'utf8',
     }),
@@ -218,26 +220,30 @@ test('prepares both real offline tarballs, rewrites nested manifests, preserves 
   expect(workspace.version).toBe('0.88.0');
 }, 30000);
 
-test('a missing required template file stops all publishing even after core was packed', () => {
-  fs.rmSync(path.join(root, 'packages/template/template/visionos/Podfile'));
-  const run = jest.fn(execFileSync);
-  expect(() =>
-    releaseOOT(
-      {
-        root,
-        version: '0.88.1',
-        output: path.join(root, 'output'),
-        publish: true,
-      },
-      run,
-    ),
-  ).toThrow('missing packaged files');
-  expect(
-    run.mock.calls.some(
-      ([command, args]) => command === 'npm' && args[0] === 'publish',
-    ),
-  ).toBe(false);
-}, 30000);
+test.each(['template/visionos/Podfile', 'template/LICENSE'])(
+  'missing required %s stops all publishing even after core was packed',
+  file => {
+    fs.rmSync(path.join(root, 'packages/template', file));
+    const run = jest.fn(execFileSync);
+    expect(() =>
+      releaseOOT(
+        {
+          root,
+          version: '0.88.1',
+          output: path.join(root, 'output'),
+          publish: true,
+        },
+        run,
+      ),
+    ).toThrow('missing packaged files');
+    expect(
+      run.mock.calls.some(
+        ([command, args]) => command === 'npm' && args[0] === 'publish',
+      ),
+    ).toBe(false);
+  },
+  30000,
+);
 
 test('any publish failure propagates and no git operation is attempted', () => {
   let publications = 0;
@@ -268,3 +274,43 @@ test('any publish failure propagates and no git operation is attempted', () => {
   expect(publications).toBe(2);
   expect(run.mock.calls.some(([command]) => command === 'git')).toBe(false);
 }, 30000);
+
+test('the real core package never publishes the repo-only ios-prebuild tooling', () => {
+  const packageDir = path.join(
+    __dirname,
+    '..',
+    '..',
+    'packages',
+    'react-native',
+  );
+  const manifest = JSON.parse(
+    fs.readFileSync(path.join(packageDir, 'package.json'), 'utf8'),
+  );
+  expect(
+    manifest.files.filter(entry => entry.includes('ios-prebuild')),
+  ).toEqual([]);
+  // npm's own file selection for the real package; scripts are skipped so
+  // prepack's code generation does not run. The cache lives in the test's
+  // temporary root because npm writes there even for a dry run.
+  const output = JSON.parse(
+    execFileSync(
+      'npm',
+      [
+        'pack',
+        '--dry-run',
+        '--json',
+        '--ignore-scripts',
+        '--cache',
+        path.join(root, 'npm-cache'),
+      ],
+      {cwd: packageDir, encoding: 'utf8'},
+    ),
+  );
+  // npm 10 prints an array of results; npm 11 keys them by package name.
+  const pack = Array.isArray(output) ? output[0] : output[manifest.name];
+  const shipped = pack.files.map(file => file.path);
+  expect(shipped).toContain('scripts/react_native_pods.rb');
+  expect(
+    shipped.filter(file => file.startsWith('scripts/ios-prebuild')),
+  ).toEqual([]);
+}, 60000);

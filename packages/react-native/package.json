@@ -115,8 +115,6 @@
     "scripts/hermes/hermes-utils.js",
     "scripts/hermes/prepare-hermes-for-build.js",
     "scripts/ios-configure-glog.sh",
-    "scripts/ios-prebuild.js",
-    "scripts/ios-prebuild",
     "scripts/native_modules.rb",
     "scripts/node-binary.sh",
     "scripts/packager-reporter.js",

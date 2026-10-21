@@ -1,5 +1,9 @@
 require_relative '../react-native/scripts/react_native_pods'
 
+if ENV['RCT_ENABLE_VISIONOS'] == '1' && ENV['RCT_USE_PREBUILT_RNCORE'] != '0'
+  raise 'RNTester-visionOS requires RCT_USE_PREBUILT_RNCORE=0 before pod install.'
+end
+
 source 'https://cdn.cocoapods.org/'
 platform :ios, min_ios_version_supported
 
@@ -69,9 +73,8 @@ target 'RNTesterIntegrationTests' do
   pod 'React-RCTTest', :path => "./RCTTest"
 end
 
-# Source-core mode must be selected before the first target in this mixed
-# installation. Keep the default iOS-only pod graph and prebuilt-core behavior.
-if ENV['RCT_USE_PREBUILT_RNCORE'] == '0'
+# Keep iOS-only installs unchanged, including source-core builds.
+if ENV['RCT_ENABLE_VISIONOS'] == '1'
   target 'RNTester-visionOS' do
     platform :visionos, min_visionos_version_supported
     pods('RNTester-visionOS')

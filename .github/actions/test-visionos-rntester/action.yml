@@ -53,6 +53,7 @@ runs:
       shell: bash
       env:
         # Set before the first use_react_native!, including mixed iOS targets.
+        RCT_ENABLE_VISIONOS: '1'
         RCT_USE_PREBUILT_RNCORE: '0'
         RCT_USE_RN_DEP: '1'
         USE_DYNAMIC_FRAMEWORKS: ${{ inputs.use-frameworks }}

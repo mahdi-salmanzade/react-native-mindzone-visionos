@@ -117,6 +117,47 @@ it('checks scene support and catches errors from every window operation', async 
   await unmount(renderer);
 });
 
+it('prevents pending duplicate opens and preserves open state on rejection', async () => {
+  let resolveOpen;
+  nativeXR.requestSession.mockReturnValueOnce(
+    new Promise(resolve => {
+      resolveOpen = resolve;
+    }),
+  );
+  const renderer = await create(<Example />);
+  const openButton = () =>
+    renderer.root
+      .findAllByType(Button)
+      .find(node => node.props.title === 'Open XR Session');
+  let opening;
+  await act(() => {
+    opening = openButton().props.onPress();
+  });
+  expect(openButton().props.disabled).toBe(true);
+  await press(renderer, 'Open XR Session');
+  expect(nativeXR.requestSession).toHaveBeenCalledTimes(1);
+  await act(async () => {
+    resolveOpen();
+    await opening;
+  });
+  expect(openButton().props.disabled).toBe(false);
+  nativeXR.requestSession.mockRejectedValueOnce(
+    new Error('Session already open'),
+  );
+  await press(renderer, 'Open XR Session');
+  expect(nativeXR.requestSession).toHaveBeenCalledTimes(2);
+  expect(renderer.root.findAllByType(Text)[0].props.children.join('')).toBe(
+    'Is XR session open: true',
+  );
+  expect(Alert.alert).toHaveBeenLastCalledWith('Error', 'Session already open');
+  // System dismissal has no JS state event. Open must remain available to reopen.
+  await press(renderer, 'Open XR Session');
+  expect(nativeXR.requestSession).toHaveBeenCalledTimes(3);
+  await press(renderer, 'Close XR Session');
+  expect(openButton().props.disabled).toBe(false);
+  await unmount(renderer);
+});
+
 it('updates secondary-window props without losing its counter and catches close errors', async () => {
   const renderer = await create(<SecondWindow title="Initial" />);
   await press(renderer, 'Increment');

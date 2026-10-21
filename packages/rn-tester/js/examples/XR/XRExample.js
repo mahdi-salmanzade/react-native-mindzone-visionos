@@ -29,18 +29,24 @@ function reportError(error: unknown) {
 
 function OpenXRSession(): React.Node {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpening, setIsOpening] = React.useState(false);
 
   const openXRSession = async () => {
+    if (isOpening) {
+      return;
+    }
     if (!WindowManager.supportsMultipleScenes) {
       Alert.alert('Error', 'Multiple scenes are not supported');
       return;
     }
+    setIsOpening(true);
     try {
       await XR.requestSession('TestImmersiveSpace');
       setIsOpen(true);
     } catch (error) {
       reportError(error);
-      setIsOpen(false);
+    } finally {
+      setIsOpening(false);
     }
   };
 
@@ -80,7 +86,11 @@ function OpenXRSession(): React.Node {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Is XR session open: {String(isOpen)}</Text>
-      <Button title="Open XR Session" onPress={openXRSession} />
+      <Button
+        title="Open XR Session"
+        onPress={openXRSession}
+        disabled={isOpening}
+      />
       <Button title="Close XR Session" onPress={closeXRSession} />
       <Button title="Open Second Window" onPress={openWindow} />
       <Button title="Update Second Window" onPress={updateWindow} />

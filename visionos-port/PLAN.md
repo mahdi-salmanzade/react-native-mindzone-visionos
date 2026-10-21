@@ -80,6 +80,7 @@ Ownership is exclusive within a phase. Paths are relative to the repo root, and 
 | T5-review | done: 8 visionOS-only findings, no off-visionOS findings |
 | T6–T8 fixes | done: all 8 fixed, plus two regressions caught by simulator probes (scene recursion crash, duplicate windows) |
 | T9-rereview | done: no verified defects |
+| T10/T10b audit, T11 fixes, T12/T13 reviews | done. Release-readiness audit with real consumer installs on visionOS, iOS and Android; see `reports/FINAL-validation.md` |
 
 Still not verified at runtime:
 - window restoration after relaunch;

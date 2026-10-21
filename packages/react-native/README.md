@@ -13,6 +13,22 @@ from 0.86.4. React Native is developed by Meta and its contributors. The MIT
 Source: <https://github.com/mahdi-salmanzade/react-native-mindzone-visionos> (a fork of [react/react-native](https://github.com/react/react-native)).
 The packages are not yet published to npm.
 
+## Compatibility contract
+
+Native visionOS behavior is platform-guarded; iOS, macOS, and Android retain
+upstream behavior. The shared distribution has these intentional differences:
+
+- Additive JavaScript exports and types for `XR` and `WindowManager`.
+- CLI commands and platform registration for visionOS.
+- Codegen of `FBReactNativeSpec_visionOS` during prepack, so the package ships it.
+  App codegen uses the iOS generator for visionOS too, but generates this extra
+  spec only when the dependency platform is `visionos`; ordinary iOS app builds
+  skip it.
+- SwiftPM manifest additions for the visionOS products and targets.
+- Fork package identity and metadata.
+- Coinstalled-runtime deduplication so native tooling and JavaScript resolve the
+  selected fork consistently when upstream React Native is also installed.
+
 ## Requirements
 
 - A supported Node version: `^22.13.0 || ^24.3.0 || >=26.0.0`.
@@ -155,6 +171,14 @@ React scene must apply `.modifier(WindowHandlingModifier())` to host routing.
 A custom window group addressed by WindowManager must use String-valued identity:
 `WindowGroup(id: id, for: String.self) { _ in /* content */ } defaultValue: { id }`.
 
+Deep links reach the app through SwiftUI's `onOpenURL`. Forward them with
+`.onOpenURL { RCTLinkingManager.onOpenURL(url: $0) }`, as the template does. The
+launch URL comes from the first window's scene connection, so `getInitialURL()`
+returns the launching link, or `null`, and later links arrive as `url` events.
+Call `getInitialURL()` or add a `url` listener at startup. If visionOS restores a
+scene session without a new-session connection, the first link delivered before
+either of those becomes the initial URL, so JS still receives it.
+
 React Native's [component and API documentation](https://reactnative.dev/docs/getting-started)
 applies to shared functionality. This fork does not claim automatic Expo or Viro
 integration.
@@ -170,8 +194,16 @@ yarn start
 ```
 
 RNTester uses the **RNTester-visionOS** scheme. Install its pods with
-`RCT_USE_PREBUILT_RNCORE=0`, then open `packages/rn-tester/RNTesterPods.xcworkspace`
-in Xcode. The visionOS CI workflow builds that scheme for Debug and Release.
+`RCT_ENABLE_VISIONOS=1 RCT_USE_PREBUILT_RNCORE=0 bundle exec pod install` from
+`packages/rn-tester`, then open `RNTesterPods.xcworkspace` in Xcode. The explicit
+visionOS opt-in requires source core. Without it, plain `pod install` and
+`RCT_USE_PREBUILT_RNCORE=0 pod install` both install only the upstream iOS targets.
+The visionOS CI workflow builds that scheme for Debug and Release.
+
+`packages/react-native/scripts/ios-prebuild` and its entry scripts are repo-only
+maintainer tools for composing React Native Apple artifacts. They use workspace
+development dependencies and are not included in the npm package; CocoaPods,
+SwiftPM consumer scripts, and the CLI do not require them.
 
 The port's inventory, ownership rules, verification status, and known limitations
 are recorded in `visionos-port/` in the source checkout. A full app build, launch,

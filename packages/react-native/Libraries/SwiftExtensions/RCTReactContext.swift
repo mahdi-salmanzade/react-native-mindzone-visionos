@@ -45,7 +45,8 @@ public extension EnvironmentValues {
 }
 
 private struct RCTSceneContextKey: EnvironmentKey {
-  static var defaultValue: RCTReactContext = RCTReactContext()
+  // SwiftUI scenes share this context and mutate it on the main actor.
+  nonisolated(unsafe) static let defaultValue: RCTReactContext = RCTReactContext()
 }
 
 #endif // os(visionOS)

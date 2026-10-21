@@ -3,6 +3,13 @@
 This directory contains scripts for prebuilding React Native itself into
 XCFrameworks for iOS and related platforms.
 
+This is a repository-only maintainer tool. Run it from a checkout after
+installing the workspace dependencies. Neither `scripts/ios-prebuild.js` nor
+this directory ships in `react-native-mindzone-visionos`, matching upstream's
+package boundary. CocoaPods and the shipped SwiftPM consumer scripts consume
+the resulting artifacts without running this tool. Source SwiftPM preparation
+through `Package.swift` also requires a repository checkout.
+
 ## Overview
 
 These scripts automate the process of building React Native as a Swift Package

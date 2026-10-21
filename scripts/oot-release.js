@@ -156,14 +156,13 @@ function validateContents(name, files) {
           'types_DEPRECATED/index.d.ts',
           'types_generated/index.d.ts',
           'Package.swift',
-          'scripts/ios-prebuild.js',
-          'scripts/ios-prebuild/cli.js',
           'scripts/spm/visionos/ReactVisionOS.swift',
         ]
       : [
           'LICENSE',
           'README.md',
           'template.config.js',
+          'template/LICENSE',
           'template/package.json',
           'template/visionos/Podfile',
         ];

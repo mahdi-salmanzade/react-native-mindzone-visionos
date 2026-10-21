@@ -18,6 +18,7 @@
 static NSString *const kOpenURLNotification = @"RCTOpenURLNotification";
 #if TARGET_OS_VISION
 static NSURL *initialURL = nil;
+static BOOL initialURLIsFinalized = NO;
 #endif
 
 @interface RCTLinkingManager () <NativeLinkingManagerSpec>
@@ -54,6 +55,10 @@ RCT_EXPORT_MODULE()
 
 - (void)startObserving
 {
+#if TARGET_OS_VISION
+  // A URL JS receives as an event must not also become the initial URL.
+  initialURLIsFinalized = YES;
+#endif
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(handleOpenURLNotification:)
                                                name:kOpenURLNotification
@@ -149,27 +154,32 @@ RCT_EXPORT_MODULE()
 {
   // Capture the first window's launch delivery, including the absence of a URL.
   // Runtime links and later scene connections must never change this value.
-  if (![session.role isEqualToString:UIWindowSceneSessionRoleApplication]) {
+  if (initialURLIsFinalized || ![session.role isEqualToString:UIWindowSceneSessionRoleApplication]) {
     return;
   }
-  static dispatch_once_t onceToken;
-  dispatch_once(&onceToken, ^{
-    initialURL = connectionOptions.URLContexts.allObjects.firstObject.URL;
-    if (initialURL == nil) {
-      for (NSUserActivity *activity in connectionOptions.userActivities) {
-        if ([activity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb] && activity.webpageURL != nil) {
-          initialURL = activity.webpageURL;
-          break;
-        }
+  initialURLIsFinalized = YES;
+  initialURL = connectionOptions.URLContexts.allObjects.firstObject.URL;
+  if (initialURL == nil) {
+    for (NSUserActivity *activity in connectionOptions.userActivities) {
+      if ([activity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb] && activity.webpageURL != nil) {
+        initialURL = activity.webpageURL;
+        break;
       }
     }
-  });
+  }
 }
 
 + (void)onOpenURL:(NSURL *)url
 {
-  // SwiftUI delivers both cold and warm links here. Always notify listeners;
-  // only the scene's connection options establish the process's initial URL.
+  // Restored sessions skip new-session configuration. Their first SwiftUI URL
+  // establishes the launch URL unless JS has already read it or subscribed to
+  // events. SwiftUI delivers a cold-launch URL after the scene activates, so
+  // activation must not close this window.
+  if (!initialURLIsFinalized) {
+    initialURL = url;
+    initialURLIsFinalized = YES;
+  }
+  // Always notify listeners, including repeated URLs identical to the launch URL.
   [self postNotificationWithURL:url];
 }
 #endif
@@ -239,7 +249,9 @@ RCT_EXPORT_MODULE()
 
 - (void)getInitialURL:(RCTPromiseResolveBlock)resolve reject:(__unused RCTPromiseRejectBlock)reject
 {
-#if !TARGET_OS_VISION
+#if TARGET_OS_VISION
+  initialURLIsFinalized = YES;
+#else
   NSURL *initialURL = nil;
   if (self.bridge.launchOptions[UIApplicationLaunchOptionsURLKey] != nullptr) {
     initialURL = self.bridge.launchOptions[UIApplicationLaunchOptionsURLKey];

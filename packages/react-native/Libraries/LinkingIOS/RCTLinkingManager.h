@@ -58,7 +58,11 @@
 + (void)sceneSession:(nonnull UISceneSession *)session
     willConnectWithOptions:(nonnull UISceneConnectionOptions *)connectionOptions;
 
-/// Forward URLs from SwiftUI onOpenURL to JS events. This never changes getInitialURL.
+/// Forward every URL from SwiftUI onOpenURL to JS events. For a restored session
+/// without new-session capture, the first URL also supplies getInitialURL, unless JS
+/// has already called getInitialURL or added a `url` listener. This is deliberate:
+/// before either happens no JS listener exists, so a link delivered in that window,
+/// even a warm one, would otherwise never reach JS. Read getInitialURL at startup.
 + (void)onOpenURL:(nonnull NSURL *)url NS_SWIFT_NAME(onOpenURL(url:));
 #endif
 

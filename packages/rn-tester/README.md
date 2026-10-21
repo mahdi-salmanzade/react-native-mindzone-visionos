@@ -25,15 +25,16 @@ core selected before any target is evaluated:
 yarn --cwd packages/react-native-codegen build
 yarn --cwd packages/react-native prepack
 cd packages/rn-tester
-RCT_USE_PREBUILT_RNCORE=0 bundle exec pod install
+RCT_ENABLE_VISIONOS=1 RCT_USE_PREBUILT_RNCORE=0 bundle exec pod install
 ```
 
-`RCT_USE_PREBUILT_RNCORE=0` enables the visionOS pod target alongside the existing
-iOS targets. The setting is required because the prebuilt React core archive has
-no xros slice. Keep the default prebuilt Hermes and React Native dependencies;
-they include xros. Without this environment setting, the Podfile retains its
-existing iOS-only targets and prebuilt-core defaults. When changing installation
-modes, rerun pod installation with the intended environment.
+`RCT_ENABLE_VISIONOS=1` enables the visionOS pod target alongside the existing
+iOS targets and requires `RCT_USE_PREBUILT_RNCORE=0` because the prebuilt React
+core archive has no xros slice. Keep the default prebuilt Hermes and React Native
+dependencies; they include xros. Without the explicit visionOS opt-in, the Podfile
+retains its existing iOS-only targets, including when source core is selected.
+A plain `pod install` keeps the upstream prebuilt-core defaults. When changing
+installation modes, rerun pod installation with the intended environment.
 
 Start Metro with `yarn start` from the repository root. Open
 `RNTesterPods.xcworkspace`, select `RNTester-visionOS`, and choose an Apple Vision

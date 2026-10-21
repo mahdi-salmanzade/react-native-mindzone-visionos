@@ -19,6 +19,7 @@ final class RCTWindowRouter {
       ) { [weak self] notification in
         // The native modules post synchronously on the main queue. Do not hop
         // into a Task: WindowManager reads the claim before posting returns.
+        nonisolated(unsafe) let notification = notification
         MainActor.assumeIsolated {
           self?.handlers.first?.receive(notification)
         }

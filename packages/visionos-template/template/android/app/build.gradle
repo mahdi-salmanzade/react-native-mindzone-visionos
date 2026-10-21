@@ -6,9 +6,13 @@ apply plugin: "com.facebook.react"
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
  */
+// Resolve the fork once. Inside `react { }`, `reactNativeDir` is the plugin's
+// DirectoryProperty, so it cannot be passed to `new File(...)` directly.
+def visionosReactNativeDir = file(["node", "--print", "require('path').dirname(require.resolve('react-native-mindzone-visionos/package.json'))"].execute(null, rootDir).text.trim())
+
 react {
-    reactNativeDir = file(["node", "--print", "require('path').dirname(require.resolve('react-native-mindzone-visionos/package.json'))"].execute(null, rootDir).text.trim())
-    cliFile = new File(reactNativeDir, "cli.js")
+    reactNativeDir = visionosReactNativeDir
+    cliFile = new File(visionosReactNativeDir, "cli.js")
     /* Folders */
     //   The root of your project, i.e. where "package.json" lives. Default is '../..'
     // root = file("../../")
